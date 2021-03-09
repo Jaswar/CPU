@@ -9,9 +9,6 @@ public class AND extends BinaryGate {
 
     /**Constructors for the AND gate class
      *
-     * @param in1 - the first input stream to the gate
-     * @param in2 - the second input stream to the gate
-     * @param out - the output stream from the gate
      * @param name - the name of the gate
      * @param inDebuggerMode - a boolean to specify if additional debug information should be displayed
      */
@@ -28,7 +25,7 @@ public class AND extends BinaryGate {
     }
 
     public AND(BitStream in1, BitStream in2, BitStream out) {
-        super( in1, in2, out, "AND GATE", false);
+        super(in1, in2, out, "AND GATE", false);
     }
 
     /**Define the abstract compute method from BinaryGate class. Used to perform the
@@ -57,10 +54,7 @@ public class AND extends BinaryGate {
      */
     @Override
     public String toString() {
-        return "AND<" + this.getName() + ", "
-                + this.getIn1().getSize() + ", "
-                + this.getIn2().getSize() + ", "
-                + this.getOut().getSize() + ">";
+        return "AND" + super.toString();
     }
 
 }

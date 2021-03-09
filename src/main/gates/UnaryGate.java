@@ -9,51 +9,44 @@ import main.utils.BitInformationConverter;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BinaryGate extends Gate {
+public abstract class UnaryGate extends Gate {
 
-    /**Abstract class to represent binary logic gates (ie logic gates with two inputs).
+    /**Abstract class to represent unary logic gates (ie logic gates with one input).
      *
-     * @param in1 - the first input bit stream
-     * @param in2 - the second input bit stream
+     * @param in - the input bit stream
      */
-    private BitStream in1, in2;
+    private BitStream in;
 
-    /**Constructor for the BinaryGate class.
+    /**Constructor for the UnaryGate class.
      *
      * @param name - the name of the gate
      * @param inDebuggerMode - boolean to specify if additional debug information should be shown
      */
-    public BinaryGate(BitStream in1, BitStream in2, BitStream out, String name, boolean inDebuggerMode) {
+    public UnaryGate(BitStream in, BitStream out, String name, boolean inDebuggerMode) {
         super(out, name, inDebuggerMode);
-        this.in1 = in1;
-        this.in2 = in2;
-
-        this.in1.addNewEndpoint(this);
-        this.in2.addNewEndpoint(this);
+        this.in = in;
+        this.in.addNewEndpoint(this);
 
         List<Node> queue = new ArrayList<>();
         queue.add(this);
         this.evaluate(queue);
     }
 
-    /**Getters for all the attributes of the class.
+    /**Getters for all the attributes.
      */
-    public BitStream getIn1() {
-        return in1;
+    public BitStream getIn() {
+        return in;
     }
 
-    public BitStream getIn2() {
-        return in2;
-    }
-
-    /**Setters for all the attributes of the class.
+    /**Setters for all the attributes.
      */
-    public void setIn1(BitStream in1) {
-        this.in1 = in1;
-    }
+    public void setIn(BitStream in) {
+        this.in = in;
+        this.in.addNewEndpoint(this);
 
-    public void setIn2(BitStream in2) {
-        this.in2 = in2;
+        List<Node> queue = new ArrayList<>();
+        queue.add(this);
+        this.evaluate(queue);
     }
 
     /**Method to check if the sizes of the inputs and the output are correct.
@@ -61,10 +54,10 @@ public abstract class BinaryGate extends Gate {
      */
     @Override
     public void checkIfSizesMatch() {
-        if (this.in1.getSize() != this.in2.getSize()) {
-            throw new BitStreamInputSizeMismatch("Input size mismatch at: " + this.toString());
+        if (this.in == null || this.getOut() == null) {
+            return;
         }
-        else if (this.in1.getSize() != this.getOut().getSize()) {
+        if (this.in.getSize() != this.getOut().getSize()) {
             throw new BitStreamInputSizeMismatch("Input size mismatch at: " + this.toString());
         }
     }
@@ -74,8 +67,7 @@ public abstract class BinaryGate extends Gate {
     @Override
     public void debug() {
         String msg = "Evaluating " + this.getName() + ":\n"
-                + "\tInputs: " + BitInformationConverter.convertBoolToBits(this.in1.getData()) + ", "
-                    + BitInformationConverter.convertBoolToBits(this.in2.getData()) + "\n"
+                + "\tInput: " + BitInformationConverter.convertBoolToBits(this.in.getData()) + "\n"
                 + "\tOutput: " + BitInformationConverter.convertBoolToBits(this.getOut().getData());
         System.out.println(msg);
     }
@@ -86,6 +78,6 @@ public abstract class BinaryGate extends Gate {
      */
     @Override
     public String toString() {
-        return "<" + this.in1 + ", " + this.in2 + ", " + this.getOut() + ">";
+        return "<" + this.in + ", " + this.getOut() + ">";
     }
 }

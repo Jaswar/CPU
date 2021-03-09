@@ -6,6 +6,7 @@ import main.exceptions.BitStreamInputSizeMismatch;
 import main.exceptions.InconsistentBitStreamSources;
 import main.utils.BitInformationConverter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Input implements Node {
@@ -24,7 +25,6 @@ public class Input implements Node {
     /**Constructors for the Input class.
      *
      * @param data - the input data
-     * @param out - the "out" BitStream that is connected to the Input
      * @param name - the name of the input
      * @param inDebuggerMode - boolean to specify if we are in the debug mode
      */
@@ -35,6 +35,10 @@ public class Input implements Node {
         this.data = data;
 
         this.out.addNewEndpoint(this);
+
+        List<Node> queue = new ArrayList<>();
+        queue.add(this);
+        this.evaluate(queue);
     }
 
     public Input(boolean[] data, BitStream out, String name) {
@@ -42,7 +46,7 @@ public class Input implements Node {
     }
 
     public Input(boolean[] data, BitStream out, boolean inDebuggerMode) {
-        this(data, out, "Input", inDebuggerMode);
+        this(data, out,"Input", inDebuggerMode);
     }
 
     public Input(boolean[] data, BitStream out) {
@@ -162,7 +166,8 @@ public class Input implements Node {
      */
     @Override
     public String toString() {
-        return "Input<" + this.name + ", " + this.data.length + ">";
+        return "Input<" + this.name + ", " +
+                BitInformationConverter.convertBoolToBits(this.data) + ">";
     }
 
     /**Define a method from the Node interface. Here there is no need to check if we need to evaluate further,

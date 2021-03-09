@@ -1,31 +1,28 @@
 package main.gates;
 
 import main.BitStream;
-import main.Node;
 
-import java.util.List;
+public class NAND extends BinaryGate {
 
-public class XOR extends BinaryGate {
-
-    /**Constructors for the XOR gate class
+    /**Constructors for the OR gate class
      *
      * @param name - the name of the gate
      * @param inDebuggerMode - a boolean to specify if additional debug information should be displayed
      */
-    public XOR(BitStream in1, BitStream in2, BitStream out, String name, boolean inDebuggerMode) {
+    public NAND(BitStream in1, BitStream in2, BitStream out, String name, boolean inDebuggerMode) {
         super(in1, in2, out, name, inDebuggerMode);
     }
 
-    public XOR(BitStream in1, BitStream in2, BitStream out, String name) {
+    public NAND(BitStream in1, BitStream in2, BitStream out, String name) {
         super(in1, in2, out, name, false);
     }
 
-    public XOR(BitStream in1, BitStream in2, BitStream out, boolean inDebuggerMode) {
-        super(in1, in2, out, "XOR GATE", inDebuggerMode);
+    public NAND(BitStream in1, BitStream in2, BitStream out, boolean inDebuggerMode) {
+        super(in1, in2, out, "OR GATE", inDebuggerMode);
     }
 
-    public XOR(BitStream in1, BitStream in2, BitStream out) {
-        super(in1, in2, out, "XOR GATE", false);
+    public NAND(BitStream in1, BitStream in2, BitStream out) {
+        super(in1, in2, out, "OR GATE", false);
     }
 
     /**Define the abstract compute method from BinaryGate class. Used to perform the
@@ -39,10 +36,7 @@ public class XOR extends BinaryGate {
         boolean[] newOutData = new boolean[this.getIn1().getSize()];
 
         for (int i = 0; i < newOutData.length; i++) {
-            newOutData[i] = false;
-            if (this.getIn1().getData()[i] || this.getIn2().getData()[i]) {
-                newOutData[i] = true;
-            }
+            newOutData[i] = true;
             if (this.getIn1().getData()[i] && this.getIn2().getData()[i]) {
                 newOutData[i] = false;
             }
@@ -57,7 +51,6 @@ public class XOR extends BinaryGate {
      */
     @Override
     public String toString() {
-        return "XOR" + super.toString();
+        return "NAND" + super.toString();
     }
-
 }

@@ -9,9 +9,6 @@ public class NOR extends BinaryGate {
 
     /**Constructors for the NOR gate class
      *
-     * @param in1 - the first input stream to the gate
-     * @param in2 - the second input stream to the gate
-     * @param out - the output stream from the gate
      * @param name - the name of the gate
      * @param inDebuggerMode - a boolean to specify if additional debug information should be displayed
      */
@@ -57,10 +54,7 @@ public class NOR extends BinaryGate {
      */
     @Override
     public String toString() {
-        return "NOR<" + this.getName() + ", "
-                + this.getIn1().getSize() + ", "
-                + this.getIn2().getSize() + ", "
-                + this.getOut().getSize() + ">";
+        return "NOR" + super.toString();
     }
 
 }

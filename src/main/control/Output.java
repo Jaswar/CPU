@@ -6,6 +6,7 @@ import main.exceptions.BitStreamInputSizeMismatch;
 import main.exceptions.InconsistentBitStreamSources;
 import main.utils.BitInformationConverter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Output implements Node {
@@ -24,7 +25,6 @@ public class Output implements Node {
 
     /**Constructors of the Output class.
      *
-     * @param in - the input BitStream
      * @param name - the name of the output
      * @param inDebuggerMode - the boolean to specify if we are in the debug mode
      */
@@ -35,6 +35,10 @@ public class Output implements Node {
         this.data = new boolean[this.in.getSize()];
 
         this.in.addNewEndpoint(this);
+
+        List<Node> queue = new ArrayList<>();
+        queue.add(this);
+        this.evaluate(queue);
     }
 
     public Output(BitStream in, String name) {
