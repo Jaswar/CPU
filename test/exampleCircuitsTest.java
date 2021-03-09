@@ -29,25 +29,15 @@ public class exampleCircuitsTest {
         BitStream streamOut1 = new BitStream(1);
         BitStream streamOut2 = new BitStream(1);
 
-        Input r = new Input(new boolean[]{true}, "R", false);
-        r.setOut(streamIn1);
-        Input s = new Input(new boolean[]{false}, "S", false);
-        s.setOut(streamIn2);
+        Input r = new Input(new boolean[]{true}, streamIn1, "R", false);
+        Input s = new Input(new boolean[]{false}, streamIn2, "S", false);
 
-        NOR upperNor = new NOR("upper NOR", false);
-        upperNor.setIn1(streamIn1);
-        upperNor.setIn2(streamIn2);
-        upperNor.setOut(streamOut1);
+        NOR upperNor = new NOR(streamIn1, streamIn2, streamOut1, "upper NOR", false);
 
-        NOR lowerNor = new NOR("lower NOR", false);
-        lowerNor.setIn1(streamIn2);
-        lowerNor.setIn2(streamOut1);
-        lowerNor.setOut(streamOut2);
+        NOR lowerNor = new NOR(streamIn2, streamOut1, streamOut2, "lower NOR", false);
 
-        Output q = new Output("Q", false);
-        q.setIn(streamOut1);
-        Output notQ = new Output("-Q", false);
-        notQ.setIn(streamOut2);
+        Output q = new Output(streamOut1, "Q", false);
+        Output notQ = new Output(streamOut2, "-Q", false);
 
         List<Node> queue = new ArrayList<>();
         queue.addAll(List.of(r, s));
@@ -71,40 +61,22 @@ public class exampleCircuitsTest {
         BitStream out1 = new BitStream(1);
         BitStream out2 = new BitStream(1);
 
-        Input d = new Input(new boolean[]{true}, "d", true);
-        d.setOut(dIn);
-        Input clk = new Input(new boolean[]{true}, "clk", true);
-        clk.setOut(clkIn);
+        Input d = new Input(new boolean[]{true}, dIn, "d", false);
+        Input clk = new Input(new boolean[]{true}, clkIn, "clk", false);
 
-        NOT not = new NOT(true);
-        not.setIn(dIn);
-        not.setOut(notOut);
+        NOT not = new NOT(dIn, notOut, false);
 
-        AND upperAnd = new AND("upper and", true);
-        upperAnd.setIn1(notOut);
-        upperAnd.setIn2(clkIn);
-        upperAnd.setOut(mid1);
+        AND upperAnd = new AND(notOut, clkIn, mid1, "upper and", false);
 
-        AND lowerAnd = new AND("lower and", true);
-        lowerAnd.setIn1(dIn);
-        lowerAnd.setIn2(clkIn);
-        lowerAnd.setOut(mid2);
+        AND lowerAnd = new AND(dIn, clkIn, mid2, "lower and", false);
 
-        NOR upperNor = new NOR("upper nor", true);
-        upperNor.setIn1(mid1);
-        upperNor.setIn2(out2);
-        upperNor.setOut(out1);
+        NOR upperNor = new NOR(mid1, out2, out1, "upper nor", false);
 
-        NOR lowerNor = new NOR("lower nor", true);
-        lowerNor.setIn1(mid2);
-        lowerNor.setIn2(out1);
-        lowerNor.setOut(out2);
+        NOR lowerNor = new NOR(mid2, out1, out2, "lower nor", false);
 
-        Output q = new Output();
-        q.setIn(out1);
+        Output q = new Output(out1);
 
-        Output notQ = new Output();
-        notQ.setIn(out2);
+        Output notQ = new Output(out2);
 
         List<Node> queue = new ArrayList<>();
         queue.addAll(List.of(d, clk));
@@ -112,6 +84,36 @@ public class exampleCircuitsTest {
 
         assertEquals("1", BitInformationConverter.convertBoolToBits(q.getData()));
         assertEquals("0", BitInformationConverter.convertBoolToBits(notQ.getData()));
+
+        d.setData(new boolean[]{false});
+        clk.setData(new boolean[]{false});
+
+        queue = new ArrayList<>();
+        queue.addAll(List.of(d, clk));
+        run(queue);
+
+        assertEquals("1", BitInformationConverter.convertBoolToBits(q.getData()));
+        assertEquals("0", BitInformationConverter.convertBoolToBits(notQ.getData()));
+
+        d.setData(new boolean[]{false});
+        clk.setData(new boolean[]{true});
+
+        queue = new ArrayList<>();
+        queue.addAll(List.of(d, clk));
+        run(queue);
+
+        assertEquals("0", BitInformationConverter.convertBoolToBits(q.getData()));
+        assertEquals("1", BitInformationConverter.convertBoolToBits(notQ.getData()));
+
+        d.setData(new boolean[]{true});
+        clk.setData(new boolean[]{false});
+
+        queue = new ArrayList<>();
+        queue.addAll(List.of(d, clk));
+        run(queue);
+
+        assertEquals("0", BitInformationConverter.convertBoolToBits(q.getData()));
+        assertEquals("1", BitInformationConverter.convertBoolToBits(notQ.getData()));
     }
 
     //OR and XOR connected to the same stream with different values
@@ -123,29 +125,15 @@ public class exampleCircuitsTest {
         BitStream in4 = new BitStream(1);
         BitStream out = new BitStream(1);
 
-        Input input1 = new Input(new boolean[]{true});
-        input1.setOut(in1);
-        Input input2 = new Input(new boolean[]{false});
-        input2.setOut(in2);
-        Input input3 = new Input(new boolean[]{true});
-        input3.setOut(in3);
-        Input input4 = new Input(new boolean[]{true});
-        input4.setOut(in4);
+        Input input1 = new Input(new boolean[]{true}, in1);
+        Input input2 = new Input(new boolean[]{false}, in2);
+        Input input3 = new Input(new boolean[]{true}, in3);
+        Input input4 = new Input(new boolean[]{true}, in4);
 
-        OR or = new OR();
-        or.setIn1(in1);
-        or.setIn2(in2);
-        or.setOut(out);
-
-        XOR xor = new XOR();
-        xor.setIn1(in3);
-        xor.setIn2(in4);
-
-        List<Node> queue = new ArrayList<>();
-        queue.addAll(List.of(input1, input2, input3, input4));
+        OR or = new OR(in1, in2, out);
 
         assertThrows(InconsistentBitStreamSources.class, () -> {
-            xor.setOut(out);
+            XOR xor = new XOR(in3, in4, out);
         });
     }
 
@@ -155,11 +143,8 @@ public class exampleCircuitsTest {
         BitStream in2 = new BitStream(2);
         BitStream out = new BitStream(1);
 
-        OR or = new OR();
-        or.setIn1(in1);
-
         assertThrows(BitStreamInputSizeMismatch.class, () -> {
-            or.setIn2(in2);
+            OR or = new OR(in1, in2, out);
         });
     }
 

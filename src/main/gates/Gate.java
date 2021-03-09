@@ -25,10 +25,12 @@ public abstract class Gate implements Node {
      * @param name - the name of the gate
      * @param inDebuggerMode - boolean to specify if additional debug information should be shown
      */
-    public Gate(String name, boolean inDebuggerMode) {
-        this.out = null;
+    public Gate(BitStream out, String name, boolean inDebuggerMode) {
+        this.out = out;
         this.name = name;
         this.inDebuggerMode = inDebuggerMode;
+
+        this.out.addNewEndpoint(this);
     }
 
     /**Getters for all the attributes of the class.
@@ -49,11 +51,6 @@ public abstract class Gate implements Node {
      */
     public void setOut(BitStream out) {
         this.out = out;
-        this.out.addNewEndpoint(this);
-
-        List<Node> queue = new ArrayList<>();
-        queue.add(this);
-        this.evaluate(queue);
     }
 
     public void setName(String name) {
@@ -85,24 +82,23 @@ public abstract class Gate implements Node {
     public void evaluate(List<Node> queue) {
         this.checkIfSizesMatch();
 
-        if (this.out != null) {
-            boolean[] newOutData = compute();
+        boolean[] newOutData = compute();
 
-            this.checkIfSourceIsConsistent(newOutData);
+        this.checkIfSourceIsConsistent(newOutData);
 
-            if (this.decideIfEvaluateFurther(newOutData)) {
-                this.addNeighboursToQueue(queue);
-            }
-            if (this.out != null) {
-                this.out.setData(newOutData);
-                this.setSourceForOutStream();
-            }
-
-
-            if (this.isInDebuggerMode()) {
-                this.debug();
-            }
+        if (this.decideIfEvaluateFurther(newOutData)) {
+            this.addNeighboursToQueue(queue);
         }
+        if (this.out != null) {
+            this.out.setData(newOutData);
+            this.setSourceForOutStream();
+        }
+
+
+        if (this.isInDebuggerMode()) {
+            this.debug();
+        }
+
     }
 
     /**Set the source of the out stream.

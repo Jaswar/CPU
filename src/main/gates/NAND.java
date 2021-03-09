@@ -9,20 +9,20 @@ public class NAND extends BinaryGate {
      * @param name - the name of the gate
      * @param inDebuggerMode - a boolean to specify if additional debug information should be displayed
      */
-    public NAND(String name, boolean inDebuggerMode) {
-        super(name, inDebuggerMode);
+    public NAND(BitStream in1, BitStream in2, BitStream out, String name, boolean inDebuggerMode) {
+        super(in1, in2, out, name, inDebuggerMode);
     }
 
-    public NAND(String name) {
-        super(name, false);
+    public NAND(BitStream in1, BitStream in2, BitStream out, String name) {
+        super(in1, in2, out, name, false);
     }
 
-    public NAND(boolean inDebuggerMode) {
-        super("OR GATE", inDebuggerMode);
+    public NAND(BitStream in1, BitStream in2, BitStream out, boolean inDebuggerMode) {
+        super(in1, in2, out, "OR GATE", inDebuggerMode);
     }
 
-    public NAND() {
-        super("OR GATE", false);
+    public NAND(BitStream in1, BitStream in2, BitStream out) {
+        super(in1, in2, out, "OR GATE", false);
     }
 
     /**Define the abstract compute method from BinaryGate class. Used to perform the

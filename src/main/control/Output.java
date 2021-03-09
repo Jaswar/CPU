@@ -28,23 +28,29 @@ public class Output implements Node {
      * @param name - the name of the output
      * @param inDebuggerMode - the boolean to specify if we are in the debug mode
      */
-    public Output(String name, boolean inDebuggerMode) {
-        this.in = null;
+    public Output(BitStream in, String name, boolean inDebuggerMode) {
+        this.in = in;
         this.name = name;
         this.inDebuggerMode = inDebuggerMode;
-        this.data = null;
+        this.data = new boolean[this.in.getSize()];
+
+        this.in.addNewEndpoint(this);
+
+        List<Node> queue = new ArrayList<>();
+        queue.add(this);
+        this.evaluate(queue);
     }
 
-    public Output(String name) {
-        this(name, false);
+    public Output(BitStream in, String name) {
+        this(in, name, false);
     }
 
-    public Output(boolean inDebuggerMode) {
-        this("Output", inDebuggerMode);
+    public Output(BitStream in, boolean inDebuggerMode) {
+        this(in, "Output", inDebuggerMode);
     }
 
-    public Output() {
-        this("Output", false);
+    public Output(BitStream in) {
+        this(in, "Output", false);
     }
 
     /**Getters for the attributes of the class
@@ -73,13 +79,6 @@ public class Output implements Node {
 
     public void setIn(BitStream in) {
         this.in = in;
-        this.in.addNewEndpoint(this);
-
-        this.data = new boolean[this.in.getSize()];
-
-        List<Node> queue = new ArrayList<>();
-        queue.add(this);
-        this.evaluate(queue);
     }
 
     public void setName(String name) {

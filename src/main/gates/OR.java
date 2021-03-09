@@ -13,20 +13,20 @@ public class OR extends BinaryGate {
      * @param name - the name of the gate
      * @param inDebuggerMode - a boolean to specify if additional debug information should be displayed
      */
-    public OR(String name, boolean inDebuggerMode) {
-        super(name, inDebuggerMode);
+    public OR(BitStream in1, BitStream in2, BitStream out, String name, boolean inDebuggerMode) {
+        super(in1, in2, out, name, inDebuggerMode);
     }
 
-    public OR(String name) {
-        super(name, false);
+    public OR(BitStream in1, BitStream in2, BitStream out, String name) {
+        super(in1, in2, out, name, false);
     }
 
-    public OR(boolean inDebuggerMode) {
-        super("OR GATE", inDebuggerMode);
+    public OR(BitStream in1, BitStream in2, BitStream out, boolean inDebuggerMode) {
+        super(in1, in2, out, "OR GATE", inDebuggerMode);
     }
 
-    public OR() {
-        super("OR GATE", false);
+    public OR(BitStream in1, BitStream in2, BitStream out) {
+        super(in1, in2, out, "OR GATE", false);
     }
 
     /**Define the abstract compute method from BinaryGate class. Used to perform the

@@ -12,20 +12,20 @@ public class XOR extends BinaryGate {
      * @param name - the name of the gate
      * @param inDebuggerMode - a boolean to specify if additional debug information should be displayed
      */
-    public XOR(String name, boolean inDebuggerMode) {
-        super(name, inDebuggerMode);
+    public XOR(BitStream in1, BitStream in2, BitStream out, String name, boolean inDebuggerMode) {
+        super(in1, in2, out, name, inDebuggerMode);
     }
 
-    public XOR(String name) {
-        super(name, false);
+    public XOR(BitStream in1, BitStream in2, BitStream out, String name) {
+        super(in1, in2, out, name, false);
     }
 
-    public XOR(boolean inDebuggerMode) {
-        super("XOR GATE", inDebuggerMode);
+    public XOR(BitStream in1, BitStream in2, BitStream out, boolean inDebuggerMode) {
+        super(in1, in2, out, "XOR GATE", inDebuggerMode);
     }
 
-    public XOR() {
-        super("XOR GATE", false);
+    public XOR(BitStream in1, BitStream in2, BitStream out) {
+        super(in1, in2, out, "XOR GATE", false);
     }
 
     /**Define the abstract compute method from BinaryGate class. Used to perform the

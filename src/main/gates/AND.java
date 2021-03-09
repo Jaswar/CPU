@@ -12,20 +12,20 @@ public class AND extends BinaryGate {
      * @param name - the name of the gate
      * @param inDebuggerMode - a boolean to specify if additional debug information should be displayed
      */
-    public AND(String name, boolean inDebuggerMode) {
-        super(name, inDebuggerMode);
+    public AND(BitStream in1, BitStream in2, BitStream out, String name, boolean inDebuggerMode) {
+        super(in1, in2, out, name, inDebuggerMode);
     }
 
     public AND(BitStream in1, BitStream in2, BitStream out, String name) {
-        super(name, false);
+        super(in1, in2, out, name, false);
     }
 
-    public AND(boolean inDebuggerMode) {
-        super("AND GATE", inDebuggerMode);
+    public AND(BitStream in1, BitStream in2, BitStream out, boolean inDebuggerMode) {
+        super(in1, in2, out, "AND GATE", inDebuggerMode);
     }
 
-    public AND() {
-        super("AND GATE", false);
+    public AND(BitStream in1, BitStream in2, BitStream out) {
+        super(in1, in2, out, "AND GATE", false);
     }
 
     /**Define the abstract compute method from BinaryGate class. Used to perform the

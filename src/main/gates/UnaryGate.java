@@ -22,9 +22,14 @@ public abstract class UnaryGate extends Gate {
      * @param name - the name of the gate
      * @param inDebuggerMode - boolean to specify if additional debug information should be shown
      */
-    public UnaryGate(String name, boolean inDebuggerMode) {
-        super(name, inDebuggerMode);
-        this.in = null;
+    public UnaryGate(BitStream in, BitStream out, String name, boolean inDebuggerMode) {
+        super(out, name, inDebuggerMode);
+        this.in = in;
+        this.in.addNewEndpoint(this);
+
+        List<Node> queue = new ArrayList<>();
+        queue.add(this);
+        this.evaluate(queue);
     }
 
     /**Getters for all the attributes.

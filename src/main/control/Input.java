@@ -28,23 +28,29 @@ public class Input implements Node {
      * @param name - the name of the input
      * @param inDebuggerMode - boolean to specify if we are in the debug mode
      */
-    public Input(boolean[] data, String name, boolean inDebuggerMode) {
-        this.out = null;
+    public Input(boolean[] data, BitStream out, String name, boolean inDebuggerMode) {
+        this.out = out;
         this.name = name;
         this.inDebuggerMode = inDebuggerMode;
         this.data = data;
+
+        this.out.addNewEndpoint(this);
+
+        List<Node> queue = new ArrayList<>();
+        queue.add(this);
+        this.evaluate(queue);
     }
 
-    public Input(boolean[] data, String name) {
-        this(data, name, false);
+    public Input(boolean[] data, BitStream out, String name) {
+        this(data, out, name, false);
     }
 
-    public Input(boolean[] data, boolean inDebuggerMode) {
-        this(data, "Input", inDebuggerMode);
+    public Input(boolean[] data, BitStream out, boolean inDebuggerMode) {
+        this(data, out,"Input", inDebuggerMode);
     }
 
-    public Input(boolean[] data) {
-        this(data, "Input", false);
+    public Input(boolean[] data, BitStream out) {
+        this(data, out, "Input", false);
     }
 
     /**Getters for all the attributes.
@@ -69,11 +75,6 @@ public class Input implements Node {
      */
     public void setOut(BitStream out) {
         this.out = out;
-        this.out.addNewEndpoint(this);
-
-        List<Node> queue = new ArrayList<>();
-        queue.add(this);
-        this.evaluate(queue);
     }
 
     public void setData(boolean[] data) {
@@ -165,7 +166,8 @@ public class Input implements Node {
      */
     @Override
     public String toString() {
-        return "Input<" + this.name + ", " + this.data.length + ">";
+        return "Input<" + this.name + ", " +
+                BitInformationConverter.convertBoolToBits(this.data) + ">";
     }
 
     /**Define a method from the Node interface. Here there is no need to check if we need to evaluate further,

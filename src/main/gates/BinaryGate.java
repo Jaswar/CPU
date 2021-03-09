@@ -23,10 +23,17 @@ public abstract class BinaryGate extends Gate {
      * @param name - the name of the gate
      * @param inDebuggerMode - boolean to specify if additional debug information should be shown
      */
-    public BinaryGate(String name, boolean inDebuggerMode) {
-        super(name, inDebuggerMode);
-        this.in1 = null;
-        this.in2 = null;
+    public BinaryGate(BitStream in1, BitStream in2, BitStream out, String name, boolean inDebuggerMode) {
+        super(out, name, inDebuggerMode);
+        this.in1 = in1;
+        this.in2 = in2;
+
+        this.in1.addNewEndpoint(this);
+        this.in2.addNewEndpoint(this);
+
+        List<Node> queue = new ArrayList<>();
+        queue.add(this);
+        this.evaluate(queue);
     }
 
     /**Getters for all the attributes of the class.
@@ -43,20 +50,10 @@ public abstract class BinaryGate extends Gate {
      */
     public void setIn1(BitStream in1) {
         this.in1 = in1;
-        this.in1.addNewEndpoint(this);
-
-        List<Node> queue = new ArrayList<>();
-        queue.add(this);
-        this.evaluate(queue);
     }
 
     public void setIn2(BitStream in2) {
         this.in2 = in2;
-        this.in2.addNewEndpoint(this);
-
-        List<Node> queue = new ArrayList<>();
-        queue.add(this);
-        this.evaluate(queue);
     }
 
     /**Method to check if the sizes of the inputs and the output are correct.
@@ -64,11 +61,10 @@ public abstract class BinaryGate extends Gate {
      */
     @Override
     public void checkIfSizesMatch() {
-
-        if (this.in1 != null && this.in2 != null && this.in1.getSize() != this.in2.getSize()) {
+        if (this.in1.getSize() != this.in2.getSize()) {
             throw new BitStreamInputSizeMismatch("Input size mismatch at: " + this.toString());
         }
-        else if (this.in1 != null && this.getOut() != null && this.in1.getSize() != this.getOut().getSize()) {
+        else if (this.in1.getSize() != this.getOut().getSize()) {
             throw new BitStreamInputSizeMismatch("Input size mismatch at: " + this.toString());
         }
     }

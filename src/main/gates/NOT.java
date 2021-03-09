@@ -9,20 +9,20 @@ public class NOT extends UnaryGate {
      * @param name - the name of the gate
      * @param inDebuggerMode - a boolean to specify if additional debug information should be displayed
      */
-    public NOT(String name, boolean inDebuggerMode) {
-        super(name, inDebuggerMode);
+    public NOT(BitStream in, BitStream out, String name, boolean inDebuggerMode) {
+        super(in, out, name, inDebuggerMode);
     }
 
-    public NOT(String name) {
-        super(name, false);
+    public NOT(BitStream in, BitStream out, String name) {
+        super(in, out, name, false);
     }
 
-    public NOT(boolean inDebuggerMode) {
-        super("NOT GATE", inDebuggerMode);
+    public NOT(BitStream in, BitStream out, boolean inDebuggerMode) {
+        super(in, out, "NOT GATE", inDebuggerMode);
     }
 
-    public NOT() {
-        super("NOT GATE", false);
+    public NOT(BitStream in, BitStream out) {
+        super(in, out, "NOT GATE", false);
     }
 
     /**Define the abstract compute method from UnaryGate class. Used to perform the

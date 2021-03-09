@@ -12,20 +12,20 @@ public class NOR extends BinaryGate {
      * @param name - the name of the gate
      * @param inDebuggerMode - a boolean to specify if additional debug information should be displayed
      */
-    public NOR(String name, boolean inDebuggerMode) {
-        super(name, inDebuggerMode);
+    public NOR(BitStream in1, BitStream in2, BitStream out, String name, boolean inDebuggerMode) {
+        super(in1, in2, out, name, inDebuggerMode);
     }
 
     public NOR(BitStream in1, BitStream in2, BitStream out, String name) {
-        super(name, false);
+        super(in1, in2, out, name, false);
     }
 
-    public NOR(boolean inDebuggerMode) {
-        super("NOR GATE", inDebuggerMode);
+    public NOR(BitStream in1, BitStream in2, BitStream out, boolean inDebuggerMode) {
+        super(in1, in2, out, "NOR GATE", inDebuggerMode);
     }
 
-    public NOR() {
-        super("NOR GATE", false);
+    public NOR(BitStream in1, BitStream in2, BitStream out) {
+        super(in1, in2, out, "NOR GATE", false);
     }
 
     /**Define the abstract compute method from BinaryGate class. Used to perform the
