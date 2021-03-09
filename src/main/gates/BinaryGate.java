@@ -167,7 +167,7 @@ public abstract class BinaryGate implements Node {
             for (int i = 0; i < newOut.length; i++) {
                 if (newOut[i] != this.out.getData()[i]) {
                     throw new InconsistentBitStreamSources("Inconsistency detected at " + this.toString() +
-                            "-> " + BitInformationConverter.convertBoolToBits(newOut) + " and " +
+                            " -> " + BitInformationConverter.convertBoolToBits(newOut) + " and " +
                             BitInformationConverter.convertBoolToBits(this.out.getData()));
                 }
             }
