@@ -6,6 +6,7 @@ import main.exceptions.BitStreamInputSizeMismatch;
 import main.exceptions.InconsistentBitStreamSources;
 import main.utils.BitInformationConverter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Input implements Node {
@@ -24,29 +25,26 @@ public class Input implements Node {
     /**Constructors for the Input class.
      *
      * @param data - the input data
-     * @param out - the "out" BitStream that is connected to the Input
      * @param name - the name of the input
      * @param inDebuggerMode - boolean to specify if we are in the debug mode
      */
-    public Input(boolean[] data, BitStream out, String name, boolean inDebuggerMode) {
-        this.out = out;
+    public Input(boolean[] data, String name, boolean inDebuggerMode) {
+        this.out = null;
         this.name = name;
         this.inDebuggerMode = inDebuggerMode;
         this.data = data;
-
-        this.out.addNewEndpoint(this);
     }
 
-    public Input(boolean[] data, BitStream out, String name) {
-        this(data, out, name, false);
+    public Input(boolean[] data, String name) {
+        this(data, name, false);
     }
 
-    public Input(boolean[] data, BitStream out, boolean inDebuggerMode) {
-        this(data, out, "Input", inDebuggerMode);
+    public Input(boolean[] data, boolean inDebuggerMode) {
+        this(data, "Input", inDebuggerMode);
     }
 
-    public Input(boolean[] data, BitStream out) {
-        this(data, out, "Input", false);
+    public Input(boolean[] data) {
+        this(data, "Input", false);
     }
 
     /**Getters for all the attributes.
@@ -71,6 +69,11 @@ public class Input implements Node {
      */
     public void setOut(BitStream out) {
         this.out = out;
+        this.out.addNewEndpoint(this);
+
+        List<Node> queue = new ArrayList<>();
+        queue.add(this);
+        this.evaluate(queue);
     }
 
     public void setData(boolean[] data) {

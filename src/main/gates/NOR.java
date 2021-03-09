@@ -9,26 +9,23 @@ public class NOR extends BinaryGate {
 
     /**Constructors for the NOR gate class
      *
-     * @param in1 - the first input stream to the gate
-     * @param in2 - the second input stream to the gate
-     * @param out - the output stream from the gate
      * @param name - the name of the gate
      * @param inDebuggerMode - a boolean to specify if additional debug information should be displayed
      */
-    public NOR(BitStream in1, BitStream in2, BitStream out, String name, boolean inDebuggerMode) {
-        super(in1, in2, out, name, inDebuggerMode);
+    public NOR(String name, boolean inDebuggerMode) {
+        super(name, inDebuggerMode);
     }
 
     public NOR(BitStream in1, BitStream in2, BitStream out, String name) {
-        super(in1, in2, out, name, false);
+        super(name, false);
     }
 
-    public NOR(BitStream in1, BitStream in2, BitStream out, boolean inDebuggerMode) {
-        super(in1, in2, out, "NOR GATE", inDebuggerMode);
+    public NOR(boolean inDebuggerMode) {
+        super("NOR GATE", inDebuggerMode);
     }
 
-    public NOR(BitStream in1, BitStream in2, BitStream out) {
-        super(in1, in2, out, "NOR GATE", false);
+    public NOR() {
+        super("NOR GATE", false);
     }
 
     /**Define the abstract compute method from BinaryGate class. Used to perform the
@@ -57,10 +54,7 @@ public class NOR extends BinaryGate {
      */
     @Override
     public String toString() {
-        return "NOR<" + this.getName() + ", "
-                + this.getIn1().getSize() + ", "
-                + this.getIn2().getSize() + ", "
-                + this.getOut().getSize() + ">";
+        return "NOR" + super.toString();
     }
 
 }

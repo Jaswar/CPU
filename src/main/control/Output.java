@@ -6,6 +6,7 @@ import main.exceptions.BitStreamInputSizeMismatch;
 import main.exceptions.InconsistentBitStreamSources;
 import main.utils.BitInformationConverter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Output implements Node {
@@ -24,29 +25,26 @@ public class Output implements Node {
 
     /**Constructors of the Output class.
      *
-     * @param in - the input BitStream
      * @param name - the name of the output
      * @param inDebuggerMode - the boolean to specify if we are in the debug mode
      */
-    public Output(BitStream in, String name, boolean inDebuggerMode) {
-        this.in = in;
+    public Output(String name, boolean inDebuggerMode) {
+        this.in = null;
         this.name = name;
         this.inDebuggerMode = inDebuggerMode;
-        this.data = new boolean[this.in.getSize()];
-
-        this.in.addNewEndpoint(this);
+        this.data = null;
     }
 
-    public Output(BitStream in, String name) {
-        this(in, name, false);
+    public Output(String name) {
+        this(name, false);
     }
 
-    public Output(BitStream in, boolean inDebuggerMode) {
-        this(in, "Output", inDebuggerMode);
+    public Output(boolean inDebuggerMode) {
+        this("Output", inDebuggerMode);
     }
 
-    public Output(BitStream in) {
-        this(in, "Output", false);
+    public Output() {
+        this("Output", false);
     }
 
     /**Getters for the attributes of the class
@@ -75,6 +73,13 @@ public class Output implements Node {
 
     public void setIn(BitStream in) {
         this.in = in;
+        this.in.addNewEndpoint(this);
+
+        this.data = new boolean[this.in.getSize()];
+
+        List<Node> queue = new ArrayList<>();
+        queue.add(this);
+        this.evaluate(queue);
     }
 
     public void setName(String name) {

@@ -10,26 +10,23 @@ public class OR extends BinaryGate {
 
     /**Constructors for the OR gate class
      *
-     * @param in1 - the first input stream to the gate
-     * @param in2 - the second input stream to the gate
-     * @param out - the output stream from the gate
      * @param name - the name of the gate
      * @param inDebuggerMode - a boolean to specify if additional debug information should be displayed
      */
-    public OR(BitStream in1, BitStream in2, BitStream out, String name, boolean inDebuggerMode) {
-        super(in1, in2, out, name, inDebuggerMode);
+    public OR(String name, boolean inDebuggerMode) {
+        super(name, inDebuggerMode);
     }
 
-    public OR(BitStream in1, BitStream in2, BitStream out, String name) {
-        super(in1, in2, out, name, false);
+    public OR(String name) {
+        super(name, false);
     }
 
-    public OR(BitStream in1, BitStream in2, BitStream out, boolean inDebuggerMode) {
-        super(in1, in2, out, "OR GATE", inDebuggerMode);
+    public OR(boolean inDebuggerMode) {
+        super("OR GATE", inDebuggerMode);
     }
 
-    public OR(BitStream in1, BitStream in2, BitStream out) {
-        super( in1, in2, out, "OR GATE", false);
+    public OR() {
+        super("OR GATE", false);
     }
 
     /**Define the abstract compute method from BinaryGate class. Used to perform the
@@ -58,9 +55,6 @@ public class OR extends BinaryGate {
      */
     @Override
     public String toString() {
-        return "OR<" + this.getName() + ", "
-                + this.getIn1().getSize() + ", "
-                + this.getIn2().getSize() + ", "
-                + this.getOut().getSize() + ">";
+        return "OR" + super.toString();
     }
 }

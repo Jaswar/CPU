@@ -1,31 +1,28 @@
 package main.gates;
 
 import main.BitStream;
-import main.Node;
 
-import java.util.List;
+public class NAND extends BinaryGate {
 
-public class XOR extends BinaryGate {
-
-    /**Constructors for the XOR gate class
+    /**Constructors for the OR gate class
      *
      * @param name - the name of the gate
      * @param inDebuggerMode - a boolean to specify if additional debug information should be displayed
      */
-    public XOR(String name, boolean inDebuggerMode) {
+    public NAND(String name, boolean inDebuggerMode) {
         super(name, inDebuggerMode);
     }
 
-    public XOR(String name) {
+    public NAND(String name) {
         super(name, false);
     }
 
-    public XOR(boolean inDebuggerMode) {
-        super("XOR GATE", inDebuggerMode);
+    public NAND(boolean inDebuggerMode) {
+        super("OR GATE", inDebuggerMode);
     }
 
-    public XOR() {
-        super("XOR GATE", false);
+    public NAND() {
+        super("OR GATE", false);
     }
 
     /**Define the abstract compute method from BinaryGate class. Used to perform the
@@ -39,10 +36,7 @@ public class XOR extends BinaryGate {
         boolean[] newOutData = new boolean[this.getIn1().getSize()];
 
         for (int i = 0; i < newOutData.length; i++) {
-            newOutData[i] = false;
-            if (this.getIn1().getData()[i] || this.getIn2().getData()[i]) {
-                newOutData[i] = true;
-            }
+            newOutData[i] = true;
             if (this.getIn1().getData()[i] && this.getIn2().getData()[i]) {
                 newOutData[i] = false;
             }
@@ -57,7 +51,6 @@ public class XOR extends BinaryGate {
      */
     @Override
     public String toString() {
-        return "XOR" + super.toString();
+        return "NAND" + super.toString();
     }
-
 }
