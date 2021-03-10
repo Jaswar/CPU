@@ -10,6 +10,9 @@ public class OR extends BinaryGate {
 
     /**Constructors for the OR gate class
      *
+     * @param in1 - the first input to the logic gate
+     * @param in2 - the second input to the logic gate
+     * @param out - the output from the logic gate
      * @param name - the name of the gate
      * @param inDebuggerMode - a boolean to specify if additional debug information should be displayed
      */
@@ -49,7 +52,7 @@ public class OR extends BinaryGate {
         return newOutData;
     }
 
-    /**Override the default toString method
+    /**Override the default toString method.
      *
      * @return - a String representation of this
      */

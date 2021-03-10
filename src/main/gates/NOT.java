@@ -6,6 +6,8 @@ public class NOT extends UnaryGate {
 
     /**Constructors for the NOT gate class
      *
+     * @param in - the input to the logic gate
+     * @param out - the output from the logic gate
      * @param name - the name of the gate
      * @param inDebuggerMode - a boolean to specify if additional debug information should be displayed
      */
@@ -28,7 +30,7 @@ public class NOT extends UnaryGate {
     /**Define the abstract compute method from UnaryGate class. Used to perform the
      * evaluation of the gate (see UnaryGate.evaluate() method for usage).
      *
-     * @return - the data computed by the logic gate from the input streams (the data is
+     * @return - the data computed by the logic gate from the input stream (the data is
      * not automatically forwarded to the out stream)
      */
     @Override
@@ -42,7 +44,7 @@ public class NOT extends UnaryGate {
         return newOutData;
     }
 
-    /**Override the default toString method
+    /**Override the default toString method.
      *
      * @return - a String representation of this
      */
