@@ -36,9 +36,7 @@ public class Output implements Node {
 
         this.in.addNewEndpoint(this);
 
-        List<Node> queue = new ArrayList<>();
-        queue.add(this);
-        this.evaluate(queue);
+        this.setup();
     }
 
     public Output(BitStream in, String name) {
@@ -78,7 +76,12 @@ public class Output implements Node {
     }
 
     public void setIn(BitStream in) {
+        this.in.removeEndpoint(this);
+
         this.in = in;
+        this.in.addNewEndpoint(this);
+
+        this.setup();
     }
 
     public void setName(String name) {
@@ -87,6 +90,14 @@ public class Output implements Node {
 
     public void setInDebuggerMode(boolean inDebuggerMode) {
         this.inDebuggerMode = inDebuggerMode;
+    }
+
+    /**Method to setup the circuit starting in "this".
+     */
+    public void setup() {
+        List<Node> queue = new ArrayList<>();
+        queue.add(this);
+        this.evaluate(queue);
     }
 
     /**Method used to evaluate the output, ie: set its data to that of the input stream.

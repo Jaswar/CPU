@@ -36,9 +36,7 @@ public class Input implements Node {
 
         this.out.addNewEndpoint(this);
 
-        List<Node> queue = new ArrayList<>();
-        queue.add(this);
-        this.evaluate(queue);
+        this.setup();
     }
 
     public Input(boolean[] data, BitStream out, String name) {
@@ -74,7 +72,12 @@ public class Input implements Node {
     /**Setters for all the attributes.
      */
     public void setOut(BitStream out) {
+        this.out.removeEndpoint(this);
+
         this.out = out;
+        this.out.addNewEndpoint(this);
+
+        this.setup();
     }
 
     public void setData(boolean[] data) {
@@ -87,6 +90,14 @@ public class Input implements Node {
 
     public void setInDebuggerMode(boolean inDebuggerMode) {
         this.inDebuggerMode = inDebuggerMode;
+    }
+
+    /**Method to setup the circuit starting in "this".
+     */
+    public void setup() {
+        List<Node> queue = new ArrayList<>();
+        queue.add(this);
+        this.evaluate(queue);
     }
 
     /**Evaluate the Input, i.e: if possible forward the input data to the "out" BitStream,

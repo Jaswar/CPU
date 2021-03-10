@@ -75,6 +75,14 @@ public class BitStream {
      */
     public void addNewEndpoint(Node node) {this.endpoints.add(node);}
 
+    /**Remove an endpoint from the BitStream.
+     *
+     * @param node - the endpoint to remove
+     */
+    public void removeEndpoint(Node node) {
+        this.endpoints.remove(node);
+    }
+
     /**Get all neighbours of a node connected with this BitStream.
      *
      * @param node - the node whose neighbours should be returned

@@ -27,9 +27,7 @@ public abstract class UnaryGate extends Gate {
         this.in = in;
         this.in.addNewEndpoint(this);
 
-        List<Node> queue = new ArrayList<>();
-        queue.add(this);
-        this.evaluate(queue);
+        this.setup();
     }
 
     /**Getters for all the attributes.
@@ -41,12 +39,12 @@ public abstract class UnaryGate extends Gate {
     /**Setters for all the attributes.
      */
     public void setIn(BitStream in) {
+        this.in.removeEndpoint(this);
+
         this.in = in;
         this.in.addNewEndpoint(this);
 
-        List<Node> queue = new ArrayList<>();
-        queue.add(this);
-        this.evaluate(queue);
+        this.setup();
     }
 
     /**Method to check if the sizes of the inputs and the output are correct.

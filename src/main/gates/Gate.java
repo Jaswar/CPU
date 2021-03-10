@@ -50,7 +50,12 @@ public abstract class Gate implements Node {
     /**Setters for all the attributes of the class.
      */
     public void setOut(BitStream out) {
+        this.out.removeEndpoint(this);
+
         this.out = out;
+        this.out.addNewEndpoint(this);
+
+        this.setup();
     }
 
     public void setName(String name) {
@@ -72,6 +77,14 @@ public abstract class Gate implements Node {
      * @return - a boolean array corresponding to the computed logic result
      */
     public abstract boolean[] compute();
+
+    /**Method to setup the circuit starting in "this".
+     */
+    public void setup() {
+        List<Node> queue = new ArrayList<>();
+        queue.add(this);
+        this.evaluate(queue);
+    }
 
     /**Evaluate the logic gate. This also includes checking if evaluation is possible, setting the
      * source of the out stream to this logic gate and adding all neighbours to the execution queue.
