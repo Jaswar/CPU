@@ -12,6 +12,7 @@ import java.util.List;
 public class Input implements Node {
 
     /**Class responsible for inputting data into the circuit.
+     *
      * @param data - the input data for the Input (forwarded later to the "out" BitStream)
      * @param out - the BitStream which goes out of the Input
      * @param name - the name of the input
@@ -25,6 +26,7 @@ public class Input implements Node {
     /**Constructors for the Input class.
      *
      * @param data - the input data
+     * @param out - the output bit stream
      * @param name - the name of the input
      * @param inDebuggerMode - boolean to specify if we are in the debug mode
      */

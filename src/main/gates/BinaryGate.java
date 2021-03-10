@@ -20,6 +20,9 @@ public abstract class BinaryGate extends Gate {
 
     /**Constructor for the BinaryGate class.
      *
+     * @param in1 - the first input stream
+     * @param in2 - the second input stream
+     * @param out - the output stream of the gate
      * @param name - the name of the gate
      * @param inDebuggerMode - boolean to specify if additional debug information should be shown
      */

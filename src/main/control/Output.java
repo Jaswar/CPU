@@ -25,6 +25,7 @@ public class Output implements Node {
 
     /**Constructors of the Output class.
      *
+     * @param in - the input bit stream, whose data will be shown by the output
      * @param name - the name of the output
      * @param inDebuggerMode - the boolean to specify if we are in the debug mode
      */

@@ -22,6 +22,7 @@ public abstract class Gate implements Node {
 
     /**Constructor for the Gate class.
      *
+     * @param out - the output stream from the gate
      * @param name - the name of the gate
      * @param inDebuggerMode - boolean to specify if additional debug information should be shown
      */

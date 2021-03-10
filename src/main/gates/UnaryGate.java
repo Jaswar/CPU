@@ -19,6 +19,8 @@ public abstract class UnaryGate extends Gate {
 
     /**Constructor for the UnaryGate class.
      *
+     * @param in - the input bit stream
+     * @param out - the output bit stream
      * @param name - the name of the gate
      * @param inDebuggerMode - boolean to specify if additional debug information should be shown
      */
