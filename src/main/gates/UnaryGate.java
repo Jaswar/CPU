@@ -58,7 +58,7 @@ public abstract class UnaryGate extends Gate {
             return;
         }
         if (this.in.getSize() != this.getOut().getSize()) {
-            throw new BitStreamInputSizeMismatch("Input size mismatch at: " + this.toString());
+            throw new BitStreamInputSizeMismatch(this);
         }
     }
 
@@ -78,6 +78,6 @@ public abstract class UnaryGate extends Gate {
      */
     @Override
     public String toString() {
-        return "<" + this.in + ", " + this.getOut() + ">";
+        return "<" + this.getName() + ", " + this.in + ", " + this.getOut() + ">";
     }
 }

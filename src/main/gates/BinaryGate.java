@@ -73,10 +73,10 @@ public abstract class BinaryGate extends Gate {
     @Override
     public void checkIfSizesMatch() {
         if (this.in1.getSize() != this.in2.getSize()) {
-            throw new BitStreamInputSizeMismatch("Input size mismatch at: " + this.toString());
+            throw new BitStreamInputSizeMismatch(this);
         }
         else if (this.in1.getSize() != this.getOut().getSize()) {
-            throw new BitStreamInputSizeMismatch("Input size mismatch at: " + this.toString());
+            throw new BitStreamInputSizeMismatch(this);
         }
     }
 
@@ -97,6 +97,6 @@ public abstract class BinaryGate extends Gate {
      */
     @Override
     public String toString() {
-        return "<" + this.in1 + ", " + this.in2 + ", " + this.getOut() + ">";
+        return "<" + this.getName() + ", " + this.in1 + ", " + this.in2 + ", " + this.getOut() + ">";
     }
 }

@@ -152,7 +152,7 @@ public class Input implements Node {
     @Override
     public void checkIfSizesMatch() {
         if (this.data.length != this.getOut().getSize()) {
-            throw new BitStreamInputSizeMismatch("Input size mismatch at: " + this.toString());
+            throw new BitStreamInputSizeMismatch(this);
         }
     }
 
@@ -165,9 +165,7 @@ public class Input implements Node {
         if (this.out.getSource() != null && this.out.getSource() != this) {
             for (int i = 0; i < newOut.length; i++) {
                 if (newOut[i] != this.out.getData()[i]) {
-                    throw new InconsistentBitStreamSources("Inconsistency detected at " + this.toString() +
-                            " -> " + BitInformationConverter.convertBoolToBits(newOut) + " and " +
-                            BitInformationConverter.convertBoolToBits(this.out.getData()));
+                    throw new InconsistentBitStreamSources(this.out.getSource(), this);
                 }
             }
         }

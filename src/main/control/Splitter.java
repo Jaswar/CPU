@@ -118,7 +118,7 @@ public class Splitter implements Node {
      * @param bitStreams - the list of BitStreams
      * @return - the total number of bits in the BitStreams specified
      */
-    private int getBitStreamListSize(List<BitStream> bitStreams) {
+    public int getBitStreamListSize(List<BitStream> bitStreams) {
         int size = 0;
         for (BitStream stream : bitStreams) {
             size += stream.getSize();
@@ -185,8 +185,7 @@ public class Splitter implements Node {
         int inSize = this.getBitStreamListSize(this.in);
         int outSize = this.getBitStreamListSize(this.out);
         if (inSize != outSize) {
-            throw new IllegalSplitException("Impossible split at: " + this.toString()
-                    + ". Input size was " + inSize + " output size was " + outSize + ".");
+            throw new IllegalSplitException(this);
         }
     }
 
@@ -202,9 +201,7 @@ public class Splitter implements Node {
             if (outStream.getSource() != null && outStream.getSource() != this) {
                 for (boolean bit : outStream.getData()) {
                     if (newOutData[count++] != bit) {
-                        throw new InconsistentBitStreamSources("Inconsistency detected at "
-                                + this.toString() + " -> " + BitInformationConverter.convertBoolToBits(newOutData)
-                                + " and " + BitInformationConverter.convertBoolToBits(outStream.getData()));
+                        throw new InconsistentBitStreamSources(outStream.getSource(), this);
                     }
                 }
             } else {
