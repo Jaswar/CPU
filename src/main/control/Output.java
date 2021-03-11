@@ -96,9 +96,17 @@ public class Output implements Node {
     /**Method to setup the circuit starting in "this".
      */
     public void setup() {
+        boolean temp = this.inDebuggerMode;
+        this.inDebuggerMode = false;
+
         List<Node> queue = new ArrayList<>();
         queue.add(this);
-        this.evaluate(queue);
+        while (queue.size() > 0) {
+            Node node = queue.remove(0);
+            node.evaluate(queue);
+        }
+
+        this.inDebuggerMode = temp;
     }
 
     /**Method used to evaluate the output, ie: set its data to that of the input stream.

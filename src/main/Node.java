@@ -8,7 +8,9 @@ public interface Node {
 
     /**Interface describing each node/component in a circuit.
      */
-    public void setup();
+    int WORD_SIZE = 16;
+
+    void setup();
     public void evaluate(List<Node> queue);
     public void debug();
     public void checkIfSizesMatch();

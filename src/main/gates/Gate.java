@@ -82,9 +82,17 @@ public abstract class Gate implements Node {
     /**Method to setup the circuit starting in "this".
      */
     public void setup() {
+        boolean temp = this.inDebuggerMode;
+        this.inDebuggerMode = false;
+
         List<Node> queue = new ArrayList<>();
         queue.add(this);
-        this.evaluate(queue);
+        while (queue.size() > 0) {
+            Node node = queue.remove(0);
+            node.evaluate(queue);
+        }
+
+        this.inDebuggerMode = temp;
     }
 
     /**Evaluate the logic gate. This also includes checking if evaluation is possible, setting the
@@ -103,11 +111,9 @@ public abstract class Gate implements Node {
         if (this.decideIfEvaluateFurther(newOutData)) {
             this.addNeighboursToQueue(queue);
         }
-        if (this.out != null) {
-            this.out.setData(newOutData);
-            this.setSourceForOutStream();
-        }
 
+        this.out.setData(newOutData);
+        this.setSourceForOutStream();
 
         if (this.isInDebuggerMode()) {
             this.debug();
