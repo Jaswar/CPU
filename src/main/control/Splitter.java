@@ -11,11 +11,25 @@ import java.util.List;
 
 public class Splitter implements Node {
 
+    /**Class responsible for splitting multiple BitStreams into other BitStreams.
+     *
+     * @param in - a list of the input BitStreams
+     * @param out - a list of the output BitStreams
+     * @param name - the name of the splitter
+     * @param inDebuggerMode - a boolean to specify if additional debug data should be shown
+     */
     private List<BitStream> in;
     private List<BitStream> out;
     private String name;
     private boolean inDebuggerMode;
 
+    /**Constructors for the Splitter class.
+     *
+     * @param in - a list of the input BitStreams
+     * @param out - a list of the output BitStreams
+     * @param name - the name of the splitter
+     * @param inDebuggerMode - a boolean to specify if additional debug data should be shown
+     */
     public Splitter(List<BitStream> in, List<BitStream> out, String name, boolean inDebuggerMode) {
         this.in = in;
         for (BitStream inStream : this.in) {
@@ -45,6 +59,8 @@ public class Splitter implements Node {
         this(in, out, "Splitter", false);
     }
 
+    /**Getters for all the attributes of the class.
+     */
     public List<BitStream> getIn() {
         return in;
     }
@@ -61,6 +77,8 @@ public class Splitter implements Node {
         return inDebuggerMode;
     }
 
+    /**Setters for all the attributes of the class.
+     */
     public void setIn(List<BitStream> in) {
         for (BitStream inStream : this.in) {
             inStream.removeEndpoint(this);
@@ -95,6 +113,11 @@ public class Splitter implements Node {
         this.inDebuggerMode = inDebuggerMode;
     }
 
+    /**Get the total size of a list of BitStreams.
+     *
+     * @param bitStreams - the list of BitStreams
+     * @return - the total number of bits in the BitStreams specified
+     */
     private int getBitStreamListSize(List<BitStream> bitStreams) {
         int size = 0;
         for (BitStream stream : bitStreams) {
@@ -103,6 +126,8 @@ public class Splitter implements Node {
         return size;
     }
 
+    /**Method to setup the circuit starting in "this".
+     */
     @Override
     public void setup() {
         boolean temp = this.inDebuggerMode;
@@ -118,6 +143,11 @@ public class Splitter implements Node {
         this.inDebuggerMode = temp;
     }
 
+    /**Evaluate the splitter. This includes checking the sizes of the BitStreams and their sources
+     * to check for any inconsistencies.
+     *
+     * @param queue - the execution queue
+     */
     @Override
     public void evaluate(List<Node> queue) {
         this.checkIfSizesMatch();
@@ -146,6 +176,10 @@ public class Splitter implements Node {
         }
     }
 
+    /**Check if the total number of bits in the input BitStreams is the same as
+     * the number of bits in the output BitStreams. Throw IllegalSplitException
+     * if not.
+     */
     @Override
     public void checkIfSizesMatch() {
         int inSize = this.getBitStreamListSize(this.in);
@@ -156,6 +190,11 @@ public class Splitter implements Node {
         }
     }
 
+    /**Check if the sources of the output BitStreams are consistent.
+     *
+     * @param newOutData - data taken from the input BitStreams, changed to
+     *                   a 1D array
+     */
     @Override
     public void checkIfSourceIsConsistent(boolean[] newOutData) {
         int count = 0;
@@ -174,6 +213,13 @@ public class Splitter implements Node {
         }
     }
 
+    /**Decide if the system should be evaluated further. That should happen
+     * if the new data is different from the old one.
+     *
+     * @param newOutData - data taken from the input BitStreams, changed to
+     *                   a 1D array
+     * @return - true if the system should be evaluated further, false otherwise
+     */
     @Override
     public boolean decideIfEvaluateFurther(boolean[] newOutData) {
         int outSize = this.getBitStreamListSize(this.out);
@@ -194,6 +240,10 @@ public class Splitter implements Node {
         return false;
     }
 
+    /**Add all neighbours of the Splitter to the queue.
+     *
+     * @param queue - the execution queue to add the neighbours to
+     */
     @Override
     public void addNeighboursToQueue(List<Node> queue) {
         for (BitStream outStream : this.out) {
@@ -201,6 +251,11 @@ public class Splitter implements Node {
         }
     }
 
+    /**Method used to set the data of the output streams to the correct values.
+     *
+     * @param newOutData - data taken from the input BitStreams, changed to
+     *                   a 1D array
+     */
     private void setOutData(boolean[] newOutData) {
         int count = 0;
         for (BitStream outStream : this.out) {
@@ -212,6 +267,8 @@ public class Splitter implements Node {
         }
     }
 
+    /**Set the source of the out streams to the splitter.
+     */
     @Override
     public void setSourceForOutStream() {
         for (BitStream outStream : this.out) {
@@ -219,6 +276,8 @@ public class Splitter implements Node {
         }
     }
 
+    /**Method used to display additional debug information.
+     */
     @Override
     public void debug() {
         String msg = "Evaluating " + this.name + ":\n\tInputs:\n";
@@ -230,6 +289,11 @@ public class Splitter implements Node {
             msg += "\t\t" + BitInformationConverter.convertBoolToBits(outStream.getData()) + "\n";
         }
         System.out.println(msg);
+    }
+
+    @Override
+    public String toString() {
+        return "Splitter<" + this.name + ", " + this.in.size() + ", " + this.out.size() + ">";
     }
 
 }
