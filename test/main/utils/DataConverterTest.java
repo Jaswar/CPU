@@ -51,6 +51,12 @@ class DataConverterTest {
     }
 
     @Test
+    void convertBinToSignedDec3() {
+        String bin = "1000";
+        assertEquals(-8, DataConverter.convertBinToSignedDec(bin, 4));
+    }
+
+    @Test
     void convertSignedDecToBin1() {
         int decimal = -13;
         assertEquals("111110011", DataConverter.convertSignedDecToBin(decimal, 9));

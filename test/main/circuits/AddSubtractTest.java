@@ -62,8 +62,8 @@ class AddSubtractTest {
         BitStream control = new BitStream(1);
         BitStream overflow = new BitStream(1);
 
-        Input sourceInput = new Input(new boolean[16], source);
-        Input destinationInput = new Input(new boolean[16], destination);
+        Input sourceInput = new Input(new boolean[Node.WORD_SIZE], source);
+        Input destinationInput = new Input(new boolean[Node.WORD_SIZE], destination);
         Input controlInput = new Input(new boolean[]{false}, control);
 
         Output outputObject = new Output(output);
@@ -86,8 +86,19 @@ class AddSubtractTest {
             int expectedSum = src + dst;
             int expectedSub = src - dst;
 
-            boolean shouldOverflowAdd = Math.abs(expectedSum) >= 32768;
-            boolean shouldOverflowSub = Math.abs(expectedSub) >= 32768;
+            boolean shouldOverflowAdd, shouldOverflowSub;
+            if (expectedSum < 0) {
+                shouldOverflowAdd = Math.abs(expectedSum) >= 32769;
+            }
+            else {
+                shouldOverflowAdd = Math.abs(expectedSum) >= 32768;
+            }
+            if (expectedSub < 0) {
+                shouldOverflowSub = Math.abs(expectedSub) >= 32769;
+            }
+            else {
+                shouldOverflowSub = Math.abs(expectedSub) >= 32768;
+            }
 
             sourceInput.setData(randomSource);
             destinationInput.setData(randomDestination);
