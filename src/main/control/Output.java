@@ -2,9 +2,7 @@ package main.control;
 
 import main.BitStream;
 import main.Node;
-import main.exceptions.BitStreamInputSizeMismatch;
-import main.exceptions.InconsistentBitStreamSources;
-import main.utils.BitInformationConverter;
+import main.utils.DataConverter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -126,7 +124,7 @@ public class Output implements Node {
      */
     public void debug() {
         System.out.println("Evaluating " + this.name + ":\n" +
-                "\tOutput: " + BitInformationConverter.convertBoolToBits(this.data));
+                "\tOutput: " + DataConverter.convertBoolToBin(this.data));
     }
 
     /**Override the default toString method.

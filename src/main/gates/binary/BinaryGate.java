@@ -1,13 +1,9 @@
-package main.gates;
+package main.gates.binary;
 
 import main.BitStream;
-import main.Node;
 import main.exceptions.BitStreamInputSizeMismatch;
-import main.exceptions.InconsistentBitStreamSources;
-import main.utils.BitInformationConverter;
-
-import java.util.ArrayList;
-import java.util.List;
+import main.gates.Gate;
+import main.utils.DataConverter;
 
 public abstract class BinaryGate extends Gate {
 
@@ -85,9 +81,9 @@ public abstract class BinaryGate extends Gate {
     @Override
     public void debug() {
         String msg = "Evaluating " + this.getName() + ":\n"
-                + "\tInputs: " + BitInformationConverter.convertBoolToBits(this.in1.getData()) + ", "
-                    + BitInformationConverter.convertBoolToBits(this.in2.getData()) + "\n"
-                + "\tOutput: " + BitInformationConverter.convertBoolToBits(this.getOut().getData());
+                + "\tInputs: " + DataConverter.convertBoolToBin(this.in1.getData()) + ", "
+                    + DataConverter.convertBoolToBin(this.in2.getData()) + "\n"
+                + "\tOutput: " + DataConverter.convertBoolToBin(this.getOut().getData());
         System.out.println(msg);
     }
 

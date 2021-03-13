@@ -4,7 +4,8 @@ import main.BitStream;
 import main.Node;
 import main.control.Input;
 import main.control.Output;
-import main.utils.BitInformationConverter;
+import main.gates.binary.AND;
+import main.utils.DataConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -51,7 +52,7 @@ class ANDTest {
 
         run(queue);
 
-        assertEquals("0", BitInformationConverter.convertBoolToBits(output.getData()));
+        assertEquals("0", DataConverter.convertBoolToBin(output.getData()));
     }
 
     @Test
@@ -64,7 +65,7 @@ class ANDTest {
 
         run(queue);
 
-        assertEquals("0", BitInformationConverter.convertBoolToBits(output.getData()));
+        assertEquals("0", DataConverter.convertBoolToBin(output.getData()));
     }
 
     @Test
@@ -77,7 +78,7 @@ class ANDTest {
 
         run(queue);
 
-        assertEquals("0", BitInformationConverter.convertBoolToBits(output.getData()));
+        assertEquals("0", DataConverter.convertBoolToBin(output.getData()));
     }
 
     @Test
@@ -90,7 +91,7 @@ class ANDTest {
 
         run(queue);
 
-        assertEquals("1", BitInformationConverter.convertBoolToBits(output.getData()));
+        assertEquals("1", DataConverter.convertBoolToBin(output.getData()));
     }
 
 }

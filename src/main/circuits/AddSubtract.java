@@ -3,44 +3,57 @@ package main.circuits;
 import main.BitStream;
 import main.Node;
 import main.control.Splitter;
-import main.gates.AND;
-import main.gates.OR;
-import main.gates.XOR;
+import main.gates.binary.AND;
+import main.gates.multi.MultiOR;
+import main.gates.binary.XOR;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddSubtract implements Node {
+public class AddSubtract implements Circuit {
 
+    /**Circuit to perform addition and subtraction of two numbers.
+     *
+     * @param source - the source BitStream
+     * @param destination - the destination BitStream
+     * @param out - the output BitStream
+     * @param control - the BitStream that specifies if addition or subtraction is performed
+     *                (0 for addition, 1 for subtraction)
+     * @param overflow - BitStream to specify if overflow occurs
+     * @param name - the name of the circuit
+     * @param inDebuggerMode - boolean to specify if the circuit should be evaluated in the debug mode
+     * @param debugDepth - how deep should the debug go (in how many levels of circuitry)
+     */
     private BitStream source, destination, out, control, overflow;
     private String name;
     private boolean inDebuggerMode;
     private int debugDepth;
 
+    /**Constructors for the AddSubtract circuit.
+     *
+     * @param source - the source BitStream
+     * @param destination - the destination BitStream
+     * @param out - the output BitStream
+     * @param control - the BitStream that specifies if addition or subtraction is performed
+     *                (0 for addition, 1 for subtraction)
+     * @param overflow - BitStream to specify if overflow occurs
+     * @param name - the name of the circuit
+     * @param inDebuggerMode - boolean to specify if the circuit should be evaluated in the debug mode
+     * @param debugDepth - how deep should the debug go (in how many levels of circuitry)
+     */
     public AddSubtract(BitStream source, BitStream destination,
                        BitStream out, BitStream control,
                        BitStream overflow, String name,
                        boolean inDebuggerMode, int debugDepth) {
         this.source = source;
-        this.source.addNewEndpoint(this);
-
         this.destination = destination;
-        this.destination.addNewEndpoint(this);
-
         this.out = out;
-        this.out.addNewEndpoint(this);
-
         this.control = control;
-        this.control.addNewEndpoint(this);
-
         this.overflow = overflow;
-        this.overflow.addNewEndpoint(this);
-
         this.name = name;
         this.inDebuggerMode = inDebuggerMode;
         this.debugDepth = debugDepth;
 
-        this.setup();
         this.build();
     }
 
@@ -63,6 +76,8 @@ public class AddSubtract implements Node {
         this(source, destination, out, control, overflow, "ADD/SUB", false, 0);
     }
 
+    /**Getters for all the attributes of the class.
+     */
     public BitStream getSource() {
         return source;
     }
@@ -91,53 +106,10 @@ public class AddSubtract implements Node {
         return inDebuggerMode;
     }
 
+    /**Setters for some of the attributes. Setting BitStreams is not possible.
+     */
     public int getDebugDepth() {
         return debugDepth;
-    }
-
-    public void setSource(BitStream source) {
-        this.source.removeEndpoint(this);
-
-        this.source = source;
-        this.source.addNewEndpoint(this);
-
-        this.setup();
-    }
-
-    public void setDestination(BitStream destination) {
-        this.destination.removeEndpoint(this);
-
-        this.destination = destination;
-        this.destination.addNewEndpoint(this);
-
-        this.setup();
-    }
-
-    public void setOut(BitStream out) {
-        this.out.removeEndpoint(this);
-
-        this.out = out;
-        this.out.addNewEndpoint(this);
-
-        this.setup();
-    }
-
-    public void setControl(BitStream control) {
-        this.control.removeEndpoint(this);
-
-        this.control = control;
-        this.control.addNewEndpoint(this);
-
-        this.setup();
-    }
-
-    public void setOverflow(BitStream overflow) {
-        this.overflow.removeEndpoint(this);
-
-        this.overflow = overflow;
-        this.overflow.addNewEndpoint(this);
-
-        this.setup();
     }
 
     public void setName(String name) {
@@ -152,8 +124,11 @@ public class AddSubtract implements Node {
         this.debugDepth = debugDepth;
     }
 
+    /**Method to build the circuit as defined in documentation/addSub.png.
+     */
+    @Override
     public void build() {
-        boolean debugGates = this.debugDepth > 0 ? true : false;
+        boolean debugGates = this.debugDepth > 0 ? this.inDebuggerMode : false;
 
         //First indexes -> least significant bits
         List<BitStream> srcInList = new ArrayList<>();
@@ -174,9 +149,6 @@ public class AddSubtract implements Node {
             dstOutList.add(bit);
         }
 
-        Splitter sourceSplitter = new Splitter(srcInList, srcOutList, "Source splitter", debugGates);
-        Splitter destinationSplitter = new Splitter(dstInList, dstOutList, "Destination splitter", debugGates);
-
         List<BitStream> outList = new ArrayList<>();
         for (int i = 0; i < Node.WORD_SIZE; i++) {
             BitStream bit = new BitStream(1);
@@ -184,6 +156,7 @@ public class AddSubtract implements Node {
         }
 
         BitStream carryIn = this.control;
+        BitStream lastCarryIn = new BitStream(1);
         for (int i = 0; i < Node.WORD_SIZE; i++) {
             BitStream revXorLXor = new BitStream(1);
             BitStream lXorUXor = new BitStream(1);
@@ -191,13 +164,35 @@ public class AddSubtract implements Node {
             BitStream and1Or = new BitStream(1);
             BitStream and2Or = new BitStream(1);
 
+            List<BitStream> andOr = new ArrayList<>();
+            andOr.addAll(List.of(and0Or, and1Or, and2Or));
+
             XOR revertXor = new XOR(this.control, dstOutList.get(i), revXorLXor, "revXor" + i, debugGates);
             XOR lowerXor = new XOR(revXorLXor, srcOutList.get(i), lXorUXor, "lXor" + i, debugGates);
             XOR upperXor = new XOR(carryIn, lXorUXor, outList.get(i), "uXor" + i, debugGates);
             AND and0 = new AND(carryIn, revXorLXor, and0Or, "and0_" + i, debugGates);
             AND and1 = new AND(srcOutList.get(i), carryIn, and1Or, "and1_" + i, debugGates);
             AND and2 = new AND(srcOutList.get(i), revXorLXor, and2Or, "and2_" + i, debugGates);
-            OR or1 = new OR();
+
+            carryIn = new BitStream(1);
+
+            MultiOR or1 = new MultiOR(andOr, carryIn, "or" + i, debugGates);
+
+            if (i == Node.WORD_SIZE - 2) {
+                lastCarryIn = carryIn;
+            }
+            if (i == Node.WORD_SIZE - 1) {
+                XOR overflowXor = new XOR(lastCarryIn, carryIn, this.overflow, "overXor", debugGates);
+            }
         }
+
+        Splitter sourceSplitter = new Splitter(srcInList, srcOutList, "Source splitter", debugGates);
+        Splitter destinationSplitter = new Splitter(dstInList, dstOutList, "Destination splitter", debugGates);
+
+        List<BitStream> outBitStreamList = new ArrayList<>();
+        outBitStreamList.add(this.out);
+
+        Splitter outputSplitter = new Splitter(outList, outBitStreamList, "Output splitter", debugGates);
     }
 }
+

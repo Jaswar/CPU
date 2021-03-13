@@ -1,13 +1,10 @@
-package main.gates;
+package main.gates.binary;
 
 import main.BitStream;
-import main.Node;
 
-import java.util.List;
+public class OR extends BinaryGate {
 
-public class AND extends BinaryGate {
-
-    /**Constructors for the AND gate class
+    /**Constructors for the OR gate class
      *
      * @param in1 - the first input to the logic gate
      * @param in2 - the second input to the logic gate
@@ -15,20 +12,20 @@ public class AND extends BinaryGate {
      * @param name - the name of the gate
      * @param inDebuggerMode - a boolean to specify if additional debug information should be displayed
      */
-    public AND(BitStream in1, BitStream in2, BitStream out, String name, boolean inDebuggerMode) {
+    public OR(BitStream in1, BitStream in2, BitStream out, String name, boolean inDebuggerMode) {
         super(in1, in2, out, name, inDebuggerMode);
     }
 
-    public AND(BitStream in1, BitStream in2, BitStream out, String name) {
+    public OR(BitStream in1, BitStream in2, BitStream out, String name) {
         super(in1, in2, out, name, false);
     }
 
-    public AND(BitStream in1, BitStream in2, BitStream out, boolean inDebuggerMode) {
-        super(in1, in2, out, "AND GATE", inDebuggerMode);
+    public OR(BitStream in1, BitStream in2, BitStream out, boolean inDebuggerMode) {
+        super(in1, in2, out, "OR GATE", inDebuggerMode);
     }
 
-    public AND(BitStream in1, BitStream in2, BitStream out) {
-        super(in1, in2, out, "AND GATE", false);
+    public OR(BitStream in1, BitStream in2, BitStream out) {
+        super(in1, in2, out, "OR GATE", false);
     }
 
     /**Define the abstract compute method from BinaryGate class. Used to perform the
@@ -43,7 +40,7 @@ public class AND extends BinaryGate {
 
         for (int i = 0; i < newOutData.length; i++) {
             newOutData[i] = false;
-            if (this.getIn1().getData()[i] && this.getIn2().getData()[i]) {
+            if (this.getIn1().getData()[i] || this.getIn2().getData()[i]) {
                 newOutData[i] = true;
             }
         }
@@ -57,7 +54,6 @@ public class AND extends BinaryGate {
      */
     @Override
     public String toString() {
-        return "AND" + super.toString();
+        return "OR" + super.toString();
     }
-
 }

@@ -3,7 +3,6 @@ package main.gates;
 import main.BitStream;
 import main.Node;
 import main.exceptions.InconsistentBitStreamSources;
-import main.utils.BitInformationConverter;
 
 import java.util.ArrayList;
 import java.util.List;

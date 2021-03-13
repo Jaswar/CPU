@@ -1,10 +1,10 @@
-package main.gates;
+package main.gates.binary;
 
 import main.BitStream;
 
-public class NAND extends BinaryGate {
+public class NOR extends BinaryGate {
 
-    /**Constructors for the OR gate class
+    /**Constructors for the NOR gate class
      *
      * @param in1 - the first input to the logic gate
      * @param in2 - the second input to the logic gate
@@ -12,20 +12,20 @@ public class NAND extends BinaryGate {
      * @param name - the name of the gate
      * @param inDebuggerMode - a boolean to specify if additional debug information should be displayed
      */
-    public NAND(BitStream in1, BitStream in2, BitStream out, String name, boolean inDebuggerMode) {
+    public NOR(BitStream in1, BitStream in2, BitStream out, String name, boolean inDebuggerMode) {
         super(in1, in2, out, name, inDebuggerMode);
     }
 
-    public NAND(BitStream in1, BitStream in2, BitStream out, String name) {
+    public NOR(BitStream in1, BitStream in2, BitStream out, String name) {
         super(in1, in2, out, name, false);
     }
 
-    public NAND(BitStream in1, BitStream in2, BitStream out, boolean inDebuggerMode) {
-        super(in1, in2, out, "OR GATE", inDebuggerMode);
+    public NOR(BitStream in1, BitStream in2, BitStream out, boolean inDebuggerMode) {
+        super(in1, in2, out, "NOR GATE", inDebuggerMode);
     }
 
-    public NAND(BitStream in1, BitStream in2, BitStream out) {
-        super(in1, in2, out, "OR GATE", false);
+    public NOR(BitStream in1, BitStream in2, BitStream out) {
+        super(in1, in2, out, "NOR GATE", false);
     }
 
     /**Define the abstract compute method from BinaryGate class. Used to perform the
@@ -40,7 +40,7 @@ public class NAND extends BinaryGate {
 
         for (int i = 0; i < newOutData.length; i++) {
             newOutData[i] = true;
-            if (this.getIn1().getData()[i] && this.getIn2().getData()[i]) {
+            if (this.getIn1().getData()[i] || this.getIn2().getData()[i]) {
                 newOutData[i] = false;
             }
         }
@@ -54,6 +54,7 @@ public class NAND extends BinaryGate {
      */
     @Override
     public String toString() {
-        return "NAND" + super.toString();
+        return "NOR" + super.toString();
     }
+
 }

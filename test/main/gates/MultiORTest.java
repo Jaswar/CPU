@@ -4,6 +4,8 @@ import main.BitStream;
 import main.Node;
 import main.exceptions.BitStreamInputSizeMismatch;
 import main.exceptions.InconsistentBitStreamSources;
+import main.gates.binary.AND;
+import main.gates.multi.MultiOR;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

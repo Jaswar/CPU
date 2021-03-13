@@ -1,4 +1,4 @@
-package main.gates;
+package main.gates.unary;
 
 import main.BitStream;
 

@@ -4,7 +4,7 @@ import main.BitStream;
 import main.Node;
 import main.exceptions.IllegalSplitException;
 import main.exceptions.InconsistentBitStreamSources;
-import main.utils.BitInformationConverter;
+import main.utils.DataConverter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -279,11 +279,11 @@ public class Splitter implements Node {
     public void debug() {
         String msg = "Evaluating " + this.name + ":\n\tInputs:\n";
         for (BitStream inStream : this.in) {
-            msg += "\t\t" + BitInformationConverter.convertBoolToBits(inStream.getData()) + "\n";
+            msg += "\t\t" + DataConverter.convertBoolToBin(inStream.getData()) + "\n";
         }
         msg += "\tOutputs:\n";
         for (BitStream outStream : this.out) {
-            msg += "\t\t" + BitInformationConverter.convertBoolToBits(outStream.getData()) + "\n";
+            msg += "\t\t" + DataConverter.convertBoolToBin(outStream.getData()) + "\n";
         }
         System.out.println(msg);
     }

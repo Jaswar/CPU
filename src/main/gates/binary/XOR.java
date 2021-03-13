@@ -1,9 +1,6 @@
-package main.gates;
+package main.gates.binary;
 
 import main.BitStream;
-import main.Node;
-
-import java.util.List;
 
 public class XOR extends BinaryGate {
 

@@ -1,6 +1,6 @@
 package main;
 
-import main.utils.BitInformationConverter;
+import main.utils.DataConverter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -114,6 +114,6 @@ public class BitStream {
     @Override
     public String toString() {
         return "BitStream<" + this.getSize() + ", " +
-                BitInformationConverter.convertBoolToBits(this.data) + ">";
+                DataConverter.convertBoolToBin(this.data) + ">";
     }
 }

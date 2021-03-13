@@ -4,7 +4,7 @@ import main.BitStream;
 import main.Node;
 import main.exceptions.BitStreamInputSizeMismatch;
 import main.exceptions.InconsistentBitStreamSources;
-import main.utils.BitInformationConverter;
+import main.utils.DataConverter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -176,7 +176,7 @@ public class Input implements Node {
     @Override
     public void debug() {
         System.out.println("Evaluating " + this.name + ":\n" +
-                "\tInput: " + BitInformationConverter.convertBoolToBits(this.data));
+                "\tInput: " + DataConverter.convertBoolToBin(this.data));
     }
 
     /**Override the default toString method.
@@ -186,7 +186,7 @@ public class Input implements Node {
     @Override
     public String toString() {
         return "Input<" + this.name + ", " +
-                BitInformationConverter.convertBoolToBits(this.data) + ">";
+                DataConverter.convertBoolToBin(this.data) + ">";
     }
 
     /**Define a method from the Node interface. Here there is no need to check if we need to evaluate further,

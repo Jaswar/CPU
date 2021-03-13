@@ -1,14 +1,5 @@
 package main;
 
-import main.control.Input;
-import main.control.Output;
-import main.gates.BinaryGate;
-import main.gates.NOR;
-import main.gates.OR;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class Main {
 
 

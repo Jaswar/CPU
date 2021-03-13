@@ -4,7 +4,7 @@ import main.BitStream;
 import main.Node;
 import main.exceptions.IllegalSplitException;
 import main.exceptions.InconsistentBitStreamSources;
-import main.gates.OR;
+import main.gates.binary.OR;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

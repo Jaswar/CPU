@@ -1,8 +1,9 @@
-package main.gates;
+package main.gates.multi;
 
 import main.BitStream;
 import main.exceptions.BitStreamInputSizeMismatch;
-import main.utils.BitInformationConverter;
+import main.gates.Gate;
+import main.utils.DataConverter;
 
 import java.util.List;
 
@@ -70,9 +71,9 @@ public abstract class MultiInputGate extends Gate {
     public void debug() {
         String msg = "Evaluating " + this.getName() + ":\n\tInputs:\n";
         for (BitStream inStream : this.in) {
-            msg += "\t\t" + BitInformationConverter.convertBoolToBits(inStream.getData()) + "\n";
+            msg += "\t\t" + DataConverter.convertBoolToBin(inStream.getData()) + "\n";
         }
-        msg += "\tOutput: " + BitInformationConverter.convertBoolToBits(this.getOut().getData());
+        msg += "\tOutput: " + DataConverter.convertBoolToBin(this.getOut().getData());
         System.out.println(msg);
     }
 

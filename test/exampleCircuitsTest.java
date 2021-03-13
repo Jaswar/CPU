@@ -4,8 +4,12 @@ import main.control.Input;
 import main.control.Output;
 import main.exceptions.BitStreamInputSizeMismatch;
 import main.exceptions.InconsistentBitStreamSources;
-import main.gates.*;
-import main.utils.BitInformationConverter;
+import main.gates.binary.AND;
+import main.gates.binary.NOR;
+import main.gates.binary.OR;
+import main.gates.binary.XOR;
+import main.gates.unary.NOT;
+import main.utils.DataConverter;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -44,8 +48,8 @@ public class exampleCircuitsTest {
 
         run(queue);
 
-        assertEquals("0", BitInformationConverter.convertBoolToBits(q.getData()));
-        assertEquals("1", BitInformationConverter.convertBoolToBits(notQ.getData()));
+        assertEquals("0", DataConverter.convertBoolToBin(q.getData()));
+        assertEquals("1", DataConverter.convertBoolToBin(notQ.getData()));
     }
 
     @Test
@@ -82,8 +86,8 @@ public class exampleCircuitsTest {
         queue.addAll(List.of(d, clk));
         run(queue);
 
-        assertEquals("1", BitInformationConverter.convertBoolToBits(q.getData()));
-        assertEquals("0", BitInformationConverter.convertBoolToBits(notQ.getData()));
+        assertEquals("1", DataConverter.convertBoolToBin(q.getData()));
+        assertEquals("0", DataConverter.convertBoolToBin(notQ.getData()));
 
         d.setData(new boolean[]{false});
         clk.setData(new boolean[]{false});
@@ -92,8 +96,8 @@ public class exampleCircuitsTest {
         queue.addAll(List.of(d, clk));
         run(queue);
 
-        assertEquals("1", BitInformationConverter.convertBoolToBits(q.getData()));
-        assertEquals("0", BitInformationConverter.convertBoolToBits(notQ.getData()));
+        assertEquals("1", DataConverter.convertBoolToBin(q.getData()));
+        assertEquals("0", DataConverter.convertBoolToBin(notQ.getData()));
 
         d.setData(new boolean[]{false});
         clk.setData(new boolean[]{true});
@@ -102,8 +106,8 @@ public class exampleCircuitsTest {
         queue.addAll(List.of(d, clk));
         run(queue);
 
-        assertEquals("0", BitInformationConverter.convertBoolToBits(q.getData()));
-        assertEquals("1", BitInformationConverter.convertBoolToBits(notQ.getData()));
+        assertEquals("0", DataConverter.convertBoolToBin(q.getData()));
+        assertEquals("1", DataConverter.convertBoolToBin(notQ.getData()));
 
         d.setData(new boolean[]{true});
         clk.setData(new boolean[]{false});
@@ -112,8 +116,8 @@ public class exampleCircuitsTest {
         queue.addAll(List.of(d, clk));
         run(queue);
 
-        assertEquals("0", BitInformationConverter.convertBoolToBits(q.getData()));
-        assertEquals("1", BitInformationConverter.convertBoolToBits(notQ.getData()));
+        assertEquals("0", DataConverter.convertBoolToBin(q.getData()));
+        assertEquals("1", DataConverter.convertBoolToBin(notQ.getData()));
     }
 
     //OR and XOR connected to the same stream with different values
