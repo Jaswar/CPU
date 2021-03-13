@@ -170,13 +170,13 @@ public class AddSubtract implements Circuit {
             XOR revertXor = new XOR(this.control, dstOutList.get(i), revXorLXor, "revXor" + i, debugGates);
             XOR lowerXor = new XOR(revXorLXor, srcOutList.get(i), lXorUXor, "lXor" + i, debugGates);
             XOR upperXor = new XOR(carryIn, lXorUXor, outList.get(i), "uXor" + i, debugGates);
-            AND and0 = new AND(carryIn, revXorLXor, and0Or, "and0_" + i, debugGates);
-            AND and1 = new AND(srcOutList.get(i), carryIn, and1Or, "and1_" + i, debugGates);
-            AND and2 = new AND(srcOutList.get(i), revXorLXor, and2Or, "and2_" + i, debugGates);
+            AND and0 = new AND(carryIn, revXorLXor, and0Or, "and" + i + "_0", debugGates);
+            AND and1 = new AND(srcOutList.get(i), carryIn, and1Or, "and" + i + "_1", debugGates);
+            AND and2 = new AND(srcOutList.get(i), revXorLXor, and2Or, "and" + i + "_2", debugGates);
 
             carryIn = new BitStream(1);
 
-            MultiOR or1 = new MultiOR(andOr, carryIn, "or" + i, debugGates);
+            MultiOR or = new MultiOR(andOr, carryIn, "or" + i, debugGates);
 
             if (i == Node.WORD_SIZE - 2) {
                 lastCarryIn = carryIn;

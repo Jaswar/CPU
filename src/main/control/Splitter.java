@@ -5,6 +5,7 @@ import main.Node;
 import main.exceptions.IllegalSplitException;
 import main.exceptions.InconsistentBitStreamSources;
 import main.utils.DataConverter;
+import main.warnings.InconsistentBitStreamSourcesWarning;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,34 +78,8 @@ public class Splitter implements Node {
         return inDebuggerMode;
     }
 
-    /**Setters for all the attributes of the class.
+    /**Setters for some of the attributes of the class.
      */
-    public void setIn(List<BitStream> in) {
-        for (BitStream inStream : this.in) {
-            inStream.removeEndpoint(this);
-        }
-
-        this.in = in;
-        for (BitStream inStream : this.in) {
-            inStream.addNewEndpoint(this);
-        }
-
-        this.setup();
-    }
-
-    public void setOut(List<BitStream> out) {
-        for (BitStream outStream : this.out) {
-            outStream.removeEndpoint(this);
-        }
-
-        this.out = out;
-        for (BitStream outStream : this.out) {
-            outStream.addNewEndpoint(this);
-        }
-
-        this.setup();
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -130,17 +105,12 @@ public class Splitter implements Node {
      */
     @Override
     public void setup() {
-        boolean temp = this.inDebuggerMode;
-        this.inDebuggerMode = false;
-
         List<Node> queue = new ArrayList<>();
         queue.add(this);
         while (queue.size() > 0) {
             Node node = queue.remove(0);
             node.evaluate(queue);
         }
-
-        this.inDebuggerMode = temp;
     }
 
     /**Evaluate the splitter. This includes checking the sizes of the BitStreams and their sources
@@ -201,7 +171,7 @@ public class Splitter implements Node {
             if (outStream.getSource() != null && outStream.getSource() != this) {
                 for (boolean bit : outStream.getData()) {
                     if (newOutData[count++] != bit) {
-                        throw new InconsistentBitStreamSources(outStream.getSource(), this);
+                        InconsistentBitStreamSourcesWarning.show(outStream.getSource(), this);
                     }
                 }
             } else {

@@ -30,27 +30,28 @@ class AddSubtractTest {
         BitStream control = new BitStream(1);
         BitStream overflow = new BitStream(1);
 
-        Input sourceInput = new Input(new boolean[]
-                {true, false, true, false, false, false, false, false,
-                        false, false, false, false, false, false, false, false}, source);
-        Input destinationInput = new Input(new boolean[]
-                {false, false, false, true, true, true, true, true,
-                        true, true, true, true, true, true, true, true}, destination);
-        Input controlInput = new Input(new boolean[]{false}, control);
+        Input sourceInput = new Input(DataConverter.convertBinToBool("1110011101111010"), source);
+        Input destinationInput = new Input(DataConverter.convertBinToBool("0000000001110011"), destination);
+        Input controlInput = new Input(new boolean[]{true}, control);
 
         Output outputObject = new Output(output);
         Output overflowOutput = new Output(overflow);
 
-        AddSubtract addSubtract = new AddSubtract(source, destination, output, control, overflow, true, 1);
+        AddSubtract addSubtract = new AddSubtract(source, destination, output, control, overflow, false, 1);
+
+        int src = DataConverter.convertBoolToSignedDec(DataConverter.convertBinToBool("1110011101111010"), Node.WORD_SIZE);
+        int dst = DataConverter.convertBoolToSignedDec(DataConverter.convertBinToBool("0000000001110011"), Node.WORD_SIZE);
+        int expectedSum = src + dst;
+        int expectedSub = src - dst;
+
+        boolean shouldOverflowAdd = Math.abs(expectedSum) >= 32767;
+        boolean shouldOverflowSub = Math.abs(expectedSub) >= 32767;
 
         List<Node> queue = new ArrayList<>();
         queue.addAll(List.of(sourceInput, destinationInput, controlInput));
         run(queue);
 
-        assertArrayEquals(new boolean[]
-                {true, false, true, true, true, true, true, true,
-                        true, true, true, true, true, true, true, true}, outputObject.getData());
-        assertArrayEquals(new boolean[]{false}, overflowOutput.getData());
+        assertArrayEquals(new boolean[]{shouldOverflowSub}, overflow.getData());
     }
 
     @Test
@@ -70,7 +71,7 @@ class AddSubtractTest {
 
         AddSubtract addSubtract = new AddSubtract(source, destination, output, control, overflow, false, 1);
 
-        for (int iteration = 0; iteration < 1000; iteration++) {
+        for (int iteration = 0; iteration < 10000; iteration++) {
             boolean[] randomSource = new boolean[Node.WORD_SIZE];
             boolean[] randomDestination = new boolean[Node.WORD_SIZE];
 
@@ -85,8 +86,8 @@ class AddSubtractTest {
             int expectedSum = src + dst;
             int expectedSub = src - dst;
 
-            boolean shouldOverflowAdd = Math.abs(expectedSum) >= 32767;
-            boolean shouldOverflowSub = Math.abs(expectedSub) >= 32767;
+            boolean shouldOverflowAdd = Math.abs(expectedSum) >= 32768;
+            boolean shouldOverflowSub = Math.abs(expectedSub) >= 32768;
 
             sourceInput.setData(randomSource);
             destinationInput.setData(randomDestination);
@@ -111,6 +112,16 @@ class AddSubtractTest {
                 assertEquals(expectedSub, DataConverter.convertBoolToSignedDec(outputObject.getData(), Node.WORD_SIZE));
             }
             assertArrayEquals(new boolean[]{shouldOverflowSub}, overflow.getData());
+
+//            System.out.println(shouldOverflowAdd);
+//            System.out.println(shouldOverflowSub);
+//            System.out.println(src);
+//            System.out.println(dst);
+//            System.out.println(DataConverter.convertBoolToBin(randomSource));
+//            System.out.println(DataConverter.convertBoolToBin(randomDestination));
+//            System.out.println(expectedSub);
+//            System.out.println(expectedSum);
+//            System.out.println(DataConverter.convertBoolToSignedDec(outputObject.getData(), Node.WORD_SIZE));
         }
     }
 

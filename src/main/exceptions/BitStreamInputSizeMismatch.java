@@ -13,5 +13,4 @@ public class BitStreamInputSizeMismatch extends RuntimeException {
     public BitStreamInputSizeMismatch(String errorMessage) {
         super(errorMessage);
     }
-
 }

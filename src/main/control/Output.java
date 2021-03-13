@@ -50,7 +50,7 @@ public class Output implements Node {
         this(in, "Output", false);
     }
 
-    /**Getters for the attributes of the class
+    /**Getters for the attributes of the class.
      */
     public boolean[] getData() {
         return data;
@@ -68,19 +68,10 @@ public class Output implements Node {
         return inDebuggerMode;
     }
 
-    /**Setters for the attributes of the class
+    /**Setters for some of the attributes of the class.
      */
     public void setData(boolean[] data) {
         this.data = data;
-    }
-
-    public void setIn(BitStream in) {
-        this.in.removeEndpoint(this);
-
-        this.in = in;
-        this.in.addNewEndpoint(this);
-
-        this.setup();
     }
 
     public void setName(String name) {
@@ -94,17 +85,12 @@ public class Output implements Node {
     /**Method to setup the circuit starting in "this".
      */
     public void setup() {
-        boolean temp = this.inDebuggerMode;
-        this.inDebuggerMode = false;
-
         List<Node> queue = new ArrayList<>();
         queue.add(this);
         while (queue.size() > 0) {
             Node node = queue.remove(0);
             node.evaluate(queue);
         }
-
-        this.inDebuggerMode = temp;
     }
 
     /**Method used to evaluate the output, ie: set its data to that of the input stream.

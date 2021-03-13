@@ -5,6 +5,7 @@ import main.Node;
 import main.exceptions.BitStreamInputSizeMismatch;
 import main.exceptions.InconsistentBitStreamSources;
 import main.utils.DataConverter;
+import main.warnings.InconsistentBitStreamSourcesWarning;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,17 +72,8 @@ public class Input implements Node {
         return inDebuggerMode;
     }
 
-    /**Setters for all the attributes.
+    /**Setters for some of the attributes.
      */
-    public void setOut(BitStream out) {
-        this.out.removeEndpoint(this);
-
-        this.out = out;
-        this.out.addNewEndpoint(this);
-
-        this.setup();
-    }
-
     public void setData(boolean[] data) {
         this.data = data;
     }
@@ -97,17 +89,12 @@ public class Input implements Node {
     /**Method to setup the circuit starting in "this".
      */
     public void setup() {
-        boolean temp = this.inDebuggerMode;
-        this.inDebuggerMode = false;
-
         List<Node> queue = new ArrayList<>();
         queue.add(this);
         while (queue.size() > 0) {
             Node node = queue.remove(0);
             node.evaluate(queue);
         }
-
-        this.inDebuggerMode = temp;
     }
 
     /**Evaluate the Input, i.e: if possible forward the input data to the "out" BitStream,
@@ -165,7 +152,7 @@ public class Input implements Node {
         if (this.out.getSource() != null && this.out.getSource() != this) {
             for (int i = 0; i < newOut.length; i++) {
                 if (newOut[i] != this.out.getData()[i]) {
-                    throw new InconsistentBitStreamSources(this.out.getSource(), this);
+                    InconsistentBitStreamSourcesWarning.show(this.out.getSource(), this);
                 }
             }
         }

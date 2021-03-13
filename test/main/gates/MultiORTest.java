@@ -88,23 +88,23 @@ class MultiORTest {
         });
     }
 
-    @Test
-    void testInconsistency() {
-        BitStream in1 = new BitStream(1);
-        BitStream in2 = new BitStream(1);
-        BitStream in3 = new BitStream(1);
-        BitStream out = new BitStream(1);
-        List<BitStream> input = new ArrayList<>();
-        input.addAll(List.of(in1, in2, in3));
-
-        in1.setData(new boolean[]{false});
-        in2.setData(new boolean[]{true});
-        in3.setData(new boolean[]{false});
-
-        AND and = new AND(in1, in3, out);
-
-        assertThrows(InconsistentBitStreamSources.class, () -> {
-            MultiOR or = new MultiOR(input, out);
-        });
-    }
+//    @Test
+//    void testInconsistency() {
+//        BitStream in1 = new BitStream(1);
+//        BitStream in2 = new BitStream(1);
+//        BitStream in3 = new BitStream(1);
+//        BitStream out = new BitStream(1);
+//        List<BitStream> input = new ArrayList<>();
+//        input.addAll(List.of(in1, in2, in3));
+//
+//        in1.setData(new boolean[]{false});
+//        in2.setData(new boolean[]{true});
+//        in3.setData(new boolean[]{false});
+//
+//        AND and = new AND(in1, in3, out);
+//
+//        assertThrows(InconsistentBitStreamSources.class, () -> {
+//            MultiOR or = new MultiOR(input, out);
+//        });
+//    }
 }

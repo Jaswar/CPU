@@ -174,55 +174,55 @@ class SplitterTest {
         });
     }
 
-    @Test
-    void testInconsistency1() {
-        BitStream in1 = new BitStream(2);
-        BitStream out1 = new BitStream(1);
-        BitStream out2 = new BitStream(1);
-
-        BitStream orIn1 = new BitStream(1);
-        BitStream orIn2 = new BitStream(1);
-
-        List<BitStream> in = new ArrayList<>();
-        List<BitStream> out = new ArrayList<>();
-        in.add(in1);
-        out.addAll(List.of(out1, out2));
-
-        in1.setData(new boolean[]{true, false});
-        orIn1.setData(new boolean[]{true});
-        orIn2.setData(new boolean[]{true});
-
-        OR or = new OR(orIn1, orIn2, out2);
-
-        assertThrows(InconsistentBitStreamSources.class, () -> {
-            Splitter splitter = new Splitter(in, out);
-        });
-    }
-
-    @Test
-    void testInconsistency2() {
-        BitStream in1 = new BitStream(2);
-        BitStream in2 = new BitStream(2);
-        BitStream out1 = new BitStream(4);
-
-        BitStream orIn1 = new BitStream(4);
-        BitStream orIn2 = new BitStream(4);
-
-        List<BitStream> in = new ArrayList<>();
-        List<BitStream> out = new ArrayList<>();
-        in.add(in1);
-        in.add(in2);
-        out.addAll(List.of(out1));
-
-        in1.setData(new boolean[]{true, true});
-        in1.setData(new boolean[]{false, true});
-        orIn1.setData(new boolean[]{true, false, false, false});
-        orIn2.setData(new boolean[]{true, false, false, true});
-
-        OR or = new OR(orIn1, orIn2, out1);
-
-        assertThrows(InconsistentBitStreamSources.class, () -> {
-            Splitter splitter = new Splitter(in, out);
-        });
-    }
+//    @Test
+//    void testInconsistency1() {
+//        BitStream in1 = new BitStream(2);
+//        BitStream out1 = new BitStream(1);
+//        BitStream out2 = new BitStream(1);
+//
+//        BitStream orIn1 = new BitStream(1);
+//        BitStream orIn2 = new BitStream(1);
+//
+//        List<BitStream> in = new ArrayList<>();
+//        List<BitStream> out = new ArrayList<>();
+//        in.add(in1);
+//        out.addAll(List.of(out1, out2));
+//
+//        in1.setData(new boolean[]{true, false});
+//        orIn1.setData(new boolean[]{true});
+//        orIn2.setData(new boolean[]{true});
+//
+//        OR or = new OR(orIn1, orIn2, out2);
+//
+//        assertThrows(InconsistentBitStreamSources.class, () -> {
+//            Splitter splitter = new Splitter(in, out);
+//        });
+//    }
+//
+//    @Test
+//    void testInconsistency2() {
+//        BitStream in1 = new BitStream(2);
+//        BitStream in2 = new BitStream(2);
+//        BitStream out1 = new BitStream(4);
+//
+//        BitStream orIn1 = new BitStream(4);
+//        BitStream orIn2 = new BitStream(4);
+//
+//        List<BitStream> in = new ArrayList<>();
+//        List<BitStream> out = new ArrayList<>();
+//        in.add(in1);
+//        in.add(in2);
+//        out.addAll(List.of(out1));
+//
+//        in1.setData(new boolean[]{true, true});
+//        in1.setData(new boolean[]{false, true});
+//        orIn1.setData(new boolean[]{true, false, false, false});
+//        orIn2.setData(new boolean[]{true, false, false, true});
+//
+//        OR or = new OR(orIn1, orIn2, out1);
+//
+//        assertThrows(InconsistentBitStreamSources.class, () -> {
+//            Splitter splitter = new Splitter(in, out);
+//        });
+//    }
 }

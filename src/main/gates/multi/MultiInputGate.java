@@ -39,21 +39,6 @@ public abstract class MultiInputGate extends Gate {
         return in;
     }
 
-    /**Setters for all the attributes of the class.
-     */
-    public void setIn(List<BitStream> in) {
-        for (BitStream inStream : this.in) {
-            inStream.removeEndpoint(this);
-        }
-
-        this.in = in;
-        for (BitStream inStream : this.in) {
-            inStream.addNewEndpoint(this);
-        }
-
-        this.setup();
-    }
-
     /**Method to check if all the sizes of the input streams and the output streams match.
      */
     @Override

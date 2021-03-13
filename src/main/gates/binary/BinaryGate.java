@@ -43,26 +43,6 @@ public abstract class BinaryGate extends Gate {
         return in2;
     }
 
-    /**Setters for all the attributes of the class.
-     */
-    public void setIn1(BitStream in1) {
-        this.in1.removeEndpoint(this);
-
-        this.in1 = in1;
-        this.in1.addNewEndpoint(this);
-
-        this.setup();
-    }
-
-    public void setIn2(BitStream in2) {
-        this.in2.removeEndpoint(this);
-
-        this.in2 = in2;
-        this.in2.addNewEndpoint(this);
-
-        this.setup();
-    }
-
     /**Method to check if the sizes of the inputs and the output are correct.
      * Throws BitStreamInputSizeMismatch if not.
      */

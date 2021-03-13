@@ -26,6 +26,7 @@ public class BitStream {
         this.endpoints = endpoints;
         this.data = new boolean[size];
         this.source = null;
+
         initializeBitStream();
     }
 
@@ -57,6 +58,7 @@ public class BitStream {
 
     public Node getSource() {return this.source;}
 
+
     /**Setters for all the attributes of the BitStream class
      */
     public void setEndpoints(List<Node> endpoints) {
@@ -68,6 +70,7 @@ public class BitStream {
     }
 
     public void setSource(Node source) {this.source = source;}
+
 
     /**Add a new endpoint to the BitStream.
      *

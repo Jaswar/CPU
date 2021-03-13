@@ -3,6 +3,7 @@ package main.gates;
 import main.BitStream;
 import main.Node;
 import main.exceptions.InconsistentBitStreamSources;
+import main.warnings.InconsistentBitStreamSourcesWarning;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,17 +48,8 @@ public abstract class Gate implements Node {
         return inDebuggerMode;
     }
 
-    /**Setters for all the attributes of the class.
+    /**Setters for some of the attributes of the class.
      */
-    public void setOut(BitStream out) {
-        this.out.removeEndpoint(this);
-
-        this.out = out;
-        this.out.addNewEndpoint(this);
-
-        this.setup();
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -81,17 +73,12 @@ public abstract class Gate implements Node {
     /**Method to setup the circuit starting in "this".
      */
     public void setup() {
-        boolean temp = this.inDebuggerMode;
-        this.inDebuggerMode = false;
-
         List<Node> queue = new ArrayList<>();
         queue.add(this);
         while (queue.size() > 0) {
             Node node = queue.remove(0);
             node.evaluate(queue);
         }
-
-        this.inDebuggerMode = temp;
     }
 
     /**Evaluate the logic gate. This also includes checking if evaluation is possible, setting the
@@ -156,7 +143,8 @@ public abstract class Gate implements Node {
         if (this.out.getSource() != null && this.out.getSource() != this) {
             for (int i = 0; i < newOut.length; i++) {
                 if (newOut[i] != this.out.getData()[i]) {
-                    throw new InconsistentBitStreamSources(this.out.getSource(), this);
+                    InconsistentBitStreamSourcesWarning.show(this.out.getSource(), this);
+                    break;
                 }
             }
         }

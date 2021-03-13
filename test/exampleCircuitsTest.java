@@ -121,25 +121,25 @@ public class exampleCircuitsTest {
     }
 
     //OR and XOR connected to the same stream with different values
-    @Test
-    void inconsistencyTest() {
-        BitStream in1 = new BitStream(1);
-        BitStream in2 = new BitStream(1);
-        BitStream in3 = new BitStream(1);
-        BitStream in4 = new BitStream(1);
-        BitStream out = new BitStream(1);
-
-        Input input1 = new Input(new boolean[]{true}, in1);
-        Input input2 = new Input(new boolean[]{false}, in2);
-        Input input3 = new Input(new boolean[]{true}, in3);
-        Input input4 = new Input(new boolean[]{true}, in4);
-
-        OR or = new OR(in1, in2, out);
-
-        assertThrows(InconsistentBitStreamSources.class, () -> {
-            XOR xor = new XOR(in3, in4, out);
-        });
-    }
+//    @Test
+//    void inconsistencyTest() {
+//        BitStream in1 = new BitStream(1);
+//        BitStream in2 = new BitStream(1);
+//        BitStream in3 = new BitStream(1);
+//        BitStream in4 = new BitStream(1);
+//        BitStream out = new BitStream(1);
+//
+//        Input input1 = new Input(new boolean[]{true}, in1);
+//        Input input2 = new Input(new boolean[]{false}, in2);
+//        Input input3 = new Input(new boolean[]{true}, in3);
+//        Input input4 = new Input(new boolean[]{true}, in4);
+//
+//        OR or = new OR(in1, in2, out);
+//
+//        assertThrows(InconsistentBitStreamSources.class, () -> {
+//            XOR xor = new XOR(in3, in4, out);
+//        });
+//    }
 
     @Test
     void sizeMismatchTest() {
