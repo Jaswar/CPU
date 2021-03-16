@@ -1,4 +1,4 @@
-package main.gates;
+package main.gates.multi;
 
 import main.BitStream;
 import main.Node;

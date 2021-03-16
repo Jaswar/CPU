@@ -1,10 +1,10 @@
-package main.gates;
+package main.gates.binary;
 
 import main.BitStream;
 import main.Node;
 import main.control.Input;
 import main.control.Output;
-import main.gates.binary.AND;
+import main.gates.binary.XOR;
 import main.utils.DataConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,12 +14,12 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ANDTest {
+class XORTest {
 
     BitStream stream1, stream2, stream3;
     Input input1, input2;
     Output output;
-    AND and1;
+    XOR and1;
 
     @BeforeEach
     void setup() {
@@ -30,7 +30,7 @@ class ANDTest {
         input1 = new Input(new boolean[]{true}, stream1);
         input2 = new Input(new boolean[]{true}, stream2);
 
-        and1 = new AND(stream1, stream2, stream3);
+        and1 = new XOR(stream1, stream2, stream3);
 
         output = new Output(stream3);
     }
@@ -65,7 +65,7 @@ class ANDTest {
 
         run(queue);
 
-        assertEquals("0", DataConverter.convertBoolToBin(output.getData()));
+        assertEquals("1", DataConverter.convertBoolToBin(output.getData()));
     }
 
     @Test
@@ -78,7 +78,7 @@ class ANDTest {
 
         run(queue);
 
-        assertEquals("0", DataConverter.convertBoolToBin(output.getData()));
+        assertEquals("1", DataConverter.convertBoolToBin(output.getData()));
     }
 
     @Test
@@ -91,7 +91,7 @@ class ANDTest {
 
         run(queue);
 
-        assertEquals("1", DataConverter.convertBoolToBin(output.getData()));
+        assertEquals("0", DataConverter.convertBoolToBin(output.getData()));
     }
 
 }
