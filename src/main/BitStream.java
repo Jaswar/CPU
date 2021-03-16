@@ -1,6 +1,6 @@
 package main;
 
-import main.utils.BitInformationConverter;
+import main.utils.DataConverter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +26,7 @@ public class BitStream {
         this.endpoints = endpoints;
         this.data = new boolean[size];
         this.source = null;
+
         initializeBitStream();
     }
 
@@ -57,6 +58,7 @@ public class BitStream {
 
     public Node getSource() {return this.source;}
 
+
     /**Setters for all the attributes of the BitStream class
      */
     public void setEndpoints(List<Node> endpoints) {
@@ -69,11 +71,20 @@ public class BitStream {
 
     public void setSource(Node source) {this.source = source;}
 
+
     /**Add a new endpoint to the BitStream.
      *
      * @param node - the endpoint to add
      */
     public void addNewEndpoint(Node node) {this.endpoints.add(node);}
+
+    /**Remove an endpoint from the BitStream.
+     *
+     * @param node - the endpoint to remove
+     */
+    public void removeEndpoint(Node node) {
+        this.endpoints.remove(node);
+    }
 
     /**Get all neighbours of a node connected with this BitStream.
      *
@@ -106,6 +117,6 @@ public class BitStream {
     @Override
     public String toString() {
         return "BitStream<" + this.getSize() + ", " +
-                BitInformationConverter.convertBoolToBits(this.data) + ">";
+                DataConverter.convertBoolToBin(this.data) + ">";
     }
 }

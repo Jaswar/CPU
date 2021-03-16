@@ -2,9 +2,7 @@ package main.control;
 
 import main.BitStream;
 import main.Node;
-import main.exceptions.BitStreamInputSizeMismatch;
-import main.exceptions.InconsistentBitStreamSources;
-import main.utils.BitInformationConverter;
+import main.utils.DataConverter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +23,7 @@ public class Output implements Node {
 
     /**Constructors of the Output class.
      *
+     * @param in - the input bit stream, whose data will be shown by the output
      * @param name - the name of the output
      * @param inDebuggerMode - the boolean to specify if we are in the debug mode
      */
@@ -36,9 +35,7 @@ public class Output implements Node {
 
         this.in.addNewEndpoint(this);
 
-        List<Node> queue = new ArrayList<>();
-        queue.add(this);
-        this.evaluate(queue);
+        this.setup();
     }
 
     public Output(BitStream in, String name) {
@@ -53,7 +50,7 @@ public class Output implements Node {
         this(in, "Output", false);
     }
 
-    /**Getters for the attributes of the class
+    /**Getters for the attributes of the class.
      */
     public boolean[] getData() {
         return data;
@@ -71,14 +68,10 @@ public class Output implements Node {
         return inDebuggerMode;
     }
 
-    /**Setters for the attributes of the class
+    /**Setters for some of the attributes of the class.
      */
     public void setData(boolean[] data) {
         this.data = data;
-    }
-
-    public void setIn(BitStream in) {
-        this.in = in;
     }
 
     public void setName(String name) {
@@ -87,6 +80,17 @@ public class Output implements Node {
 
     public void setInDebuggerMode(boolean inDebuggerMode) {
         this.inDebuggerMode = inDebuggerMode;
+    }
+
+    /**Method to setup the circuit starting in "this".
+     */
+    public void setup() {
+        List<Node> queue = new ArrayList<>();
+        queue.add(this);
+        while (queue.size() > 0) {
+            Node node = queue.remove(0);
+            node.evaluate(queue);
+        }
     }
 
     /**Method used to evaluate the output, ie: set its data to that of the input stream.
@@ -106,7 +110,7 @@ public class Output implements Node {
      */
     public void debug() {
         System.out.println("Evaluating " + this.name + ":\n" +
-                "\tOutput: " + BitInformationConverter.convertBoolToBits(this.data));
+                "\tOutput: " + DataConverter.convertBoolToBin(this.data));
     }
 
     /**Override the default toString method.

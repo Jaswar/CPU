@@ -3,7 +3,7 @@ package main.gates;
 import main.BitStream;
 import main.Node;
 import main.exceptions.InconsistentBitStreamSources;
-import main.utils.BitInformationConverter;
+import main.warnings.InconsistentBitStreamSourcesWarning;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +22,7 @@ public abstract class Gate implements Node {
 
     /**Constructor for the Gate class.
      *
+     * @param out - the output stream from the gate
      * @param name - the name of the gate
      * @param inDebuggerMode - boolean to specify if additional debug information should be shown
      */
@@ -47,12 +48,8 @@ public abstract class Gate implements Node {
         return inDebuggerMode;
     }
 
-    /**Setters for all the attributes of the class.
+    /**Setters for some of the attributes of the class.
      */
-    public void setOut(BitStream out) {
-        this.out = out;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -73,6 +70,17 @@ public abstract class Gate implements Node {
      */
     public abstract boolean[] compute();
 
+    /**Method to setup the circuit starting in "this".
+     */
+    public void setup() {
+        List<Node> queue = new ArrayList<>();
+        queue.add(this);
+        while (queue.size() > 0) {
+            Node node = queue.remove(0);
+            node.evaluate(queue);
+        }
+    }
+
     /**Evaluate the logic gate. This also includes checking if evaluation is possible, setting the
      * source of the out stream to this logic gate and adding all neighbours to the execution queue.
      *
@@ -89,11 +97,9 @@ public abstract class Gate implements Node {
         if (this.decideIfEvaluateFurther(newOutData)) {
             this.addNeighboursToQueue(queue);
         }
-        if (this.out != null) {
-            this.out.setData(newOutData);
-            this.setSourceForOutStream();
-        }
 
+        this.out.setData(newOutData);
+        this.setSourceForOutStream();
 
         if (this.isInDebuggerMode()) {
             this.debug();
@@ -137,9 +143,8 @@ public abstract class Gate implements Node {
         if (this.out.getSource() != null && this.out.getSource() != this) {
             for (int i = 0; i < newOut.length; i++) {
                 if (newOut[i] != this.out.getData()[i]) {
-                    throw new InconsistentBitStreamSources("Inconsistency detected at " + this.toString() +
-                            " -> " + BitInformationConverter.convertBoolToBits(newOut) + " and " +
-                            BitInformationConverter.convertBoolToBits(this.out.getData()));
+                    InconsistentBitStreamSourcesWarning.show(this.out.getSource(), this);
+                    break;
                 }
             }
         }

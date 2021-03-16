@@ -4,7 +4,8 @@ import main.BitStream;
 import main.Node;
 import main.exceptions.BitStreamInputSizeMismatch;
 import main.exceptions.InconsistentBitStreamSources;
-import main.utils.BitInformationConverter;
+import main.utils.DataConverter;
+import main.warnings.InconsistentBitStreamSourcesWarning;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
 public class Input implements Node {
 
     /**Class responsible for inputting data into the circuit.
+     *
      * @param data - the input data for the Input (forwarded later to the "out" BitStream)
      * @param out - the BitStream which goes out of the Input
      * @param name - the name of the input
@@ -25,6 +27,7 @@ public class Input implements Node {
     /**Constructors for the Input class.
      *
      * @param data - the input data
+     * @param out - the output bit stream
      * @param name - the name of the input
      * @param inDebuggerMode - boolean to specify if we are in the debug mode
      */
@@ -36,9 +39,7 @@ public class Input implements Node {
 
         this.out.addNewEndpoint(this);
 
-        List<Node> queue = new ArrayList<>();
-        queue.add(this);
-        this.evaluate(queue);
+        this.setup();
     }
 
     public Input(boolean[] data, BitStream out, String name) {
@@ -71,12 +72,8 @@ public class Input implements Node {
         return inDebuggerMode;
     }
 
-    /**Setters for all the attributes.
+    /**Setters for some of the attributes.
      */
-    public void setOut(BitStream out) {
-        this.out = out;
-    }
-
     public void setData(boolean[] data) {
         this.data = data;
     }
@@ -87,6 +84,17 @@ public class Input implements Node {
 
     public void setInDebuggerMode(boolean inDebuggerMode) {
         this.inDebuggerMode = inDebuggerMode;
+    }
+
+    /**Method to setup the circuit starting in "this".
+     */
+    public void setup() {
+        List<Node> queue = new ArrayList<>();
+        queue.add(this);
+        while (queue.size() > 0) {
+            Node node = queue.remove(0);
+            node.evaluate(queue);
+        }
     }
 
     /**Evaluate the Input, i.e: if possible forward the input data to the "out" BitStream,
@@ -131,7 +139,7 @@ public class Input implements Node {
     @Override
     public void checkIfSizesMatch() {
         if (this.data.length != this.getOut().getSize()) {
-            throw new BitStreamInputSizeMismatch("Input size mismatch at: " + this.toString());
+            throw new BitStreamInputSizeMismatch(this);
         }
     }
 
@@ -144,9 +152,7 @@ public class Input implements Node {
         if (this.out.getSource() != null && this.out.getSource() != this) {
             for (int i = 0; i < newOut.length; i++) {
                 if (newOut[i] != this.out.getData()[i]) {
-                    throw new InconsistentBitStreamSources("Inconsistency detected at " + this.toString() +
-                            " -> " + BitInformationConverter.convertBoolToBits(newOut) + " and " +
-                            BitInformationConverter.convertBoolToBits(this.out.getData()));
+                    InconsistentBitStreamSourcesWarning.show(this.out.getSource(), this);
                 }
             }
         }
@@ -157,7 +163,7 @@ public class Input implements Node {
     @Override
     public void debug() {
         System.out.println("Evaluating " + this.name + ":\n" +
-                "\tInput: " + BitInformationConverter.convertBoolToBits(this.data));
+                "\tInput: " + DataConverter.convertBoolToBin(this.data));
     }
 
     /**Override the default toString method.
@@ -167,7 +173,7 @@ public class Input implements Node {
     @Override
     public String toString() {
         return "Input<" + this.name + ", " +
-                BitInformationConverter.convertBoolToBits(this.data) + ">";
+                DataConverter.convertBoolToBin(this.data) + ">";
     }
 
     /**Define a method from the Node interface. Here there is no need to check if we need to evaluate further,
