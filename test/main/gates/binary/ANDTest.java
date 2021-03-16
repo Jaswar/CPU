@@ -1,10 +1,10 @@
-package main.gates;
+package main.gates.binary;
 
 import main.BitStream;
 import main.Node;
 import main.control.Input;
 import main.control.Output;
-import main.gates.binary.OR;
+import main.gates.binary.AND;
 import main.utils.DataConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,12 +14,12 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ORTest {
+class ANDTest {
 
     BitStream stream1, stream2, stream3;
     Input input1, input2;
     Output output;
-    OR and1;
+    AND and1;
 
     @BeforeEach
     void setup() {
@@ -30,7 +30,7 @@ class ORTest {
         input1 = new Input(new boolean[]{true}, stream1);
         input2 = new Input(new boolean[]{true}, stream2);
 
-        and1 = new OR(stream1, stream2, stream3);
+        and1 = new AND(stream1, stream2, stream3);
 
         output = new Output(stream3);
     }
@@ -65,7 +65,7 @@ class ORTest {
 
         run(queue);
 
-        assertEquals("1", DataConverter.convertBoolToBin(output.getData()));
+        assertEquals("0", DataConverter.convertBoolToBin(output.getData()));
     }
 
     @Test
@@ -78,7 +78,7 @@ class ORTest {
 
         run(queue);
 
-        assertEquals("1", DataConverter.convertBoolToBin(output.getData()));
+        assertEquals("0", DataConverter.convertBoolToBin(output.getData()));
     }
 
     @Test
