@@ -23,6 +23,28 @@ class AddSubtractTest {
     }
 
     @Test
+    void testVerySimple() {
+        BitStream source = new BitStream(4);
+        BitStream destination = new BitStream(4);
+        BitStream output = new BitStream(4);
+        BitStream control = new BitStream(1);
+        BitStream overflow = new BitStream(1);
+
+        Input sourceInput = new Input(new boolean[]{false, false, true, false}, source);
+        Input destinationInput = new Input(new boolean[]{false, false, true, true}, destination);
+        Input controlInput = new Input(new boolean[]{false}, control);
+
+        AddSubtract addSubtract = new AddSubtract(source, destination, output, control, overflow);
+
+        List<Node> queue = new ArrayList<>();
+        queue.addAll(List.of(sourceInput, destinationInput, controlInput));
+        run(queue);
+
+        assertArrayEquals(new boolean[]{false, true, false, true}, output.getData());
+        assertArrayEquals(new boolean[]{false}, overflow.getData());
+    }
+
+    @Test
     void testSimple1() {
         BitStream source = new BitStream(Node.WORD_SIZE);
         BitStream destination = new BitStream(Node.WORD_SIZE);

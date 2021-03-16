@@ -6,15 +6,14 @@ public class DataConverter {
      */
 
     /**Method used to convert an array of booleans to a bit representation.
-     * Arrays are reversed.
-     * Eg: [true, true, false, true] -> 1011
+     * Eg: [true, true, false, true] -> 1101
      *
      * @param data - the boolean array to convert
      * @return - a bit string representation of the data
      */
     public static String convertBoolToBin(boolean[] data) {
         String msg = "";
-        for (int i = data.length - 1; i >= 0; i--) {
+        for (int i = 0; i < data.length; i++) {
             if (data[i]) {
                 msg += "1";
             }
@@ -26,21 +25,19 @@ public class DataConverter {
     }
 
     /**Method to convert binary number to a list of booleans.
-     * Arrays are reversed.
-     * Eg: 01001 -> [true, false, false, true, false]
+     * Eg: 01001 -> [false, true, false, false, true]
      *
      * @param bits - the binary data
      * @return - the boolean array generated from the binary representation
      */
     public static boolean[] convertBinToBool(String bits) {
         boolean[] bool = new boolean[bits.length()];
-        for (int i = bits.length() - 1; i >= 0; i--) {
-            int inx = bits.length() - i - 1;
+        for (int i = 0; i < bits.length(); i++) {
             if (bits.charAt(i) == '0') {
-                bool[inx] = false;
+                bool[i] = false;
             }
             else {
-                bool[inx] = true;
+                bool[i] = true;
             }
         }
         return bool;
@@ -85,7 +82,7 @@ public class DataConverter {
         return binary;
     }
 
-    /**Convert boolean array to unsigned integer. Array is reversed.
+    /**Convert boolean array to unsigned integer.
      *
      * @param data - the boolean array to convert
      * @return - the unsigned integer compute from the input data
@@ -95,7 +92,7 @@ public class DataConverter {
         return DataConverter.convertBinToUnsignedDec(binary);
     }
 
-    /**Convert unsigned integer to boolean array. Array is reversed.
+    /**Convert unsigned integer to boolean array.
      *
      * @param decimal - the unsigned integer
      * @return - the generated boolean array
@@ -172,7 +169,7 @@ public class DataConverter {
         }
     }
 
-    /**Convert boolean array to signed integer. Array is reversed.
+    /**Convert boolean array to signed integer.
      *
      * @param data - the boolean array to convert
      * @param wordSize - what is the word size the number is in
@@ -183,7 +180,7 @@ public class DataConverter {
         return DataConverter.convertBinToSignedDec(binary, wordSize);
     }
 
-    /**Convert signed integer to boolean array. Array is reversed.
+    /**Convert signed integer to boolean array.
      *
      * @param decimal - the signed integer
      * @param wordSize - what is the word size the number is in

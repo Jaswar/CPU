@@ -2,7 +2,10 @@ package main.circuits;
 
 import main.BitStream;
 import main.control.Splitter;
+import main.exceptions.BitStreamInputSizeMismatch;
 import main.gates.binary.AND;
+import main.gates.multi.MultiAND;
+import main.gates.unary.NOT;
 import main.utils.DataConverter;
 
 import java.util.ArrayList;
@@ -23,6 +26,8 @@ public class Decoder implements Circuit {
         this.name = name;
         this.inDebuggerMode = inDebuggerMode;
         this.debugDepth = debugDepth;
+
+        this.build();
     }
 
     public Decoder(BitStream input, List<BitStream> outputs,
@@ -73,6 +78,9 @@ public class Decoder implements Circuit {
 
     public void build() {
         boolean debugGates = this.debugDepth > 0 ? this.inDebuggerMode : false;
+        if (this.outputs.size() != 1 << this.input.getSize()) {
+            throw new BitStreamInputSizeMismatch(this);
+        }
 
         List<BitStream> splitterInput = new ArrayList<>();
         splitterInput.add(this.input);
@@ -85,16 +93,32 @@ public class Decoder implements Circuit {
         Splitter inputSplitter = new Splitter(splitterInput, splitterOutput, "inputSplitter", debugGates);
 
         for (int i = 0; i < this.outputs.size(); i++) {
-
-
+            List<BitStream> andInputs = new ArrayList<>();
+            for (BitStream splitterOut : splitterOutput) {
+                andInputs.add(splitterOut);
+            }
 
             String indexInBinary = DataConverter.convertUnsignedDecToBin(i);
+            indexInBinary = this.padZeros(indexInBinary, this.input.getSize());
 
             for (int j = indexInBinary.length() - 1; j >= 0; j--) {
                 if (indexInBinary.charAt(j) == '0') {
-
+                    BitStream notOut = new BitStream(1);
+                    NOT not = new NOT(andInputs.get(j), notOut,
+                            "not" + i + (indexInBinary.length() - 1 - j), debugGates);
+                    andInputs.set(j, notOut);
                 }
             }
+
+            MultiAND and = new MultiAND(andInputs, this.outputs.get(i), "and" + i, debugGates);
         }
+    }
+
+    private String padZeros(String binary, int size) {
+        String outString = binary;
+        for (int i = 0; i < size - binary.length(); i++) {
+            outString = "0" + outString;
+        }
+        return outString;
     }
 }
