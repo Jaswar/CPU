@@ -11,6 +11,17 @@ import java.util.List;
 
 public class LogicUnit implements Circuit {
 
+    /**Class to represent the logic unit as designed in documentation/logicUnit.png.
+     *
+     * @param source - the source BitStream
+     * @param destination - the destination BitStream
+     * @param output - the output BitStream
+     * @param controls - the BitStreams controlling which operation should be undertaken.
+     *                 The order is: NOT, OR, AND, XOR, NAND, NOR.
+     * @param name - the name of the logic unit
+     * @param inDebuggerMode - boolean to specify if the circuit is in the debug mode
+     * @param debugDepth - how deep should debugging go
+     */
     private BitStream source;
     private BitStream destination;
     private BitStream output;
@@ -19,6 +30,17 @@ public class LogicUnit implements Circuit {
     private boolean inDebuggerMode;
     private int debugDepth;
 
+    /**Constructors for the LogicUnit class.
+     *
+     * @param source - the source BitStream
+     * @param destination - the destination BitStream
+     * @param output - the output BitStream
+     * @param controls - the BitStreams controlling which operation should be undertaken.
+     *                 The order is: NOT, OR, AND, XOR, NAND, NOR.
+     * @param name - the name of the logic unit
+     * @param inDebuggerMode - boolean to specify if the circuit is in the debug mode
+     * @param debugDepth - how deep should debugging go
+     */
     public LogicUnit(BitStream source, BitStream destination,
                      BitStream output, List<BitStream> controls,
                      String name, boolean inDebuggerMode, int debugDepth) {
@@ -50,6 +72,8 @@ public class LogicUnit implements Circuit {
         this(source, destination, output, controls, "Logic Unit", false, 0);
     }
 
+    /**Getters for all the attributes of the class.
+     */
     public BitStream getSource() {
         return source;
     }
@@ -78,6 +102,22 @@ public class LogicUnit implements Circuit {
         return debugDepth;
     }
 
+    /**Setters for some of the attributes. Setting BitStreams is not possible.
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setInDebuggerMode(boolean inDebuggerMode) {
+        this.inDebuggerMode = inDebuggerMode;
+    }
+
+    public void setDebugDepth(int debugDepth) {
+        this.debugDepth = debugDepth;
+    }
+
+    /**Build the circuit with logic gates. Exact build is as in documentation/logicUnit.png.
+     */
     @Override
     public void build() {
         boolean debugGates = this.debugDepth > 0 ? this.inDebuggerMode : false;
