@@ -129,13 +129,14 @@ public class AddSubtract implements Circuit {
     @Override
     public void build() {
         boolean debugGates = this.debugDepth > 0 ? this.inDebuggerMode : false;
+        int size = this.source.getSize();
 
         //First indexes -> least significant bits
         List<BitStream> srcInList = new ArrayList<>();
         srcInList.add(this.source);
 
         List<BitStream> srcOutList = new ArrayList<>();
-        for (int i = 0; i < Node.WORD_SIZE; i++) {
+        for (int i = 0; i < size; i++) {
             BitStream bit = new BitStream(1);
             srcOutList.add(bit);
         }
@@ -144,20 +145,20 @@ public class AddSubtract implements Circuit {
         dstInList.add(this.destination);
 
         List<BitStream> dstOutList = new ArrayList<>();
-        for (int i = 0; i < Node.WORD_SIZE; i++) {
+        for (int i = 0; i < size; i++) {
             BitStream bit = new BitStream(1);
             dstOutList.add(bit);
         }
 
         List<BitStream> outList = new ArrayList<>();
-        for (int i = 0; i < Node.WORD_SIZE; i++) {
+        for (int i = 0; i < size; i++) {
             BitStream bit = new BitStream(1);
             outList.add(bit);
         }
 
         BitStream carryIn = this.control;
         BitStream lastCarryIn = new BitStream(1);
-        for (int i = 0; i < Node.WORD_SIZE; i++) {
+        for (int i = 0; i < size; i++) {
             BitStream revXorLXor = new BitStream(1);
             BitStream lXorUXor = new BitStream(1);
             BitStream and0Or = new BitStream(1);
@@ -178,10 +179,10 @@ public class AddSubtract implements Circuit {
 
             MultiOR or = new MultiOR(andOr, carryIn, "or" + i, debugGates);
 
-            if (i == Node.WORD_SIZE - 2) {
+            if (i == size - 2) {
                 lastCarryIn = carryIn;
             }
-            if (i == Node.WORD_SIZE - 1) {
+            if (i == size - 1) {
                 XOR overflowXor = new XOR(lastCarryIn, carryIn, this.overflow, "overXor", debugGates);
             }
         }
