@@ -7,9 +7,6 @@ import main.gates.binary.NOR;
 import main.gates.binary.OR;
 import main.utils.ProcessRunner;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Main {
 
 
