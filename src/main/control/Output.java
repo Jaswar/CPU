@@ -3,6 +3,7 @@ package main.control;
 import main.BitStream;
 import main.Node;
 import main.utils.DataConverter;
+import main.utils.ProcessRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,12 +86,7 @@ public class Output implements Node {
     /**Method to setup the circuit starting in "this".
      */
     public void setup() {
-        List<Node> queue = new ArrayList<>();
-        queue.add(this);
-        while (queue.size() > 0) {
-            Node node = queue.remove(0);
-            node.evaluate(queue);
-        }
+        ProcessRunner.run(this);
     }
 
     /**Method used to evaluate the output, ie: set its data to that of the input stream.

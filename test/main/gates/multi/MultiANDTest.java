@@ -3,6 +3,7 @@ package main.gates.multi;
 import main.BitStream;
 import main.Node;
 import main.exceptions.BitStreamInputSizeMismatch;
+import main.utils.ProcessRunner;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -11,13 +12,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MultiANDTest {
-
-    void run(List<Node> queue) {
-        while (queue.size() > 0) {
-            Node node = queue.remove(0);
-            node.evaluate(queue);
-        }
-    }
 
     @Test
     void test1() {
@@ -36,9 +30,7 @@ class MultiANDTest {
 
         MultiAND and = new MultiAND(inputs, out);
 
-        List<Node> queue = new ArrayList<>();
-        queue.add(and);
-        run(queue);
+        ProcessRunner.run(and);
 
         assertArrayEquals(new boolean[]{false, true, false, false}, out.getData());
     }
@@ -60,9 +52,7 @@ class MultiANDTest {
 
         MultiAND and = new MultiAND(inputs, out);
 
-        List<Node> queue = new ArrayList<>();
-        queue.add(and);
-        run(queue);
+        ProcessRunner.run(and);
 
         assertArrayEquals(new boolean[]{false, true, true, true}, out.getData());
     }
@@ -84,9 +74,7 @@ class MultiANDTest {
 
         MultiAND and = new MultiAND(inputs, out);
 
-        List<Node> queue = new ArrayList<>();
-        queue.add(and);
-        run(queue);
+        ProcessRunner.run(and);
 
         assertArrayEquals(new boolean[]{false, false, false, false}, out.getData());
     }

@@ -5,6 +5,7 @@ import main.Node;
 import main.exceptions.BitStreamInputSizeMismatch;
 import main.exceptions.InconsistentBitStreamSources;
 import main.utils.DataConverter;
+import main.utils.ProcessRunner;
 import main.warnings.InconsistentBitStreamSourcesWarning;
 
 import java.util.ArrayList;
@@ -89,12 +90,8 @@ public class Input implements Node {
     /**Method to setup the circuit starting in "this".
      */
     public void setup() {
-        List<Node> queue = new ArrayList<>();
-        queue.add(this);
-        while (queue.size() > 0) {
-            Node node = queue.remove(0);
-            node.evaluate(queue);
-        }
+        this.checkIfSizesMatch();
+        ProcessRunner.run(this);
     }
 
     /**Evaluate the Input, i.e: if possible forward the input data to the "out" BitStream,
@@ -104,7 +101,6 @@ public class Input implements Node {
      */
     @Override
     public void evaluate(List<Node> queue) {
-        this.checkIfSizesMatch();
         this.checkIfSourceIsConsistent(this.data);
 
         this.addNeighboursToQueue(queue);

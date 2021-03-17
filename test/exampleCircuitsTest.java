@@ -10,6 +10,7 @@ import main.gates.binary.OR;
 import main.gates.binary.XOR;
 import main.gates.unary.NOT;
 import main.utils.DataConverter;
+import main.utils.ProcessRunner;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -18,13 +19,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class exampleCircuitsTest {
-
-    void run(List<Node> queue) {
-        while (queue.size() > 0) {
-            Node toEvaluate = queue.remove(0);
-            toEvaluate.evaluate(queue);
-        }
-    }
 
     @Test
     void RSLatch() {
@@ -43,10 +37,7 @@ public class exampleCircuitsTest {
         Output q = new Output(streamOut1, "Q", false);
         Output notQ = new Output(streamOut2, "-Q", false);
 
-        List<Node> queue = new ArrayList<>();
-        queue.addAll(List.of(r, s));
-
-        run(queue);
+        ProcessRunner.run(r, s);
 
         assertEquals("0", DataConverter.convertBoolToBin(q.getData()));
         assertEquals("1", DataConverter.convertBoolToBin(notQ.getData()));
@@ -82,9 +73,7 @@ public class exampleCircuitsTest {
 
         Output notQ = new Output(out2);
 
-        List<Node> queue = new ArrayList<>();
-        queue.addAll(List.of(d, clk));
-        run(queue);
+        ProcessRunner.run(d, clk);
 
         assertEquals("1", DataConverter.convertBoolToBin(q.getData()));
         assertEquals("0", DataConverter.convertBoolToBin(notQ.getData()));
@@ -92,9 +81,7 @@ public class exampleCircuitsTest {
         d.setData(new boolean[]{false});
         clk.setData(new boolean[]{false});
 
-        queue = new ArrayList<>();
-        queue.addAll(List.of(d, clk));
-        run(queue);
+        ProcessRunner.run(d, clk);
 
         assertEquals("1", DataConverter.convertBoolToBin(q.getData()));
         assertEquals("0", DataConverter.convertBoolToBin(notQ.getData()));
@@ -102,9 +89,7 @@ public class exampleCircuitsTest {
         d.setData(new boolean[]{false});
         clk.setData(new boolean[]{true});
 
-        queue = new ArrayList<>();
-        queue.addAll(List.of(d, clk));
-        run(queue);
+        ProcessRunner.run(d, clk);
 
         assertEquals("0", DataConverter.convertBoolToBin(q.getData()));
         assertEquals("1", DataConverter.convertBoolToBin(notQ.getData()));
@@ -112,10 +97,7 @@ public class exampleCircuitsTest {
         d.setData(new boolean[]{true});
         clk.setData(new boolean[]{false});
 
-        queue = new ArrayList<>();
-        queue.addAll(List.of(d, clk));
-        run(queue);
-
+        ProcessRunner.run(d, clk);
         assertEquals("0", DataConverter.convertBoolToBin(q.getData()));
         assertEquals("1", DataConverter.convertBoolToBin(notQ.getData()));
     }

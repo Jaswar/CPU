@@ -3,6 +3,7 @@ package main.gates;
 import main.BitStream;
 import main.Node;
 import main.exceptions.InconsistentBitStreamSources;
+import main.utils.ProcessRunner;
 import main.warnings.InconsistentBitStreamSourcesWarning;
 
 import java.util.ArrayList;
@@ -73,12 +74,8 @@ public abstract class Gate implements Node {
     /**Method to setup the circuit starting in "this".
      */
     public void setup() {
-        List<Node> queue = new ArrayList<>();
-        queue.add(this);
-        while (queue.size() > 0) {
-            Node node = queue.remove(0);
-            node.evaluate(queue);
-        }
+        this.checkIfSizesMatch();
+        ProcessRunner.run(this);
     }
 
     /**Evaluate the logic gate. This also includes checking if evaluation is possible, setting the
@@ -88,8 +85,6 @@ public abstract class Gate implements Node {
      */
     @Override
     public void evaluate(List<Node> queue) {
-        this.checkIfSizesMatch();
-
         boolean[] newOutData = compute();
 
         this.checkIfSourceIsConsistent(newOutData);
@@ -104,7 +99,6 @@ public abstract class Gate implements Node {
         if (this.isInDebuggerMode()) {
             this.debug();
         }
-
     }
 
     /**Set the source of the out stream.

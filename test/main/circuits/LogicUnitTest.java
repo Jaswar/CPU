@@ -4,6 +4,7 @@ import main.BitStream;
 import main.Node;
 import main.control.Input;
 import main.control.Output;
+import main.utils.ProcessRunner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,13 +18,6 @@ class LogicUnitTest {
     Input sourceInput, destinationInput, notControlInput, orControlInput, andControlInput,
             xorControlInput, nandControlInput, norControlInput;
     Output outputObject;
-
-    void run(List<Node> queue) {
-        while (queue.size() > 0) {
-            Node node = queue.remove(0);
-            node.evaluate(queue);
-        }
-    }
 
     @BeforeEach
     void setup() {
@@ -60,10 +54,8 @@ class LogicUnitTest {
     void testNot() {
         notControlInput.setData(new boolean[]{true});
 
-        List<Node> queue = new ArrayList<>();
-        queue.addAll(List.of(sourceInput, destinationInput, notControlInput, orControlInput,
-                andControlInput, xorControlInput, nandControlInput, norControlInput));
-        run(queue);
+        ProcessRunner.run(sourceInput, destinationInput, notControlInput, orControlInput,
+                andControlInput, xorControlInput, nandControlInput, norControlInput);
 
         assertArrayEquals(new boolean[]{false, true, false, false}, outputObject.getData());
     }
@@ -72,10 +64,8 @@ class LogicUnitTest {
     void testOr() {
         orControlInput.setData(new boolean[]{true});
 
-        List<Node> queue = new ArrayList<>();
-        queue.addAll(List.of(sourceInput, destinationInput, notControlInput, orControlInput,
-                andControlInput, xorControlInput, nandControlInput, norControlInput));
-        run(queue);
+        ProcessRunner.run(sourceInput, destinationInput, notControlInput, orControlInput,
+                andControlInput, xorControlInput, nandControlInput, norControlInput);
 
         assertArrayEquals(new boolean[]{true, false, true, true}, outputObject.getData());
     }
@@ -84,10 +74,8 @@ class LogicUnitTest {
     void testAnd() {
         andControlInput.setData(new boolean[]{true});
 
-        List<Node> queue = new ArrayList<>();
-        queue.addAll(List.of(sourceInput, destinationInput, notControlInput, orControlInput,
-                andControlInput, xorControlInput, nandControlInput, norControlInput));
-        run(queue);
+        ProcessRunner.run(sourceInput, destinationInput, notControlInput, orControlInput,
+                andControlInput, xorControlInput, nandControlInput, norControlInput);
 
         assertArrayEquals(new boolean[]{false, false, true, false}, outputObject.getData());
     }
@@ -96,10 +84,8 @@ class LogicUnitTest {
     void testXor() {
         xorControlInput.setData(new boolean[]{true});
 
-        List<Node> queue = new ArrayList<>();
-        queue.addAll(List.of(sourceInput, destinationInput, notControlInput, orControlInput,
-                andControlInput, xorControlInput, nandControlInput, norControlInput));
-        run(queue);
+        ProcessRunner.run(sourceInput, destinationInput, notControlInput, orControlInput,
+                andControlInput, xorControlInput, nandControlInput, norControlInput);
 
         assertArrayEquals(new boolean[]{true, false, false, true}, outputObject.getData());
     }
@@ -108,10 +94,8 @@ class LogicUnitTest {
     void testNand() {
         nandControlInput.setData(new boolean[]{true});
 
-        List<Node> queue = new ArrayList<>();
-        queue.addAll(List.of(sourceInput, destinationInput, notControlInput, orControlInput,
-                andControlInput, xorControlInput, nandControlInput, norControlInput));
-        run(queue);
+        ProcessRunner.run(sourceInput, destinationInput, notControlInput, orControlInput,
+                andControlInput, xorControlInput, nandControlInput, norControlInput);
 
         assertArrayEquals(new boolean[]{true, true, false, true}, outputObject.getData());
     }
@@ -120,10 +104,8 @@ class LogicUnitTest {
     void testNor() {
         norControlInput.setData(new boolean[]{true});
 
-        List<Node> queue = new ArrayList<>();
-        queue.addAll(List.of(sourceInput, destinationInput, notControlInput, orControlInput,
-                andControlInput, xorControlInput, nandControlInput, norControlInput));
-        run(queue);
+        ProcessRunner.run(sourceInput, destinationInput, notControlInput, orControlInput,
+                andControlInput, xorControlInput, nandControlInput, norControlInput);
 
         assertArrayEquals(new boolean[]{false, true, false, false}, outputObject.getData());
     }

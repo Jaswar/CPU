@@ -3,6 +3,7 @@ package main.circuits;
 import main.BitStream;
 import main.Node;
 import main.control.Input;
+import main.utils.ProcessRunner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,13 +13,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DecoderTest {
-
-    void run(List<Node> queue) {
-        while (queue.size() > 0) {
-            Node node = queue.remove(0);
-            node.evaluate(queue);
-        }
-    }
 
     @Test
     void testSize1() {
@@ -34,18 +28,14 @@ class DecoderTest {
 
         Decoder decoder = new Decoder(input, outList);
 
-        List<Node> queue = new ArrayList<>();
-        queue.add(inputObject);
-        run(queue);
+        ProcessRunner.run(inputObject);
 
         assertArrayEquals(new boolean[]{true}, out0.getData());
         assertArrayEquals(new boolean[]{false}, out1.getData());
 
         inputObject.setData(new boolean[]{true});
 
-        queue = new ArrayList<>();
-        queue.add(inputObject);
-        run(queue);
+        ProcessRunner.run(inputObject);
 
         assertArrayEquals(new boolean[]{false}, out0.getData());
         assertArrayEquals(new boolean[]{true}, out1.getData());
@@ -67,9 +57,7 @@ class DecoderTest {
 
         Decoder decoder = new Decoder(input, outList);
 
-        List<Node> queue = new ArrayList<>();
-        queue.add(inputObject);
-        run(queue);
+        ProcessRunner.run(inputObject);
 
         assertArrayEquals(new boolean[]{true}, out0.getData());
         assertArrayEquals(new boolean[]{false}, out1.getData());
@@ -78,9 +66,7 @@ class DecoderTest {
 
         inputObject.setData(new boolean[]{false, true});
 
-        queue = new ArrayList<>();
-        queue.add(inputObject);
-        run(queue);
+        ProcessRunner.run(inputObject);
 
         assertArrayEquals(new boolean[]{false}, out0.getData());
         assertArrayEquals(new boolean[]{true}, out1.getData());
@@ -89,9 +75,7 @@ class DecoderTest {
 
         inputObject.setData(new boolean[]{true, false});
 
-        queue = new ArrayList<>();
-        queue.add(inputObject);
-        run(queue);
+        ProcessRunner.run(inputObject);
 
         assertArrayEquals(new boolean[]{false}, out0.getData());
         assertArrayEquals(new boolean[]{false}, out1.getData());
@@ -100,9 +84,7 @@ class DecoderTest {
 
         inputObject.setData(new boolean[]{true, true});
 
-        queue = new ArrayList<>();
-        queue.add(inputObject);
-        run(queue);
+        ProcessRunner.run(inputObject);
 
         assertArrayEquals(new boolean[]{false}, out0.getData());
         assertArrayEquals(new boolean[]{false}, out1.getData());
@@ -130,9 +112,7 @@ class DecoderTest {
 
         Decoder decoder = new Decoder(input, outList);
 
-        List<Node> queue = new ArrayList<>();
-        queue.add(inputObject);
-        run(queue);
+        ProcessRunner.run(inputObject);
 
         assertArrayEquals(new boolean[]{true}, out0.getData());
         assertArrayEquals(new boolean[]{false}, out1.getData());
@@ -141,9 +121,7 @@ class DecoderTest {
 
         inputObject.setData(new boolean[]{false, false, true});
 
-        queue = new ArrayList<>();
-        queue.add(inputObject);
-        run(queue);
+        ProcessRunner.run(inputObject);
 
         assertArrayEquals(new boolean[]{true}, out1.getData());
         assertArrayEquals(new boolean[]{false}, out2.getData());
@@ -152,9 +130,7 @@ class DecoderTest {
 
         inputObject.setData(new boolean[]{false, true, false});
 
-        queue = new ArrayList<>();
-        queue.add(inputObject);
-        run(queue);
+        ProcessRunner.run(inputObject);
 
         assertArrayEquals(new boolean[]{true}, out2.getData());
         assertArrayEquals(new boolean[]{false}, out1.getData());
@@ -163,9 +139,7 @@ class DecoderTest {
 
         inputObject.setData(new boolean[]{true, true, false});
 
-        queue = new ArrayList<>();
-        queue.add(inputObject);
-        run(queue);
+        ProcessRunner.run(inputObject);
 
         assertArrayEquals(new boolean[]{true}, out6.getData());
         assertArrayEquals(new boolean[]{false}, out1.getData());
@@ -174,9 +148,7 @@ class DecoderTest {
 
         inputObject.setData(new boolean[]{true, true, true});
 
-        queue = new ArrayList<>();
-        queue.add(inputObject);
-        run(queue);
+        ProcessRunner.run(inputObject);
 
         assertArrayEquals(new boolean[]{true}, out7.getData());
         assertArrayEquals(new boolean[]{false}, out1.getData());
@@ -198,9 +170,7 @@ class DecoderTest {
 
         Decoder decoder = new Decoder(in, outputs);
 
-        List<Node> queue = new ArrayList<>();
-        queue.add(inputObject);
-        run(queue);
+        ProcessRunner.run(inputObject);
 
         assertArrayEquals(new boolean[]{true}, outputs.get(0).getData());
         assertArrayEquals(new boolean[]{false}, outputs.get(8).getData());
@@ -210,9 +180,7 @@ class DecoderTest {
         inputObject.setData(new boolean[]{false, false, false, false,
                                             true, false, false, false});
 
-        queue = new ArrayList<>();
-        queue.add(inputObject);
-        run(queue);
+        ProcessRunner.run(inputObject);
 
         assertArrayEquals(new boolean[]{true}, outputs.get(8).getData());
         assertArrayEquals(new boolean[]{false}, outputs.get(26).getData());
@@ -221,9 +189,7 @@ class DecoderTest {
         inputObject.setData(new boolean[]{false, true, false, false,
                 true, false, true, false});
 
-        queue = new ArrayList<>();
-        queue.add(inputObject);
-        run(queue);
+        ProcessRunner.run(inputObject);
 
         assertArrayEquals(new boolean[]{true}, outputs.get(74).getData());
         assertArrayEquals(new boolean[]{false}, outputs.get(187).getData());
@@ -232,9 +198,7 @@ class DecoderTest {
         inputObject.setData(new boolean[]{true, false, false, false,
                 true, false, false, false});
 
-        queue = new ArrayList<>();
-        queue.add(inputObject);
-        run(queue);
+        ProcessRunner.run(inputObject);
 
         assertArrayEquals(new boolean[]{true}, outputs.get(136).getData());
         assertArrayEquals(new boolean[]{false}, outputs.get(234).getData());

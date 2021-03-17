@@ -5,6 +5,7 @@ import main.control.Output;
 import main.gates.binary.AND;
 import main.gates.binary.NOR;
 import main.gates.binary.OR;
+import main.utils.ProcessRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,19 +26,9 @@ public class Main {
 
         Output output = new Output(out, "Q", false);
 
-        List<Node> queue = new ArrayList<>();
-        queue.addAll(List.of(r, s));
-
-        run(queue);
+        ProcessRunner.run(r, s);
 
         System.out.println(output.getData());
 
-    }
-
-    private static void run(List<Node> queue) {
-        while (queue.size() > 0) {
-            Node toEvaluate = queue.remove(0);
-            toEvaluate.evaluate(queue);
-        }
     }
 }

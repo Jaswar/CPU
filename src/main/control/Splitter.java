@@ -5,6 +5,7 @@ import main.Node;
 import main.exceptions.IllegalSplitException;
 import main.exceptions.InconsistentBitStreamSources;
 import main.utils.DataConverter;
+import main.utils.ProcessRunner;
 import main.warnings.InconsistentBitStreamSourcesWarning;
 
 import java.util.ArrayList;
@@ -105,12 +106,8 @@ public class Splitter implements Node {
      */
     @Override
     public void setup() {
-        List<Node> queue = new ArrayList<>();
-        queue.add(this);
-        while (queue.size() > 0) {
-            Node node = queue.remove(0);
-            node.evaluate(queue);
-        }
+        this.checkIfSizesMatch();
+        ProcessRunner.run(this);
     }
 
     /**Evaluate the splitter. This includes checking the sizes of the BitStreams and their sources
@@ -120,8 +117,6 @@ public class Splitter implements Node {
      */
     @Override
     public void evaluate(List<Node> queue) {
-        this.checkIfSizesMatch();
-
         int inSize = this.getBitStreamListSize(this.in);
         boolean[] newOutData = new boolean[inSize];
 

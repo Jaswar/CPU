@@ -6,6 +6,7 @@ import main.control.Input;
 import main.exceptions.InconsistentBitStreamSources;
 import main.gates.binary.AND;
 import main.gates.binary.OR;
+import main.utils.ProcessRunner;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -14,13 +15,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TriStateTest {
-
-    void run(List<Node> queue) {
-        while (queue.size() > 0) {
-            Node node = queue.remove(0);
-            node.evaluate(queue);
-        }
-    }
 
     @Test
     void test1() {
@@ -47,27 +41,21 @@ class TriStateTest {
         TriState triStateOr = new TriState(outOr, control1, out);
         TriState triStateAnd = new TriState(outAnd, control2, out);
 
-        List<Node> queue = new ArrayList<>();
-        queue.addAll(List.of(input1, input2, input3, input4, inputControl1, inputControl2));
-        run(queue);
+        ProcessRunner.run(input1, input2, input3, input4, inputControl1, inputControl2);
 
         assertArrayEquals(new boolean[]{false, true}, out.getData());
 
         inputControl1.setData(new boolean[]{true});
         inputControl2.setData(new boolean[]{false});
 
-        queue = new ArrayList<>();
-        queue.addAll(List.of(input1, input2, input3, input4, inputControl1, inputControl2));
-        run(queue);
+        ProcessRunner.run(input1, input2, input3, input4, inputControl1, inputControl2);
 
         assertArrayEquals(new boolean[]{true, false}, out.getData());
 
         inputControl1.setData(new boolean[]{false});
         inputControl2.setData(new boolean[]{false});
 
-        queue = new ArrayList<>();
-        queue.addAll(List.of(or, and));
-        run(queue);
+        ProcessRunner.run(or, and);
 
         assertArrayEquals(new boolean[]{true, false}, out.getData());
 

@@ -6,6 +6,7 @@ import main.exceptions.BitStreamInputSizeMismatch;
 import main.exceptions.InconsistentBitStreamSources;
 import main.gates.binary.AND;
 import main.gates.multi.MultiOR;
+import main.utils.ProcessRunner;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -14,13 +15,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MultiORTest {
-
-    void run(List<Node> queue) {
-        while (queue.size() > 0) {
-            Node node = queue.remove(0);
-            node.evaluate(queue);
-        }
-    }
 
     @Test
     void test1() {
@@ -39,10 +33,7 @@ class MultiORTest {
 
         MultiOR or = new MultiOR(input, out);
 
-        List<Node> queue = new ArrayList<>();
-        queue.add(or);
-
-        run(queue);
+        ProcessRunner.run(or);
 
         assertArrayEquals(new boolean[]{true}, out.getData());
     }
@@ -62,10 +53,7 @@ class MultiORTest {
 
         MultiOR or = new MultiOR(input, out);
 
-        List<Node> queue = new ArrayList<>();
-        queue.add(or);
-
-        run(queue);
+        ProcessRunner.run(or);
 
         assertArrayEquals(new boolean[]{false}, out.getData());
     }

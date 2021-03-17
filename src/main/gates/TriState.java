@@ -68,7 +68,6 @@ public class TriState extends Gate {
      */
     @Override
     public void evaluate(List<Node> queue) {
-        this.checkIfSizesMatch();
 
         if (this.control.getData()[0]) {
 
