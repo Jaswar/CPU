@@ -8,13 +8,13 @@ class DataConverterTest {
 
     @Test
     void convertBoolToBitsTest() {
-        boolean[] data = new boolean[]{true, true, false, false, true};
+        boolean[] data = new boolean[]{true, false, false, true, true};
         assertEquals("10011", DataConverter.convertBoolToBin(data));
     }
 
     @Test
     void convertBitsToBoolTest() {
-        assertArrayEquals(new boolean[]{true, true, false, false, true}, DataConverter.convertBinToBool("10011"));
+        assertArrayEquals(new boolean[]{true, false, false, true, true}, DataConverter.convertBinToBool("10011"));
     }
 
     @Test
@@ -76,34 +76,34 @@ class DataConverterTest {
 
     @Test
     void convertBoolToSignedDec1() {
-        boolean[] bool = new boolean[]{true, true, true, false};
+        boolean[] bool = new boolean[]{false, true, true, true};
         assertEquals(7, DataConverter.convertBoolToSignedDec(bool, 4));
     }
 
     @Test
     void convertBoolToSignedDec2() {
-        boolean[] bool = new boolean[]{true, false, true, true};
+        boolean[] bool = new boolean[]{true, true, false, true};
         assertEquals(-3, DataConverter.convertBoolToSignedDec(bool, 4));
     }
 
     @Test
     void convertSignedDecToBool1() {
         int decimal = -14;
-        assertArrayEquals(new boolean[]{false, true, false, false, true},
+        assertArrayEquals(new boolean[]{true, false, false, true, false},
                 DataConverter.convertSignedDecToBool(decimal, 5));
     }
 
     @Test
     void convertSignedDecToBool2() {
         int decimal = 36;
-        assertArrayEquals(new boolean[]{false, false, true, false, false, true, false},
+        assertArrayEquals(new boolean[]{false, true, false, false, true, false, false},
                 DataConverter.convertSignedDecToBool(decimal, 7));
     }
 
     @Test
     void convertSignedDecToBool3() {
         int decimal = -14;
-        assertArrayEquals(new boolean[]{false, true, false, false, true, true, true},
+        assertArrayEquals(new boolean[]{true, true, true, false, false, true, false},
                 DataConverter.convertSignedDecToBool(decimal, 7));
     }
 

@@ -168,12 +168,12 @@ public class AddSubtract implements Circuit {
             List<BitStream> andOr = new ArrayList<>();
             andOr.addAll(List.of(and0Or, and1Or, and2Or));
 
-            XOR revertXor = new XOR(this.control, dstOutList.get(i), revXorLXor, "revXor" + i, debugGates);
-            XOR lowerXor = new XOR(revXorLXor, srcOutList.get(i), lXorUXor, "lXor" + i, debugGates);
-            XOR upperXor = new XOR(carryIn, lXorUXor, outList.get(i), "uXor" + i, debugGates);
+            XOR revertXor = new XOR(this.control, dstOutList.get(size - i - 1), revXorLXor, "revXor" + i, debugGates);
+            XOR lowerXor = new XOR(revXorLXor, srcOutList.get(size - i - 1), lXorUXor, "lXor" + i, debugGates);
+            XOR upperXor = new XOR(carryIn, lXorUXor, outList.get(size - i - 1), "uXor" + i, debugGates);
             AND and0 = new AND(carryIn, revXorLXor, and0Or, "and" + i + "_0", debugGates);
-            AND and1 = new AND(srcOutList.get(i), carryIn, and1Or, "and" + i + "_1", debugGates);
-            AND and2 = new AND(srcOutList.get(i), revXorLXor, and2Or, "and" + i + "_2", debugGates);
+            AND and1 = new AND(srcOutList.get(size - i - 1), carryIn, and1Or, "and" + i + "_1", debugGates);
+            AND and2 = new AND(srcOutList.get(size - i - 1), revXorLXor, and2Or, "and" + i + "_2", debugGates);
 
             carryIn = new BitStream(1);
 

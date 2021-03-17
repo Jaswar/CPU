@@ -5,6 +5,7 @@ import main.Node;
 import main.control.Input;
 import main.control.Output;
 import main.utils.DataConverter;
+import main.utils.ProcessRunner;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -15,11 +16,24 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AddSubtractTest {
 
-    void run(List<Node> queue) {
-        while (queue.size() > 0) {
-            Node node = queue.remove(0);
-            node.evaluate(queue);
-        }
+    @Test
+    void testVerySimple() {
+        BitStream source = new BitStream(4);
+        BitStream destination = new BitStream(4);
+        BitStream output = new BitStream(4);
+        BitStream control = new BitStream(1);
+        BitStream overflow = new BitStream(1);
+
+        Input sourceInput = new Input(new boolean[]{false, false, true, false}, source);
+        Input destinationInput = new Input(new boolean[]{false, false, true, true}, destination);
+        Input controlInput = new Input(new boolean[]{false}, control);
+
+        AddSubtract addSubtract = new AddSubtract(source, destination, output, control, overflow);
+
+        ProcessRunner.run(sourceInput, destinationInput, controlInput);
+
+        assertArrayEquals(new boolean[]{false, true, false, true}, output.getData());
+        assertArrayEquals(new boolean[]{false}, overflow.getData());
     }
 
     @Test
@@ -47,9 +61,7 @@ class AddSubtractTest {
         boolean shouldOverflowAdd = Math.abs(expectedSum) >= 32767;
         boolean shouldOverflowSub = Math.abs(expectedSub) >= 32767;
 
-        List<Node> queue = new ArrayList<>();
-        queue.addAll(List.of(sourceInput, destinationInput, controlInput));
-        run(queue);
+        ProcessRunner.run(sourceInput, destinationInput, controlInput);
 
         assertArrayEquals(new boolean[]{shouldOverflowSub}, overflow.getData());
     }
@@ -104,9 +116,7 @@ class AddSubtractTest {
             destinationInput.setData(randomDestination);
             controlInput.setData(new boolean[]{false});
 
-            List<Node> queue = new ArrayList<>();
-            queue.addAll(List.of(sourceInput, destinationInput, controlInput));
-            run(queue);
+            ProcessRunner.run(sourceInput, destinationInput, controlInput);
 
             if (!shouldOverflowAdd) {
                 assertEquals(expectedSum, DataConverter.convertBoolToSignedDec(outputObject.getData(), Node.WORD_SIZE));
@@ -115,9 +125,7 @@ class AddSubtractTest {
 
             controlInput.setData(new boolean[]{true});
 
-            queue = new ArrayList<>();
-            queue.addAll(List.of(sourceInput, destinationInput, controlInput));
-            run(queue);
+            ProcessRunner.run(sourceInput, destinationInput, controlInput);
 
             if (!shouldOverflowSub) {
                 assertEquals(expectedSub, DataConverter.convertBoolToSignedDec(outputObject.getData(), Node.WORD_SIZE));

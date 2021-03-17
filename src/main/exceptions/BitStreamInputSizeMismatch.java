@@ -6,7 +6,7 @@ import main.Node;
  */
 public class BitStreamInputSizeMismatch extends RuntimeException {
 
-    public BitStreamInputSizeMismatch(Node node) {
+    public BitStreamInputSizeMismatch(Object node) {
         super("Input size mismatch at: " + node.toString());
     }
 

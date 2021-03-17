@@ -5,6 +5,7 @@ import main.Node;
 import main.exceptions.IllegalSplitException;
 import main.exceptions.InconsistentBitStreamSources;
 import main.gates.binary.OR;
+import main.utils.ProcessRunner;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -13,13 +14,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SplitterTest {
-
-    void run(List<Node> queue) {
-        while (queue.size() > 0) {
-            Node node = queue.remove(0);
-            node.evaluate(queue);
-        }
-    }
 
     @Test
     void testSplitting1() {
@@ -37,9 +31,7 @@ class SplitterTest {
         Splitter splitter = new Splitter(in, out);
         in1.setData(new boolean[]{true, true, false, true});
 
-        List<Node> queue = new ArrayList<>();
-        queue.add(splitter);
-        run(queue);
+        ProcessRunner.run(splitter);
 
         assertArrayEquals(new boolean[]{true}, out1.getData());
         assertArrayEquals(new boolean[]{true}, out2.getData());
@@ -61,9 +53,7 @@ class SplitterTest {
         Splitter splitter = new Splitter(in, out);
         in1.setData(new boolean[]{false, true, true, false});
 
-        List<Node> queue = new ArrayList<>();
-        queue.add(splitter);
-        run(queue);
+        ProcessRunner.run(splitter);
 
         assertArrayEquals(new boolean[]{false, true}, out1.getData());
         assertArrayEquals(new boolean[]{true, false}, out2.getData());
@@ -87,9 +77,7 @@ class SplitterTest {
         in1.setData(new boolean[]{false, true, true, false, true, true});
         in2.setData(new boolean[]{true, false, true, true, false, true});
 
-        List<Node> queue = new ArrayList<>();
-        queue.add(splitter);
-        run(queue);
+        ProcessRunner.run(splitter);
 
         assertArrayEquals(new boolean[]{false, true, true, false}, out1.getData());
         assertArrayEquals(new boolean[]{true, true, true, false}, out2.getData());
@@ -112,9 +100,7 @@ class SplitterTest {
         in1.setData(new boolean[]{false});
         in2.setData(new boolean[]{true});
 
-        List<Node> queue = new ArrayList<>();
-        queue.add(splitter);
-        run(queue);
+        ProcessRunner.run(splitter);
 
         assertArrayEquals(new boolean[]{false, true}, out1.getData());
     }
