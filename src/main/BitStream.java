@@ -17,7 +17,7 @@ public class BitStream {
     private boolean[] data;
     private Node source;
 
-    /**Constructors for the BitStream class
+    /**Constructors for the BitStream class.
      *
      * @param size - the size of the stream (ie how many bits should be contained)
      * @param endpoints - a list of endpoints/nodes connected with this stream
@@ -110,7 +110,7 @@ public class BitStream {
         return out;
     }
 
-    /**Override the default toString method
+    /**Override the default toString method.
      *
      * @return - a String represenation of this
      */
