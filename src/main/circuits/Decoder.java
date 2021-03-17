@@ -13,12 +13,28 @@ import java.util.List;
 
 public class Decoder implements Circuit {
 
+    /**Decoder circuit class. See documentation/decoder.png for the build.
+     *
+     * @param input - the input BitStream
+     * @param outputs - the list of output BitStreams
+     * @param name - the name of the decoder
+     * @param inDebuggerMode - boolean to specify if the circuit is in debug mode
+     * @param debugDepth - how deep should debugging go
+     */
     private BitStream input;
     private List<BitStream> outputs;
     private String name;
     private boolean inDebuggerMode;
     private int debugDepth;
 
+    /**Constructors for the Decoder class. See documentation/decoder.png for the build.
+     *
+     * @param input - the input BitStream
+     * @param outputs - the list of output BitStreams
+     * @param name - the name of the decoder
+     * @param inDebuggerMode - boolean to specify if the circuit is in debug mode
+     * @param debugDepth - how deep should debugging go
+     */
     public Decoder(BitStream input, List<BitStream> outputs,
                    String name, boolean inDebuggerMode, int debugDepth) {
         this.input = input;
@@ -44,6 +60,8 @@ public class Decoder implements Circuit {
         this(input, outputs, "Decoder", false, 0);
     }
 
+    /**Getters for all the attributes.
+     */
     public BitStream getInputs() {
         return input;
     }
@@ -64,6 +82,8 @@ public class Decoder implements Circuit {
         return debugDepth;
     }
 
+    /**Setters for some of the attributes. Setting BitStreams is not possible.
+     */
     public void setName(String name) {
         this.name = name;
     }
@@ -76,6 +96,9 @@ public class Decoder implements Circuit {
         this.debugDepth = debugDepth;
     }
 
+    /**Builds the decoder circuit for the given input and the list of outputs.
+     * The sizes must match, ie: #outputs = 2^#input, otherwise an error is thrown.
+     */
     public void build() {
         boolean debugGates = this.debugDepth > 0 ? this.inDebuggerMode : false;
         if (this.outputs.size() != 1 << this.input.getSize()) {
@@ -114,6 +137,13 @@ public class Decoder implements Circuit {
         }
     }
 
+    /**Method to pad a binary to number to a specific length.
+     * Eg: padZeros("1001", 6) = "001001".
+     *
+     * @param binary - the binary number to pad with zeros
+     * @param size - the desired size of the binary number
+     * @return - the padded binary
+     */
     private String padZeros(String binary, int size) {
         String outString = binary;
         for (int i = 0; i < size - binary.length(); i++) {
