@@ -2,22 +2,20 @@ package main.control;
 
 import main.BitStream;
 import main.Node;
-import main.exceptions.IllegalSplitException;
-import main.exceptions.InconsistentBitStreamSources;
+import main.exceptions.BitStreamInputSizeMismatch;
 import main.utils.DataConverter;
 import main.utils.ProcessRunner;
 import main.warnings.InconsistentBitStreamSourcesWarning;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class Splitter implements Node {
+public class BitExtender implements Node {
 
-    /**Class responsible for splitting multiple BitStreams into other BitStreams.
+    /**Class which takes input BitStreams and multiplies them to match the output size.
      *
      * @param in - a list of the input BitStreams
      * @param out - a list of the output BitStreams
-     * @param name - the name of the splitter
+     * @param name - the name of the bit extender
      * @param inDebuggerMode - a boolean to specify if additional debug data should be shown
      */
     private List<BitStream> in;
@@ -25,14 +23,14 @@ public class Splitter implements Node {
     private String name;
     private boolean inDebuggerMode;
 
-    /**Constructors for the Splitter class.
+    /**Constructors for the BitExtender class.
      *
      * @param in - a list of the input BitStreams
      * @param out - a list of the output BitStreams
-     * @param name - the name of the splitter
+     * @param name - the name of the bit extender
      * @param inDebuggerMode - a boolean to specify if additional debug data should be shown
      */
-    public Splitter(List<BitStream> in, List<BitStream> out, String name, boolean inDebuggerMode) {
+    public BitExtender(List<BitStream> in, List<BitStream> out, String name, boolean inDebuggerMode) {
         this.in = in;
         for (BitStream inStream : this.in) {
             inStream.addNewEndpoint(this);
@@ -49,16 +47,16 @@ public class Splitter implements Node {
         this.setup();
     }
 
-    public Splitter(List<BitStream> in, List<BitStream> out, String name) {
+    public BitExtender(List<BitStream> in, List<BitStream> out, String name) {
         this(in, out, name, false);
     }
 
-    public Splitter(List<BitStream> in, List<BitStream> out, boolean inDebuggerMode) {
-        this(in, out, "Splitter", inDebuggerMode);
+    public BitExtender(List<BitStream> in, List<BitStream> out, boolean inDebuggerMode) {
+        this(in, out, "BitExtender", inDebuggerMode);
     }
 
-    public Splitter(List<BitStream> in, List<BitStream> out) {
-        this(in, out, "Splitter", false);
+    public BitExtender(List<BitStream> in, List<BitStream> out) {
+        this(in, out, "BitExtender", false);
     }
 
     /**Getters for all the attributes of the class.
@@ -80,6 +78,7 @@ public class Splitter implements Node {
     }
 
     /**Setters for some of the attributes of the class.
+     * Setting BitStreams is not possible.
      */
     public void setName(String name) {
         this.name = name;
@@ -110,7 +109,7 @@ public class Splitter implements Node {
         ProcessRunner.run(this);
     }
 
-    /**Evaluate the splitter. This includes checking the sizes of the BitStreams and their sources
+    /**Evaluate the bit extender. This includes checking the sizes of the BitStreams and their sources
      * to check for any inconsistencies.
      *
      * @param queue - the execution queue
@@ -118,12 +117,16 @@ public class Splitter implements Node {
     @Override
     public void evaluate(List<Node> queue) {
         int inSize = this.getBitStreamListSize(this.in);
-        boolean[] newOutData = new boolean[inSize];
+        int outSize = this.getBitStreamListSize(this.out);
+        int multiplier = outSize / inSize;
 
+        boolean[] newOutData = new boolean[outSize];
         int count = 0;
         for (BitStream inStream : this.in) {
             for (boolean bit : inStream.getData()) {
-                newOutData[count++] = bit;
+                for (int i = 0; i < multiplier; i++) {
+                    newOutData[count++] = bit;
+                }
             }
         }
 
@@ -141,16 +144,30 @@ public class Splitter implements Node {
         }
     }
 
-    /**Check if the total number of bits in the input BitStreams is the same as
-     * the number of bits in the output BitStreams. Throw IllegalSplitException
-     * if not.
+    /**Check if the number of input BitStreams divides the number of output BitStreams.
+     * Also check if all the inputs and the outputs have the same size.
+     * Throw BitStreamInputSizeMismatch if either of these two conditions hold.
      */
     @Override
     public void checkIfSizesMatch() {
         int inSize = this.getBitStreamListSize(this.in);
         int outSize = this.getBitStreamListSize(this.out);
-        if (inSize != outSize) {
-            throw new IllegalSplitException(this);
+        if (inSize > outSize || outSize % inSize != 0) {
+            throw new BitStreamInputSizeMismatch(this);
+        }
+
+        int inBitSize = this.in.get(0).getSize();
+        for (BitStream inStream : this.in) {
+            if (inStream.getSize() != inBitSize) {
+                throw new BitStreamInputSizeMismatch(this);
+            }
+        }
+
+        int outBitSize = this.out.get(0).getSize();
+        for (BitStream outStream : this.out) {
+            if (outStream.getSize() != outBitSize) {
+                throw new BitStreamInputSizeMismatch(this);
+            }
         }
     }
 
@@ -202,7 +219,7 @@ public class Splitter implements Node {
         return false;
     }
 
-    /**Add all neighbours of the Splitter to the queue.
+    /**Add all neighbours of the BitExtender to the queue.
      *
      * @param queue - the execution queue to add the neighbours to
      */
@@ -229,7 +246,7 @@ public class Splitter implements Node {
         }
     }
 
-    /**Set the source of the out streams to the splitter.
+    /**Set the source of the out streams to the bit extender.
      */
     @Override
     public void setSourceForOutStream() {
@@ -259,7 +276,6 @@ public class Splitter implements Node {
      */
     @Override
     public String toString() {
-        return "Splitter<" + this.name + ", " + this.in.size() + ", " + this.out.size() + ">";
+        return "BitExtender<" + this.name + ", " + this.in.size() + ", " + this.out.size() + ">";
     }
-
 }
