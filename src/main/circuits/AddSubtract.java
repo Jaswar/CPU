@@ -123,7 +123,7 @@ public class AddSubtract implements Circuit {
         this.debugDepth = debugDepth;
     }
 
-    /**Method to build the circuit as defined in documentation/addSub.png.
+    /**Method to build the circuit as defined in documentation/AddSub.png.
      */
     @Override
     public void build() {
