@@ -11,7 +11,7 @@ import java.util.List;
 
 public class LogicUnit implements Circuit {
 
-    /**Class to represent the logic unit as designed in documentation/logicUnit.png.
+    /**Class to represent the logic unit as designed in documentation/LogicUnit.png.
      *
      * @param source - the source BitStream
      * @param destination - the destination BitStream
@@ -116,7 +116,7 @@ public class LogicUnit implements Circuit {
         this.debugDepth = debugDepth;
     }
 
-    /**Build the circuit with logic gates. Exact build is as in documentation/logicUnit.png.
+    /**Build the circuit with logic gates. Exact build is as in documentation/LogicUnit.png.
      */
     @Override
     public void build() {

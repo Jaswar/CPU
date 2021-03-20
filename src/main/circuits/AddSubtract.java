@@ -1,7 +1,6 @@
 package main.circuits;
 
 import main.BitStream;
-import main.Node;
 import main.control.Splitter;
 import main.gates.binary.AND;
 import main.gates.multi.MultiOR;
@@ -124,7 +123,7 @@ public class AddSubtract implements Circuit {
         this.debugDepth = debugDepth;
     }
 
-    /**Method to build the circuit as defined in documentation/addSub.png.
+    /**Method to build the circuit as defined in documentation/AddSub.png.
      */
     @Override
     public void build() {
