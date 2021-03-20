@@ -3,7 +3,6 @@ package main.circuits;
 import main.BitStream;
 import main.control.Splitter;
 import main.exceptions.BitStreamInputSizeMismatch;
-import main.gates.binary.AND;
 import main.gates.multi.MultiAND;
 import main.gates.unary.NOT;
 import main.utils.DataConverter;
