@@ -11,11 +11,31 @@ import java.util.List;
 
 public class DLatch implements Circuit {
 
+    /**DLatch implementation. See documentation/DLatch.png for exact build.
+     *
+     * @param D - the D input BitStream
+     * @param enable - BitStream used to enable the latch
+     * @param Q - the Q output of the latch
+     * @param notQ - the reverse of the Q output
+     * @param name - the name of the latch
+     * @param inDebuggerMode - specify if the latch is in debug mode
+     * @param debugDepth - how many circuits deep should debugging go
+     */
     private BitStream D, enable, Q, notQ;
     private String name;
     private boolean inDebuggerMode;
     private int debugDepth;
 
+    /**Constructors for the DLatch class.
+     *
+     * @param D - the D input BitStream
+     * @param enable - BitStream used to enable the latch
+     * @param Q - the Q output of the latch
+     * @param notQ - the reverse of the Q output
+     * @param name - the name of the latch
+     * @param inDebuggerMode - specify if the latch is in debug mode
+     * @param debugDepth - how many circuits deep should debugging go
+     */
     public DLatch(BitStream D, BitStream enable, BitStream Q, BitStream notQ,
                   String name, boolean inDebuggerMode, int debugDepth) {
         this.D = D;
@@ -43,6 +63,8 @@ public class DLatch implements Circuit {
         this(D, enable, Q, notQ, "DLatch", false, 0);
     }
 
+    /**Getters for all the attributes.
+     */
     public BitStream getD() {
         return D;
     }
@@ -71,6 +93,9 @@ public class DLatch implements Circuit {
         return debugDepth;
     }
 
+    /**Setters for some of the attributes.
+     * Setting BitStreams is not possible.
+     */
     public void setName(String name) {
         this.name = name;
     }
@@ -83,6 +108,8 @@ public class DLatch implements Circuit {
         this.debugDepth = debugDepth;
     }
 
+    /**Build the DLatch circuit as defined in the documentation.
+     */
     @Override
     public void build() {
         boolean debugGates = this.debugDepth > 0 ? this.inDebuggerMode : false;
