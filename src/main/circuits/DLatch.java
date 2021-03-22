@@ -11,16 +11,6 @@ import java.util.List;
 
 public class DLatch implements Circuit {
 
-    /**DLatch implementation. See documentation/DLatch.png for exact build.
-     *
-     * @param D - the D input BitStream
-     * @param enable - BitStream used to enable the latch
-     * @param Q - the Q output of the latch
-     * @param notQ - the reverse of the Q output
-     * @param name - the name of the latch
-     * @param inDebuggerMode - specify if the latch is in debug mode
-     * @param debugDepth - how many circuits deep should debugging go
-     */
     private BitStream D, enable, Q, notQ;
     private String name;
     private boolean inDebuggerMode;

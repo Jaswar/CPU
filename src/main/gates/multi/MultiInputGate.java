@@ -9,10 +9,6 @@ import java.util.List;
 
 public abstract class MultiInputGate extends Gate {
 
-    /**Class representing gates with multiple inputs.
-     *
-     * @param in - the list of input BitStreams
-     */
     private List<BitStream> in;
 
     /**Constructor for the MultiInputGate class.

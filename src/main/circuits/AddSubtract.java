@@ -11,18 +11,6 @@ import java.util.List;
 
 public class AddSubtract implements Circuit {
 
-    /**Circuit to perform addition and subtraction of two numbers.
-     *
-     * @param source - the source BitStream
-     * @param destination - the destination BitStream
-     * @param out - the output BitStream
-     * @param control - the BitStream that specifies if addition or subtraction is performed
-     *                (0 for addition, 1 for subtraction)
-     * @param overflow - BitStream to specify if overflow occurs
-     * @param name - the name of the circuit
-     * @param inDebuggerMode - boolean to specify if the circuit should be evaluated in the debug mode
-     * @param debugDepth - how deep should the debug go (in how many levels of circuitry)
-     */
     private BitStream source, destination, out, control, overflow;
     private String name;
     private boolean inDebuggerMode;

@@ -12,14 +12,6 @@ import java.util.List;
 
 public class Splitter implements Node {
 
-    /**Class which takes input BitStreams and tries to forward them to the output BitStreams.
-     * It attempts to split, merge or multiply the BitStreams.
-     *
-     * @param in - a list of the input BitStreams
-     * @param out - a list of the output BitStreams
-     * @param name - the name of the splitter
-     * @param inDebuggerMode - a boolean to specify if additional debug data should be shown
-     */
     private List<BitStream> in;
     private List<BitStream> out;
     private String name;

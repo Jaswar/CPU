@@ -7,11 +7,6 @@ import main.utils.DataConverter;
 
 public abstract class BinaryGate extends Gate {
 
-    /**Abstract class to represent binary logic gates (ie logic gates with two inputs).
-     *
-     * @param in1 - the first input bit stream
-     * @param in2 - the second input bit stream
-     */
     private BitStream in1, in2;
 
     /**Constructor for the BinaryGate class.

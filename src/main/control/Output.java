@@ -10,13 +10,6 @@ import java.util.List;
 
 public class Output implements Node {
 
-    /**Class used to get the outputs of circuits.
-     *
-     * @param data - the data contained in the output
-     * @param in - the BitStream connected to the output
-     * @param name - the name of the output
-     * @param inDebuggerMode - a boolean to specify if additional debug information should be displayed
-     */
     private boolean[] data;
     private BitStream in;
     private String name;

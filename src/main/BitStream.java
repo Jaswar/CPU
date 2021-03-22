@@ -7,12 +7,6 @@ import java.util.List;
 
 public class BitStream {
 
-    /**Class used to represent the connection between nodes/components in the circuit.
-     *
-     * @param endpoints - a list of endpoints corresponding to this BitStream
-     * @param data - the data contained in the BitStream
-     * @param source - the data source for this BitStream
-     */
     private List<Node> endpoints;
     private boolean[] data;
     private Node source;

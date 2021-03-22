@@ -4,10 +4,10 @@ import main.exceptions.BitStreamInputSizeMismatch;
 
 import java.util.List;
 
+/**Interface describing each node/component in a circuit.
+ */
 public interface Node {
 
-    /**Interface describing each node/component in a circuit.
-     */
     int WORD_SIZE = 16;
 
     void setup();

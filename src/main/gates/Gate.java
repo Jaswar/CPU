@@ -11,12 +11,6 @@ import java.util.List;
 
 public abstract class Gate implements Node {
 
-    /**Abstract class to represent logic gates.
-     *
-     * @param out - the output stream
-     * @param name - the name of the gate
-     * @param inDebuggerMode - boolean to specify if additional debug information should be shown
-     */
     private BitStream out;
     private String name;
     private boolean inDebuggerMode;

@@ -12,14 +12,6 @@ import java.util.List;
 
 public class Decoder implements Circuit {
 
-    /**Decoder circuit class. See documentation/Decoder.png for the build.
-     *
-     * @param input - the input BitStream
-     * @param outputs - the list of output BitStreams
-     * @param name - the name of the decoder
-     * @param inDebuggerMode - boolean to specify if the circuit is in debug mode
-     * @param debugDepth - how deep should debugging go
-     */
     private BitStream input;
     private List<BitStream> outputs;
     private String name;

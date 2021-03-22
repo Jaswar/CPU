@@ -9,11 +9,6 @@ import java.util.List;
 
 public class TriState extends Gate {
 
-    /**Class corresponding to a tri state gate.
-     *
-     * @param in - the input BitStream
-     * @param control - BitStream to say if the gate is enabled or disabled
-     */
     private BitStream in, control;
 
     /**Constructors for the TriState class.

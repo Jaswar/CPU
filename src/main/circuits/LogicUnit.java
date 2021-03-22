@@ -11,17 +11,6 @@ import java.util.List;
 
 public class LogicUnit implements Circuit {
 
-    /**Class to represent the logic unit as designed in documentation/LogicUnit.png.
-     *
-     * @param source - the source BitStream
-     * @param destination - the destination BitStream
-     * @param output - the output BitStream
-     * @param controls - the BitStreams controlling which operation should be undertaken.
-     *                 The order is: NOT, OR, AND, XOR, NAND, NOR.
-     * @param name - the name of the logic unit
-     * @param inDebuggerMode - boolean to specify if the circuit is in the debug mode
-     * @param debugDepth - how deep should debugging go
-     */
     private BitStream source;
     private BitStream destination;
     private BitStream output;
