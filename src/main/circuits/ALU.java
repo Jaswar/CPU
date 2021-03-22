@@ -143,7 +143,7 @@ public class ALU implements Circuit {
 
         BitStream logicUnitOut = new BitStream(size);
 
-        TriState logicTriState = new TriState(logicControlOut, logicControlOut, this.out, "logicTriState", debugGates);
+        TriState logicTriState = new TriState(logicUnitOut, logicControlOut, this.out, "logicTriState", debugGates);
 
         AddSubtract addSubtract = new AddSubtract(srcDLatchQ, this.destination, addSubOut, addSubOut, this.overflow,
                 "addSub", debugGates, this.debugDepth - 1);
