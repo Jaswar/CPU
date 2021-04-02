@@ -36,21 +36,21 @@ public class ALU implements Circuit {
     }
 
     public ALU(BitStream source, BitStream destination, BitStream out,
-               BitStream opCode, BitStream ALUIn, BitStream overflow, String name) {
-        this(source, destination, out, opCode, ALUIn, overflow, name, false, 0);
+               BitStream opCode, BitStream aluIn, BitStream overflow, String name) {
+        this(source, destination, out, opCode, aluIn, overflow, name, false, 0);
     }
 
 
     public ALU(BitStream source, BitStream destination, BitStream out,
-               BitStream opCode, BitStream ALUIn, BitStream overflow,
+               BitStream opCode, BitStream aluIn, BitStream overflow,
                boolean inDebuggerMode, int debugDepth) {
-        this(source, destination, out, opCode, ALUIn, overflow, "ALU", inDebuggerMode, debugDepth);
+        this(source, destination, out, opCode, aluIn, overflow, "ALU", inDebuggerMode, debugDepth);
     }
 
 
     public ALU(BitStream source, BitStream destination, BitStream out,
-               BitStream opCode, BitStream ALUIn, BitStream overflow) {
-        this(source, destination, out, opCode, ALUIn, overflow, "ALU", false, 0);
+               BitStream opCode, BitStream aluIn, BitStream overflow) {
+        this(source, destination, out, opCode, aluIn, overflow, "ALU", false, 0);
     }
 
     public BitStream getSource() {
@@ -145,7 +145,7 @@ public class ALU implements Circuit {
 
         TriState logicTriState = new TriState(logicUnitOut, logicControlOut, this.out, "logicTriState", debugGates);
 
-        AddSubtract addSubtract = new AddSubtract(srcDLatchQ, this.destination, addSubOut, addSubOut, this.overflow,
+        AddSubtract addSubtract = new AddSubtract(srcDLatchQ, this.destination, addSubOut, addSubAndOut, this.overflow,
                 "addSub", debugGates, this.debugDepth - 1);
 
         LogicUnit logicUnit = new LogicUnit(srcDLatchQ, this.destination, logicUnitOut, logicUnitControls,
