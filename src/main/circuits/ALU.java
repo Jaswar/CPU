@@ -18,6 +18,18 @@ public class ALU implements Circuit {
     private boolean inDebuggerMode;
     private int debugDepth;
 
+    /**Constructors for the ALU class.
+     *
+     * @param source - the source BitStream
+     * @param destination - the destination BitStream
+     * @param out - the output BitStream
+     * @param opCode - the BitStream for selecting which operation should be performed
+     * @param aluIn - BitStream to tell if the ALU should read source
+     * @param overflow - BitStream specifying if overflow occurred
+     * @param name - the name of the ALU
+     * @param inDebuggerMode - boolean to specify if the unit is in debug mode
+     * @param debugDepth - the depth of debugging
+     */
     public ALU(BitStream source, BitStream destination, BitStream out,
                BitStream opCode, BitStream aluIn, BitStream overflow, String name,
                boolean inDebuggerMode, int debugDepth) {
@@ -53,6 +65,8 @@ public class ALU implements Circuit {
         this(source, destination, out, opCode, aluIn, overflow, "ALU", false, 0);
     }
 
+    /**Getters for all the attributes.
+     */
     public BitStream getSource() {
         return source;
     }
@@ -89,6 +103,8 @@ public class ALU implements Circuit {
         return debugDepth;
     }
 
+    /**Setters for some of the attributes. Setting BitStreams is not possible.
+     */
     public void setName(String name) {
         this.name = name;
     }
@@ -101,6 +117,8 @@ public class ALU implements Circuit {
         this.debugDepth = debugDepth;
     }
 
+    /**Define the build method to construct the ALU as described in documentation.
+     */
     @Override
     public void build() {
         boolean debugGates = this.debugDepth > 0 ? this.inDebuggerMode : false;
