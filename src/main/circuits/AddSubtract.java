@@ -118,7 +118,7 @@ public class AddSubtract implements Circuit {
         boolean debugGates = this.debugDepth > 0 ? this.inDebuggerMode : false;
         int size = this.source.getSize();
 
-        //First indexes -> least significant bits
+        //First indexes -> most significant bits
         List<BitStream> srcInList = new ArrayList<>();
         srcInList.add(this.source);
 
