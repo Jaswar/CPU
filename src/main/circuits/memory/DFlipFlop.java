@@ -18,6 +18,17 @@ public class DFlipFlop implements Circuit {
     private boolean inDebuggerMode;
     private int debugDepth;
 
+    /**Constructors for the D Flip-Flop class.
+     *
+     * @param D - the input BitStream, often called D
+     * @param enable - the BitStream to control the behaviour of the flip-flop
+     * @param Q - the output
+     * @param notQ - the complement of the output
+     * @param risingEdge - boolean to specify if the flip-flop is rising or falling edge triggered
+     * @param name - the name of the flip-flop
+     * @param inDebuggerMode - boolean to tell if the circuit is in debug mode
+     * @param debugDepth - how deep should debugging go
+     */
     public DFlipFlop(BitStream D, BitStream enable, BitStream Q, BitStream notQ, boolean risingEdge,
                      String name, boolean inDebuggerMode, int debugDepth) {
         this.D = D;
@@ -47,6 +58,8 @@ public class DFlipFlop implements Circuit {
         this(D, enable, Q, notQ, risingEdge, "DFlipFlop", false, 0);
     }
 
+    /**Getters for all the attributes.
+     */
     public BitStream getD() {
         return D;
     }
@@ -79,6 +92,9 @@ public class DFlipFlop implements Circuit {
         return debugDepth;
     }
 
+    /**Setters for some of the attributes. Setting BitStreams and
+     * risingEdge property is not possible.
+     */
     public void setName(String name) {
         this.name = name;
     }
@@ -91,6 +107,8 @@ public class DFlipFlop implements Circuit {
         this.debugDepth = debugDepth;
     }
 
+    /**Define the build method to construct the circuit as described in the documentation.
+     */
     @Override
     public void build() {
         boolean debugGates = this.debugDepth > 0 ? this.inDebuggerMode : false;
