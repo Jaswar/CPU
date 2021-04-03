@@ -25,6 +25,33 @@ class RegisterTest {
         ProcessRunner.run(mainInput);
 
         assertArrayEquals(new boolean[]{true, true, false, true}, output.getData());
+
+        mainInput.setData(new boolean[]{false, true, false, false});
+        regInInput.setData(new boolean[]{false});
+        regOutInput.setData(new boolean[]{true});
+
+        ProcessRunner.run(regInInput, regOutInput);
+        ProcessRunner.run(mainInput);
+
+        assertArrayEquals(new boolean[]{true, true, false, true}, output.getData());
+
+        mainInput.setData(new boolean[]{false, true, false, false});
+        regInInput.setData(new boolean[]{true});
+        regOutInput.setData(new boolean[]{false});
+
+        ProcessRunner.run(regOutInput);
+        ProcessRunner.run(regInInput, mainInput);
+
+        assertArrayEquals(new boolean[]{true, true, false, true}, output.getData());
+
+        mainInput.setData(new boolean[]{false, true, false, false});
+        regInInput.setData(new boolean[]{true});
+        regOutInput.setData(new boolean[]{true});
+
+        ProcessRunner.run(regOutInput);
+        ProcessRunner.run(regInInput, mainInput);
+
+        assertArrayEquals(new boolean[]{false, true, false, false}, output.getData());
     }
 
 }

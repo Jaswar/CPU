@@ -10,6 +10,16 @@ public class Register implements Circuit {
     private boolean inDebuggerMode;
     private int debugDepth;
 
+    /**Constructors for the Register class.
+     *
+     * @param input - the input BitStream to the register
+     * @param output - the output from the register
+     * @param regIn - control line to tell if the register should read input
+     * @param regOut - control line to tell if the register should output data
+     * @param name - the name of the register
+     * @param inDebuggerMode - boolean to specify if the register is in debug mode
+     * @param debugDepth - integer to specify the depth of debugging
+     */
     public Register(BitStream input, BitStream output, BitStream regIn, BitStream regOut,
                     String name, boolean inDebuggerMode, int debugDepth) {
         this.input = input;
@@ -42,6 +52,8 @@ public class Register implements Circuit {
         return input;
     }
 
+    /**Getters for all the attributes of the class.
+     */
     public BitStream getOutput() {
         return output;
     }
@@ -66,6 +78,8 @@ public class Register implements Circuit {
         return debugDepth;
     }
 
+    /**Setters for some of the attributes. Setting BitStreams is not possible.
+     */
     public void setName(String name) {
         this.name = name;
     }
@@ -78,6 +92,8 @@ public class Register implements Circuit {
         this.debugDepth = debugDepth;
     }
 
+    /**Define the build method to construct the register as described in the documentation.
+     */
     @Override
     public void build() {
         boolean debugGates = this.debugDepth > 0 ? this.inDebuggerMode : false;
