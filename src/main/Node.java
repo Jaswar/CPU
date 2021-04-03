@@ -4,15 +4,13 @@ import main.exceptions.BitStreamInputSizeMismatch;
 
 import java.util.List;
 
+/**Interface describing each node/component in a circuit.
+ */
 public interface Node {
 
-    /**Interface describing each node/component in a circuit.
-     */
     int WORD_SIZE = 16;
 
     void setup();
-    boolean isInDebuggerMode();
-    void setInDebuggerMode(boolean inDebuggerMode);
     public void evaluate(List<Node> queue);
     public void debug();
     public void checkIfSizesMatch();

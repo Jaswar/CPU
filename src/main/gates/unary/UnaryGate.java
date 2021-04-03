@@ -7,10 +7,6 @@ import main.utils.DataConverter;
 
 public abstract class UnaryGate extends Gate {
 
-    /**Abstract class to represent unary logic gates (ie logic gates with one input).
-     *
-     * @param in - the input bit stream
-     */
     private BitStream in;
 
     /**Constructor for the UnaryGate class.

@@ -1,7 +1,6 @@
 package main.circuits;
 
 import main.BitStream;
-import main.Node;
 import main.control.Splitter;
 import main.gates.binary.AND;
 import main.gates.multi.MultiOR;
@@ -12,18 +11,6 @@ import java.util.List;
 
 public class AddSubtract implements Circuit {
 
-    /**Circuit to perform addition and subtraction of two numbers.
-     *
-     * @param source - the source BitStream
-     * @param destination - the destination BitStream
-     * @param out - the output BitStream
-     * @param control - the BitStream that specifies if addition or subtraction is performed
-     *                (0 for addition, 1 for subtraction)
-     * @param overflow - BitStream to specify if overflow occurs
-     * @param name - the name of the circuit
-     * @param inDebuggerMode - boolean to specify if the circuit should be evaluated in the debug mode
-     * @param debugDepth - how deep should the debug go (in how many levels of circuitry)
-     */
     private BitStream source, destination, out, control, overflow;
     private String name;
     private boolean inDebuggerMode;
@@ -124,14 +111,14 @@ public class AddSubtract implements Circuit {
         this.debugDepth = debugDepth;
     }
 
-    /**Method to build the circuit as defined in documentation/addSub.png.
+    /**Method to build the circuit as defined in documentation/AddSub.png.
      */
     @Override
     public void build() {
         boolean debugGates = this.debugDepth > 0 ? this.inDebuggerMode : false;
         int size = this.source.getSize();
 
-        //First indexes -> least significant bits
+        //First indexes -> most significant bits
         List<BitStream> srcInList = new ArrayList<>();
         srcInList.add(this.source);
 

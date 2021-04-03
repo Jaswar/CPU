@@ -187,6 +187,9 @@ public class DataConverter {
      * @return - the generated boolean array
      */
     public static boolean[] convertSignedDecToBool(int decimal, int wordSize) {
+        if (decimal == 0) {
+            return new boolean[wordSize];
+        }
         String binary = DataConverter.convertSignedDecToBin(decimal, wordSize);
         return DataConverter.convertBinToBool(binary);
     }
