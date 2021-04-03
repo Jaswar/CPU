@@ -14,6 +14,18 @@ public class RegisterFile implements Circuit {
     private boolean inDebuggerMode;
     private int debugDepth;
 
+    /**Constructors for the RegisterFile class.
+     *
+     * @param input - the input to the register file
+     * @param output - the output from the register file
+     * @param RFIn - BitStream to specify if values are written to the register file
+     * @param RFOut - BitStream to specify if values are read from the register file
+     * @param addressWrite - control which register is written to
+     * @param addressRead - control which register outputs its value
+     * @param name - the name of the circuit
+     * @param inDebuggerMode - boolean to specify if the circuit is in the debug mode
+     * @param debugDepth - how deep should debugging go
+     */
     public RegisterFile(BitStream input, BitStream output, BitStream RFIn, BitStream RFOut,
                         BitStream addressWrite, BitStream addressRead, String name,
                         boolean inDebuggerMode, int debugDepth) {
@@ -47,6 +59,8 @@ public class RegisterFile implements Circuit {
         this(input, output, RFIn, RFOut, addressWrite, addressRead, "RegisterFile", false, 0);
     }
 
+    /**Getters for all the attributes.
+     */
     public BitStream getInput() {
         return input;
     }
@@ -83,6 +97,8 @@ public class RegisterFile implements Circuit {
         return debugDepth;
     }
 
+    /**Setters for some of the attributes. Setting BitStreams is not possible.
+     */
     public void setName(String name) {
         this.name = name;
     }
@@ -95,6 +111,8 @@ public class RegisterFile implements Circuit {
         this.debugDepth = debugDepth;
     }
 
+    /**Define the build method to construct the circuit as described in the documentation.
+     */
     public void build() {
         boolean debugGates = this.debugDepth > 0 ? this.inDebuggerMode : false;
         int size = this.input.getSize();
