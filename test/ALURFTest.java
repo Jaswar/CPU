@@ -246,7 +246,6 @@ public class ALURFTest {
             a = b;
             b = temp;
 
-            System.out.println(b);
         }
     }
 
