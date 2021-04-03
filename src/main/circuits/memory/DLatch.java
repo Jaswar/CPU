@@ -1,6 +1,7 @@
-package main.circuits;
+package main.circuits.memory;
 
 import main.BitStream;
+import main.circuits.Circuit;
 import main.control.Splitter;
 import main.gates.binary.AND;
 import main.gates.binary.NOR;

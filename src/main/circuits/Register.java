@@ -1,6 +1,7 @@
 package main.circuits;
 
 import main.BitStream;
+import main.circuits.memory.DLatch;
 import main.gates.TriState;
 
 public class Register implements Circuit {

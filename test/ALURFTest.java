@@ -1,6 +1,6 @@
 import main.BitStream;
 import main.circuits.ALU;
-import main.circuits.DLatch;
+import main.circuits.memory.DLatch;
 import main.circuits.Register;
 import main.circuits.RegisterFile;
 import main.control.Input;

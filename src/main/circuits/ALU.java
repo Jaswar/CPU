@@ -1,7 +1,7 @@
 package main.circuits;
 
 import main.BitStream;
-import main.control.Splitter;
+import main.circuits.memory.DLatch;
 import main.gates.TriState;
 import main.gates.binary.AND;
 import main.gates.binary.OR;
