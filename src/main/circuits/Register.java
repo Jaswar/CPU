@@ -104,6 +104,6 @@ public class Register implements Circuit {
 
         DLatch mainDLatch = new DLatch(this.input, this.regIn, dLatchQ, dLatchNotQ, "mainDLatch", debugGates, this.debugDepth - 1);
 
-        TriState outTriState = new TriState(dLatchQ, this.regOut, this.output, "outTriState", debugGates);
+        TriState outTriState = new TriState(dLatchQ, this.regOut, this.output, "outTriState in " + this.name, debugGates);
     }
 }
