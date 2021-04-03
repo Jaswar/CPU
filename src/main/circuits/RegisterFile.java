@@ -113,6 +113,7 @@ public class RegisterFile implements Circuit {
 
     /**Define the build method to construct the circuit as described in the documentation.
      */
+    @Override
     public void build() {
         boolean debugGates = this.debugDepth > 0 ? this.inDebuggerMode : false;
         int size = this.input.getSize();
