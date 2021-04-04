@@ -1,4 +1,4 @@
-package main.circuits;
+package main.circuits.memory;
 
 import main.BitStream;
 import main.circuits.memory.DLatch;

@@ -135,13 +135,12 @@ public class RegisterFile implements Circuit {
                 "addrReadDecoder", debugGates, this.debugDepth - 1);
 
         for (int i = 0; i < registerCount; i++) {
-            BitStream regIn = new BitStream(1);
             BitStream regOut = new BitStream(1);
 
-            AND regInAnd = new AND(this.RFIn, addrWriteDecoderOutList.get(i), regIn, "regInAnd" + i, debugGates);
             AND regOutAnd = new AND(this.RFOut, addrReadDecoderOutList.get(i), regOut, "regOutAnd" + i, debugGates);
 
-            Register register = new Register(this.input, this.output, regIn, regOut, "reg" + i, debugGates, this.debugDepth - 1);
+            Register register = new Register(this.input, this.output, this.RFIn, regOut, addrWriteDecoderOutList.get(i),
+                    "reg" + i, debugGates, this.debugDepth - 1);
         }
     }
 }

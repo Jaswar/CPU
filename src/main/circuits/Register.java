@@ -7,7 +7,7 @@ import main.gates.TriState;
 
 public class Register implements Circuit {
 
-    private BitStream input, output, regIn, regOut;
+    private BitStream input, output, regIn, regOut, enable;
     private String name;
     private boolean inDebuggerMode;
     private int debugDepth;
@@ -18,16 +18,18 @@ public class Register implements Circuit {
      * @param output - the output from the register
      * @param regIn - control line to tell if the register should read input
      * @param regOut - control line to tell if the register should output data
+     * @param enable - control line to tell if the register is enabled
      * @param name - the name of the register
      * @param inDebuggerMode - boolean to specify if the register is in debug mode
      * @param debugDepth - integer to specify the depth of debugging
      */
-    public Register(BitStream input, BitStream output, BitStream regIn, BitStream regOut,
+    public Register(BitStream input, BitStream output, BitStream regIn, BitStream regOut, BitStream enable,
                     String name, boolean inDebuggerMode, int debugDepth) {
         this.input = input;
         this.output = output;
         this.regIn = regIn;
         this.regOut = regOut;
+        this.enable = enable;
 
         this.name = name;
         this.inDebuggerMode = inDebuggerMode;
@@ -36,18 +38,18 @@ public class Register implements Circuit {
         this.build();
     }
 
-    public Register(BitStream input, BitStream output, BitStream regIn, BitStream regOut,
+    public Register(BitStream input, BitStream output, BitStream regIn, BitStream regOut, BitStream enable,
                     String name) {
-        this(input, output, regIn, regOut, name, false, 0);
+        this(input, output, regIn, regOut, enable, name, false, 0);
     }
 
-    public Register(BitStream input, BitStream output, BitStream regIn, BitStream regOut,
+    public Register(BitStream input, BitStream output, BitStream regIn, BitStream regOut, BitStream enable,
                     boolean inDebuggerMode, int debugDepth) {
-        this(input, output, regIn, regOut, "Register", inDebuggerMode, debugDepth);
+        this(input, output, regIn, regOut, enable,"Register", inDebuggerMode, debugDepth);
     }
 
-    public Register(BitStream input, BitStream output, BitStream regIn, BitStream regOut) {
-        this(input, output, regIn, regOut, "Register", false, 0);
+    public Register(BitStream input, BitStream output, BitStream regIn, BitStream regOut, BitStream enable) {
+        this(input, output, regIn, regOut, enable, "Register", false, 0);
     }
 
     public BitStream getinput() {
@@ -104,7 +106,7 @@ public class Register implements Circuit {
         BitStream dFlipFlopQ = new BitStream(size);
         BitStream dFlipFlopNotQ = new BitStream(size);
 
-        DFlipFlop mainDFlipFlop = new DFlipFlop(this.input, this.regIn, dFlipFlopQ, dFlipFlopNotQ, false,
+        DFlipFlop mainDFlipFlop = new DFlipFlop(this.input, this.regIn, this.enable, dFlipFlopQ, dFlipFlopNotQ, false,
                 "mainDFlipFlop", debugGates, this.debugDepth - 1);
 
         TriState outTriState = new TriState(dFlipFlopQ, this.regOut, this.output, "outTriState in " + this.name, debugGates);

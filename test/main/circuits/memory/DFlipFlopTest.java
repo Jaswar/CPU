@@ -12,31 +12,33 @@ class DFlipFlopTest {
     @Test
     void testFallingEdge() {
         BitStream D = new BitStream(4);
+        BitStream clock = new BitStream(1);
         BitStream enable = new BitStream(1);
+        enable.setData(new boolean[]{true});
         BitStream Q = new BitStream(4);
         BitStream notQ = new BitStream(4);
 
         Input dInput = new Input(new boolean[]{true, false, false, true}, D);
-        Input enableInput = new Input(new boolean[]{true}, enable);
+        Input clockInput = new Input(new boolean[]{true}, clock);
 
-        DFlipFlop dFlipFlop = new DFlipFlop(D, enable, Q, notQ, false);
-        ProcessRunner.run(dInput, enableInput);
+        DFlipFlop dFlipFlop = new DFlipFlop(D, clock, enable, Q, notQ, false);
+        ProcessRunner.run(dInput, clockInput);
 
-        enableInput.setData(new boolean[]{false});
-        ProcessRunner.run(enableInput);
+        clockInput.setData(new boolean[]{false});
+        ProcessRunner.run(clockInput);
 
         assertArrayEquals(new boolean[]{true, false, false, true}, Q.getData());
         assertArrayEquals(new boolean[]{false, true, true, false}, notQ.getData());
 
         dInput.setData(new boolean[]{false, true, false, true});
-        enableInput.setData(new boolean[]{true});
-        ProcessRunner.run(dInput, enableInput);
+        clockInput.setData(new boolean[]{true});
+        ProcessRunner.run(dInput, clockInput);
 
         assertArrayEquals(new boolean[]{true, false, false, true}, Q.getData());
         assertArrayEquals(new boolean[]{false, true, true, false}, notQ.getData());
 
-        enableInput.setData(new boolean[]{false});
-        ProcessRunner.run(enableInput);
+        clockInput.setData(new boolean[]{false});
+        ProcessRunner.run(clockInput);
 
         assertArrayEquals(new boolean[]{false, true, false, true}, Q.getData());
         assertArrayEquals(new boolean[]{true, false, true, false}, notQ.getData());
@@ -45,18 +47,20 @@ class DFlipFlopTest {
     @Test
     void testRisingEdge() {
         BitStream D = new BitStream(4);
+        BitStream clock = new BitStream(1);
         BitStream enable = new BitStream(1);
+        enable.setData(new boolean[]{true});
         BitStream Q = new BitStream(4);
         BitStream notQ = new BitStream(4);
 
         Input dInput = new Input(new boolean[]{true, false, false, true}, D);
-        Input enableInput = new Input(new boolean[]{false}, enable);
+        Input clockInput = new Input(new boolean[]{false}, clock);
 
-        DFlipFlop dFlipFlop = new DFlipFlop(D, enable, Q, notQ, true);
-        ProcessRunner.run(dInput, enableInput);
+        DFlipFlop dFlipFlop = new DFlipFlop(D, clock, enable, Q, notQ, true);
+        ProcessRunner.run(dInput, clockInput);
 
-        enableInput.setData(new boolean[]{true});
-        ProcessRunner.run(enableInput);
+        clockInput.setData(new boolean[]{true});
+        ProcessRunner.run(clockInput);
 
         assertArrayEquals(new boolean[]{true, false, false, true}, Q.getData());
         assertArrayEquals(new boolean[]{false, true, true, false}, notQ.getData());
@@ -67,20 +71,20 @@ class DFlipFlopTest {
         assertArrayEquals(new boolean[]{true, false, false, true}, Q.getData());
         assertArrayEquals(new boolean[]{false, true, true, false}, notQ.getData());
 
-        enableInput.setData(new boolean[]{false});
-        ProcessRunner.run(enableInput);
+        clockInput.setData(new boolean[]{false});
+        ProcessRunner.run(clockInput);
 
         assertArrayEquals(new boolean[]{true, false, false, true}, Q.getData());
         assertArrayEquals(new boolean[]{false, true, true, false}, notQ.getData());
 
-        enableInput.setData(new boolean[]{true});
-        ProcessRunner.run(enableInput);
+        clockInput.setData(new boolean[]{true});
+        ProcessRunner.run(clockInput);
 
         assertArrayEquals(new boolean[]{true, true, true, true}, Q.getData());
         assertArrayEquals(new boolean[]{false, false, false, false}, notQ.getData());
 
-        enableInput.setData(new boolean[]{false});
-        ProcessRunner.run(enableInput);
+        clockInput.setData(new boolean[]{false});
+        ProcessRunner.run(clockInput);
 
         assertArrayEquals(new boolean[]{true, true, true, true}, Q.getData());
         assertArrayEquals(new boolean[]{false, false, false, false}, notQ.getData());

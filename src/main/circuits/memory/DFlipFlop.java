@@ -2,6 +2,7 @@ package main.circuits.memory;
 
 import main.BitStream;
 import main.circuits.Circuit;
+import main.circuits.Multiplexer;
 import main.control.Splitter;
 import main.gates.binary.NOR;
 import main.gates.multi.MultiNOR;
@@ -12,7 +13,7 @@ import java.util.List;
 
 public class DFlipFlop implements Circuit {
 
-    private BitStream D, enable, Q, notQ;
+    private BitStream D, clock, enable, Q, notQ;
     private boolean risingEdge;
     private String name;
     private boolean inDebuggerMode;
@@ -21,7 +22,8 @@ public class DFlipFlop implements Circuit {
     /**Constructors for the D Flip-Flop class.
      *
      * @param D - the input BitStream, often called D
-     * @param enable - the BitStream to control the behaviour of the flip-flop
+     * @param clock - the BitStream coming from the clock controlling the data in the flip-flop
+     * @param enable - the BitStream to control if the flip-flop should react to the clock
      * @param Q - the output
      * @param notQ - the complement of the output
      * @param risingEdge - boolean to specify if the flip-flop is rising or falling edge triggered
@@ -29,9 +31,10 @@ public class DFlipFlop implements Circuit {
      * @param inDebuggerMode - boolean to tell if the circuit is in debug mode
      * @param debugDepth - how deep should debugging go
      */
-    public DFlipFlop(BitStream D, BitStream enable, BitStream Q, BitStream notQ, boolean risingEdge,
+    public DFlipFlop(BitStream D, BitStream clock, BitStream enable, BitStream Q, BitStream notQ, boolean risingEdge,
                      String name, boolean inDebuggerMode, int debugDepth) {
         this.D = D;
+        this.clock = clock;
         this.enable = enable;
         this.Q = Q;
         this.notQ = notQ;
@@ -44,18 +47,18 @@ public class DFlipFlop implements Circuit {
         this.build();
     }
 
-    public DFlipFlop(BitStream D, BitStream enable, BitStream Q, BitStream notQ, boolean risingEdge,
+    public DFlipFlop(BitStream D, BitStream clock, BitStream enable, BitStream Q, BitStream notQ, boolean risingEdge,
                      String name) {
-        this(D, enable, Q, notQ, risingEdge, name, false, 0);
+        this(D, clock, enable, Q, notQ, risingEdge, name, false, 0);
     }
 
-    public DFlipFlop(BitStream D, BitStream enable, BitStream Q, BitStream notQ, boolean risingEdge,
+    public DFlipFlop(BitStream D, BitStream clock, BitStream enable, BitStream Q, BitStream notQ, boolean risingEdge,
                      boolean inDebuggerMode, int debugDepth) {
-        this(D, enable, Q, notQ, risingEdge, "DFlipFlop", inDebuggerMode, debugDepth);
+        this(D, clock, enable, Q, notQ, risingEdge, "DFlipFlop", inDebuggerMode, debugDepth);
     }
 
-    public DFlipFlop(BitStream D, BitStream enable, BitStream Q, BitStream notQ, boolean risingEdge) {
-        this(D, enable, Q, notQ, risingEdge, "DFlipFlop", false, 0);
+    public DFlipFlop(BitStream D, BitStream clock, BitStream enable, BitStream Q, BitStream notQ, boolean risingEdge) {
+        this(D, clock, enable, Q, notQ, risingEdge, "DFlipFlop", false, 0);
     }
 
     /**Getters for all the attributes.
@@ -114,21 +117,28 @@ public class DFlipFlop implements Circuit {
         boolean debugGates = this.debugDepth > 0 ? this.inDebuggerMode : false;
         int size = this.D.getSize();
 
-        BitStream preparedEnabled = this.enable;
+        List<BitStream> multiplexerInput = new ArrayList<>();
+        multiplexerInput.addAll(List.of(this.Q, this.D));
+
+        BitStream multiplexerOutput = new BitStream(size);
+        Multiplexer enableMultiplexer = new Multiplexer(multiplexerInput, this.enable, multiplexerOutput,
+                "enableMultiplexer", debugGates, this.debugDepth - 1);
+
+        BitStream preparedClock = this.clock;
         if (risingEdge) {
             BitStream notOut = new BitStream(1);
-            NOT not = new NOT(preparedEnabled, notOut, "edgeRevertNot", debugGates);
-            preparedEnabled = notOut;
+            NOT not = new NOT(preparedClock, notOut, "edgeRevertNot", debugGates);
+            preparedClock = notOut;
         }
 
-        List<BitStream> enableInputList = new ArrayList<>();
-        enableInputList.add(preparedEnabled);
+        List<BitStream> clockInputList = new ArrayList<>();
+        clockInputList.add(preparedClock);
 
         BitStream splitterOut = new BitStream(size);
-        List<BitStream> enableOutputList = new ArrayList<>();
-        enableOutputList.add(splitterOut);
+        List<BitStream> clockOutputList = new ArrayList<>();
+        clockOutputList.add(splitterOut);
 
-        Splitter mainSplitter = new Splitter(enableInputList, enableOutputList, "mainSplitter", debugGates);
+        Splitter mainSplitter = new Splitter(clockInputList, clockOutputList, "mainSplitter", debugGates);
 
         BitStream nor0Out = new BitStream(size);
         BitStream nor1Out = new BitStream(size);
@@ -138,7 +148,7 @@ public class DFlipFlop implements Circuit {
         List<BitStream> nor1InList = new ArrayList<>();
         nor1InList.addAll(List.of(nor0Out, splitterOut, nor2Out));
 
-        NOR nor0 = new NOR(this.D, nor1Out, nor0Out, "nor0", debugGates);
+        NOR nor0 = new NOR(multiplexerOutput, nor1Out, nor0Out, "nor0", debugGates);
         MultiNOR nor1 = new MultiNOR(nor1InList, nor1Out, "nor1", debugGates);
         NOR nor2 = new NOR(splitterOut, nor3Out, nor2Out, "nor2", debugGates);
         NOR nor3 = new NOR(nor2Out, nor0Out, nor3Out, "nor3", debugGates);

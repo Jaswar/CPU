@@ -128,7 +128,10 @@ public class ALU implements Circuit {
         BitStream srcDFlipFlopQ = new BitStream(size);
         BitStream srcDFlipFlopNotQ = new BitStream(size);
 
-        DFlipFlop sourceDFlipFlop = new DFlipFlop(this.source, this.aluIn, srcDFlipFlopQ, srcDFlipFlopNotQ, false,
+        BitStream sourceEnabled = new BitStream(1);
+        sourceEnabled.setData(new boolean[]{true});
+
+        DFlipFlop sourceDFlipFlop = new DFlipFlop(this.source, this.aluIn, sourceEnabled, srcDFlipFlopQ, srcDFlipFlopNotQ, false,
                 "sourceDLatch", debugGates, this.debugDepth - 1);
 
         List<BitStream> decoderOut = new ArrayList<>();

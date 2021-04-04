@@ -13,6 +13,8 @@ class RegisterTest {
     void test1() {
         BitStream input = new BitStream(4);
         BitStream output = new BitStream(4);
+        BitStream enable = new BitStream(1);
+        enable.setData(new boolean[]{true});
         BitStream regIn = new BitStream(1);
         BitStream regOut = new BitStream(1);
 
@@ -20,9 +22,11 @@ class RegisterTest {
         Input regInInput = new Input(new boolean[]{true}, regIn);
         Input regOutInput = new Input(new boolean[]{true}, regOut);
 
-        Register register = new Register(input, output, regIn, regOut);
-        ProcessRunner.run(regInInput, regOutInput);
-        ProcessRunner.run(mainInput);
+        Register register = new Register(input, output, regIn, regOut, enable);
+        ProcessRunner.run(mainInput, regInInput, regOutInput);
+
+        regInInput.setData(new boolean[]{false});
+        ProcessRunner.run(regInInput);
 
         assertArrayEquals(new boolean[]{true, true, false, true}, output.getData());
 
@@ -48,8 +52,9 @@ class RegisterTest {
         regInInput.setData(new boolean[]{true});
         regOutInput.setData(new boolean[]{true});
 
-        ProcessRunner.run(regOutInput);
-        ProcessRunner.run(regInInput, mainInput);
+        ProcessRunner.run(regInInput, mainInput, regOutInput);
+        regInInput.setData(new boolean[]{false});
+        ProcessRunner.run(regInInput);
 
         assertArrayEquals(new boolean[]{false, true, false, false}, output.getData());
     }
