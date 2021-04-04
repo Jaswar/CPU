@@ -131,8 +131,8 @@ public class ALU implements Circuit {
         BitStream sourceEnabled = new BitStream(1);
         sourceEnabled.setData(new boolean[]{true});
 
-        DFlipFlop sourceDFlipFlop = new DFlipFlop(this.source, this.aluIn, sourceEnabled, srcDFlipFlopQ, srcDFlipFlopNotQ, false,
-                "sourceDLatch", debugGates, this.debugDepth - 1);
+//        DFlipFlop sourceDFlipFlop = new DFlipFlop(this.source, this.aluIn, sourceEnabled, srcDFlipFlopQ, srcDFlipFlopNotQ, false,
+//                "sourceDLatch", debugGates, this.debugDepth - 1);
 
         List<BitStream> decoderOut = new ArrayList<>();
         for (int i = 0; i < (int)Math.pow(2, this.opCode.getSize()); i++) {
@@ -167,10 +167,10 @@ public class ALU implements Circuit {
 
         TriState logicTriState = new TriState(logicUnitOut, logicControlOut, this.out, "logicTriState", debugGates);
 
-        AddSubtract addSubtract = new AddSubtract(srcDFlipFlopQ, this.destination, addSubOut, addSubAndOut, this.overflow,
+        AddSubtract addSubtract = new AddSubtract(this.source, this.destination, addSubOut, addSubAndOut, this.overflow,
                 "addSub", debugGates, this.debugDepth - 1);
 
-        LogicUnit logicUnit = new LogicUnit(srcDFlipFlopQ, this.destination, logicUnitOut, logicUnitControls,
+        LogicUnit logicUnit = new LogicUnit(this.source, this.destination, logicUnitOut, logicUnitControls,
                 "logicUnit", debugGates, this.debugDepth - 1);
     }
 }

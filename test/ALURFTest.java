@@ -70,7 +70,7 @@ public class ALURFTest {
         DLatch Z = new DLatch(aluOut, zIn, zQ, zNotQ, "Z");
         TriState zTriState = new TriState(zQ, zOut, bus, "zTriState");
 
-        RegisterFile rf = new RegisterFile(bus, bus, RFIn, RFOut, addressWrite, addressRead);
+        RegisterFile rf = new RegisterFile(bus, bus, RFIn, RFOut, addressWrite, addressRead, false, 2);
     }
 
     @Test
@@ -132,9 +132,14 @@ public class ALURFTest {
 
         //Move Z to bus
         aluInInput.setData(new boolean[]{false});
-        zOutInput.setData(new boolean[]{true});
-        ProcessRunner.run(aluInInput, zOutInput);
+        zInInput.setData(new boolean[]{true});
+        ProcessRunner.run(aluInInput, zInInput);
 
+        zInInput.setData(new boolean[]{false});
+        ProcessRunner.run(zInInput);
+
+        zOutInput.setData(new boolean[]{true});
+        ProcessRunner.run(zOutInput);
 
         assertArrayEquals(new boolean[]{true, true, false, true}, bus.getData());
     }
@@ -198,8 +203,13 @@ public class ALURFTest {
             opCodeInput.setData(new boolean[]{false, false, false, false, true});
             ProcessRunner.run(RFOutInput, aluInInput, opCodeInput);
 
+            zInInput.setData(new boolean[]{true});
+            ProcessRunner.run(zInInput);
+
+            zInInput.setData(new boolean[]{false});
+            ProcessRunner.run(zInInput);
+
             //Move Z to bus
-            aluInInput.setData(new boolean[]{false});
             zOutInput.setData(new boolean[]{true});
             ProcessRunner.run(aluInInput, zOutInput);
 
