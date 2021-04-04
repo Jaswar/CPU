@@ -16,6 +16,15 @@ public class Multiplexer implements Circuit {
     private boolean inDebuggerMode;
     private int debugDepth;
 
+    /**Constructors for the Multiplexer class.
+     *
+     * @param input - list of the inputs to the multiplexer
+     * @param select - BitStream to specify which input should be selected
+     * @param output - the selected output
+     * @param name - the name of the gate
+     * @param inDebuggerMode - boolean to specify if the multiplexer is in debug mode
+     * @param debugDepth - how deep should the debugging of gates go
+     */
     public Multiplexer(List<BitStream> input, BitStream select, BitStream output,
                        String name, boolean inDebuggerMode, int debugDepth) {
         this.input = input;
@@ -43,6 +52,8 @@ public class Multiplexer implements Circuit {
         this(input, select, output, "Multiplexer", false, 0);
     }
 
+    /**Getters for all the attributes.
+     */
     public List<BitStream> getInput() {
         return input;
     }
@@ -67,6 +78,8 @@ public class Multiplexer implements Circuit {
         return debugDepth;
     }
 
+    /**Setters for some of the attributes. Setting the BitStreams is not possible.
+     */
     public void setName(String name) {
         this.name = name;
     }
@@ -79,6 +92,8 @@ public class Multiplexer implements Circuit {
         this.debugDepth = debugDepth;
     }
 
+    /**Define the build method for the Multiplexer as described in the documentation.
+     */
     @Override
     public void build() {
         boolean debugGates = this.debugDepth > 0 ? this.inDebuggerMode : false;
