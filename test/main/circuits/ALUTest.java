@@ -40,9 +40,11 @@ class ALUTest {
         destinationInput.setData(new boolean[]{false, true, true, true});
         opCodeInput.setData(new boolean[]{false, false, false, false, true});
         aluInInput.setData(new boolean[]{true});
+        ProcessRunner.run(sourceInput, destinationInput, opCodeInput, aluInInput);
+
+        aluInInput.setData(new boolean[]{false});
         ProcessRunner.run(aluInInput);
 
-        ProcessRunner.run(sourceInput, destinationInput, opCodeInput);
         assertArrayEquals(new boolean[]{false, true, false, false}, mainOutput.getData());
         assertArrayEquals(new boolean[]{false}, overflowOutput.getData());
     }
@@ -53,9 +55,11 @@ class ALUTest {
         destinationInput.setData(new boolean[]{false, true, true, false});
         opCodeInput.setData(new boolean[]{false, false, false, false, true});
         aluInInput.setData(new boolean[]{true});
+        ProcessRunner.run(sourceInput, destinationInput, opCodeInput, aluInInput);
+
+        aluInInput.setData(new boolean[]{false});
         ProcessRunner.run(aluInInput);
 
-        ProcessRunner.run(sourceInput, destinationInput, opCodeInput);
         assertArrayEquals(new boolean[]{true, false, true, true}, mainOutput.getData());
         assertArrayEquals(new boolean[]{true}, overflowOutput.getData());
     }
@@ -66,9 +70,11 @@ class ALUTest {
         destinationInput.setData(new boolean[]{true, false, true, true});
         opCodeInput.setData(new boolean[]{false, false, false, true, false});
         aluInInput.setData(new boolean[]{true});
+        ProcessRunner.run(sourceInput, destinationInput, opCodeInput, aluInInput);
+
+        aluInInput.setData(new boolean[]{false});
         ProcessRunner.run(aluInInput);
 
-        ProcessRunner.run(sourceInput, destinationInput, opCodeInput);
         assertArrayEquals(new boolean[]{false, false, true, true}, mainOutput.getData());
         assertArrayEquals(new boolean[]{false}, overflowOutput.getData());
     }
@@ -79,9 +85,11 @@ class ALUTest {
         destinationInput.setData(new boolean[]{false, true, true, true});
         opCodeInput.setData(new boolean[]{false, false, false, true, false});
         aluInInput.setData(new boolean[]{true});
+        ProcessRunner.run(sourceInput, destinationInput, opCodeInput, aluInInput);
+
+        aluInInput.setData(new boolean[]{false});
         ProcessRunner.run(aluInInput);
 
-        ProcessRunner.run(sourceInput, destinationInput, opCodeInput);
         assertArrayEquals(new boolean[]{false, true, true, true}, mainOutput.getData());
         assertArrayEquals(new boolean[]{true}, overflowOutput.getData());
     }
@@ -92,9 +100,11 @@ class ALUTest {
         destinationInput.setData(new boolean[]{false, false, true, true});
         opCodeInput.setData(new boolean[]{false, false, false, true, true});
         aluInInput.setData(new boolean[]{true});
+        ProcessRunner.run(sourceInput, destinationInput, opCodeInput, aluInInput);
+
+        aluInInput.setData(new boolean[]{false});
         ProcessRunner.run(aluInInput);
 
-        ProcessRunner.run(sourceInput, destinationInput, opCodeInput);
         assertArrayEquals(new boolean[]{false, true, false, true}, mainOutput.getData());
     }
 
@@ -104,9 +114,11 @@ class ALUTest {
         destinationInput.setData(new boolean[]{false, false, true, true});
         opCodeInput.setData(new boolean[]{false, false, true, false, false});
         aluInInput.setData(new boolean[]{true});
+        ProcessRunner.run(sourceInput, destinationInput, opCodeInput, aluInInput);
+
+        aluInInput.setData(new boolean[]{false});
         ProcessRunner.run(aluInInput);
 
-        ProcessRunner.run(sourceInput, destinationInput, opCodeInput);
         assertArrayEquals(new boolean[]{true, false, true, true}, mainOutput.getData());
     }
 
@@ -116,9 +128,11 @@ class ALUTest {
         destinationInput.setData(new boolean[]{false, false, true, true});
         opCodeInput.setData(new boolean[]{false, false, true, false, true});
         aluInInput.setData(new boolean[]{true});
+        ProcessRunner.run(sourceInput, destinationInput, opCodeInput, aluInInput);
+
+        aluInInput.setData(new boolean[]{false});
         ProcessRunner.run(aluInInput);
 
-        ProcessRunner.run(sourceInput, destinationInput, opCodeInput);
         assertArrayEquals(new boolean[]{false, false, true, false}, mainOutput.getData());
     }
 
@@ -128,9 +142,11 @@ class ALUTest {
         destinationInput.setData(new boolean[]{false, false, true, true});
         opCodeInput.setData(new boolean[]{false, false, true, true, false});
         aluInInput.setData(new boolean[]{true});
+        ProcessRunner.run(sourceInput, destinationInput, opCodeInput, aluInInput);
+
+        aluInInput.setData(new boolean[]{false});
         ProcessRunner.run(aluInInput);
 
-        ProcessRunner.run(sourceInput, destinationInput, opCodeInput);
         assertArrayEquals(new boolean[]{true, false, false, true}, mainOutput.getData());
     }
 
@@ -140,9 +156,11 @@ class ALUTest {
         destinationInput.setData(new boolean[]{false, false, true, true});
         opCodeInput.setData(new boolean[]{false, false, true, true, true});
         aluInInput.setData(new boolean[]{true});
+        ProcessRunner.run(sourceInput, destinationInput, opCodeInput, aluInInput);
+
+        aluInInput.setData(new boolean[]{false});
         ProcessRunner.run(aluInInput);
 
-        ProcessRunner.run(sourceInput, destinationInput, opCodeInput);
         assertArrayEquals(new boolean[]{true, true, false, true}, mainOutput.getData());
     }
 
@@ -152,9 +170,11 @@ class ALUTest {
         destinationInput.setData(new boolean[]{false, false, true, true});
         opCodeInput.setData(new boolean[]{false, true, false, false, false});
         aluInInput.setData(new boolean[]{true});
+        ProcessRunner.run(sourceInput, destinationInput, opCodeInput, aluInInput);
+
+        aluInInput.setData(new boolean[]{false});
         ProcessRunner.run(aluInInput);
 
-        ProcessRunner.run(sourceInput, destinationInput, opCodeInput);
         assertArrayEquals(new boolean[]{false, true, false, false}, mainOutput.getData());
     }
 

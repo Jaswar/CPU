@@ -1,6 +1,7 @@
 package main.circuits;
 
 import main.BitStream;
+import main.circuits.memory.DFlipFlop;
 import main.circuits.memory.DLatch;
 import main.gates.TriState;
 
@@ -100,11 +101,12 @@ public class Register implements Circuit {
         boolean debugGates = this.debugDepth > 0 ? this.inDebuggerMode : false;
         int size = this.input.getSize();
 
-        BitStream dLatchQ = new BitStream(size);
-        BitStream dLatchNotQ = new BitStream(size);
+        BitStream dFlipFlopQ = new BitStream(size);
+        BitStream dFlipFlopNotQ = new BitStream(size);
 
-        DLatch mainDLatch = new DLatch(this.input, this.regIn, dLatchQ, dLatchNotQ, "mainDLatch", debugGates, this.debugDepth - 1);
+        DFlipFlop mainDFlipFlop = new DFlipFlop(this.input, this.regIn, dFlipFlopQ, dFlipFlopNotQ, false,
+                "mainDFlipFlop", debugGates, this.debugDepth - 1);
 
-        TriState outTriState = new TriState(dLatchQ, this.regOut, this.output, "outTriState in " + this.name, debugGates);
+        TriState outTriState = new TriState(dFlipFlopQ, this.regOut, this.output, "outTriState in " + this.name, debugGates);
     }
 }

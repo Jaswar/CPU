@@ -65,7 +65,10 @@ public class ALURFTest {
 
         ALU alu = new ALU(bus, destination, aluOut, opCode, aluIn, overflow);
 
-        Register Z = new Register(aluOut, bus, zIn, zOut, "Z");
+        BitStream zNotQ = new BitStream(4);
+        BitStream zQ = new BitStream(4);
+        DLatch Z = new DLatch(aluOut, zIn, zQ, zNotQ, "Z");
+        TriState zTriState = new TriState(zQ, zOut, bus, "zTriState");
 
         RegisterFile rf = new RegisterFile(bus, bus, RFIn, RFOut, addressWrite, addressRead);
     }
@@ -131,6 +134,7 @@ public class ALURFTest {
         aluInInput.setData(new boolean[]{false});
         zOutInput.setData(new boolean[]{true});
         ProcessRunner.run(aluInInput, zOutInput);
+
 
         assertArrayEquals(new boolean[]{true, true, false, true}, bus.getData());
     }

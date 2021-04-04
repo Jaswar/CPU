@@ -1,6 +1,7 @@
 package main.circuits;
 
 import main.BitStream;
+import main.circuits.memory.DFlipFlop;
 import main.circuits.memory.DLatch;
 import main.gates.TriState;
 import main.gates.binary.AND;
@@ -124,10 +125,10 @@ public class ALU implements Circuit {
         boolean debugGates = this.debugDepth > 0 ? this.inDebuggerMode : false;
         int size = this.source.getSize();
 
-        BitStream srcDLatchQ = new BitStream(size);
-        BitStream srcDLatchNotQ = new BitStream(size);
+        BitStream srcDFlipFlopQ = new BitStream(size);
+        BitStream srcDFlipFlopNotQ = new BitStream(size);
 
-        DLatch sourceDLatch = new DLatch(this.source, this.aluIn, srcDLatchQ, srcDLatchNotQ,
+        DFlipFlop sourceDFlipFlop = new DFlipFlop(this.source, this.aluIn, srcDFlipFlopQ, srcDFlipFlopNotQ, false,
                 "sourceDLatch", debugGates, this.debugDepth - 1);
 
         List<BitStream> decoderOut = new ArrayList<>();
@@ -163,10 +164,10 @@ public class ALU implements Circuit {
 
         TriState logicTriState = new TriState(logicUnitOut, logicControlOut, this.out, "logicTriState", debugGates);
 
-        AddSubtract addSubtract = new AddSubtract(srcDLatchQ, this.destination, addSubOut, addSubAndOut, this.overflow,
+        AddSubtract addSubtract = new AddSubtract(srcDFlipFlopQ, this.destination, addSubOut, addSubAndOut, this.overflow,
                 "addSub", debugGates, this.debugDepth - 1);
 
-        LogicUnit logicUnit = new LogicUnit(srcDLatchQ, this.destination, logicUnitOut, logicUnitControls,
+        LogicUnit logicUnit = new LogicUnit(srcDFlipFlopQ, this.destination, logicUnitOut, logicUnitControls,
                 "logicUnit", debugGates, this.debugDepth - 1);
     }
 }

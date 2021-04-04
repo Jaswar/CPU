@@ -31,7 +31,7 @@ class RegisterFileTest {
 
         output = new Output(out);
 
-        RegisterFile rf = new RegisterFile(in, out, RFIn, RFOut, addressWrite, addressRead);
+        RegisterFile rf = new RegisterFile(in, out, RFIn, RFOut, addressWrite, addressRead, true, 1);
     }
 
     @Test
@@ -39,6 +39,9 @@ class RegisterFileTest {
         input.setData(new boolean[]{true, true, true, true});
         RFInInput.setData(new boolean[]{true});
         ProcessRunner.run(input, RFInInput);
+
+        RFInInput.setData(new boolean[]{false});
+        ProcessRunner.run(RFInInput);
 
         assertArrayEquals(new boolean[]{false, false, false, false}, output.getData());
 
@@ -59,6 +62,9 @@ class RegisterFileTest {
         RFInInput.setData(new boolean[]{true});
         ProcessRunner.run(RFInInput);
 
+        RFInInput.setData(new boolean[]{false});
+        ProcessRunner.run(RFInInput);
+
         assertArrayEquals(new boolean[]{false, false, true, true}, output.getData());
     }
 
@@ -68,9 +74,10 @@ class RegisterFileTest {
         RFOutInput.setData(new boolean[]{true});
         addressWriteInput.setData(new boolean[]{false, true, false});
         addressReadInput.setData(new boolean[]{false, true, false});
-        ProcessRunner.run(input, RFOutInput, addressWriteInput, addressReadInput);
-
         RFInInput.setData(new boolean[]{true});
+        ProcessRunner.run(input, RFOutInput, addressWriteInput, addressReadInput, RFInInput);
+
+        RFInInput.setData(new boolean[]{false});
         ProcessRunner.run(RFInInput);
 
         assertArrayEquals(new boolean[]{false, false, true, true}, output.getData());
@@ -87,6 +94,9 @@ class RegisterFileTest {
         RFInInput.setData(new boolean[]{true});
         ProcessRunner.run(RFInInput);
 
+        RFInInput.setData(new boolean[]{false});
+        ProcessRunner.run(RFInInput);
+
         assertArrayEquals(new boolean[]{true, false, true, false}, output.getData());
     }
 
@@ -101,17 +111,19 @@ class RegisterFileTest {
         RFInInput.setData(new boolean[]{true});
         ProcessRunner.run(RFInInput);
 
+        RFInInput.setData(new boolean[]{false});
+        ProcessRunner.run(RFInInput);
+
         assertArrayEquals(new boolean[]{false, true, true, false}, output.getData());
     }
 
     @Test
     void testRegisterSwitching() {
-        //Save to reg4
+        //Save to reg2
         input.setData(new boolean[]{true, true, false, false});
         RFInInput.setData(new boolean[]{true});
         addressWriteInput.setData(new boolean[]{false, true, false});
-        ProcessRunner.run(input, addressWriteInput);
-        ProcessRunner.run(RFInInput);
+        ProcessRunner.run(input, addressWriteInput, RFInInput);
 
         RFInInput.setData(new boolean[]{false});
         ProcessRunner.run(RFInInput);
@@ -120,8 +132,7 @@ class RegisterFileTest {
         input.setData(new boolean[]{false, true, true, false});
         RFInInput.setData(new boolean[]{true});
         addressWriteInput.setData(new boolean[]{true, true, false});
-        ProcessRunner.run(input, addressWriteInput);
-        ProcessRunner.run(RFInInput);
+        ProcessRunner.run(input, addressWriteInput, RFInInput);
 
         RFInInput.setData(new boolean[]{false});
         ProcessRunner.run(RFInInput);
@@ -130,7 +141,9 @@ class RegisterFileTest {
         input.setData(new boolean[]{true, false, false, true});
         RFInInput.setData(new boolean[]{true});
         addressWriteInput.setData(new boolean[]{false, true, true});
-        ProcessRunner.run(input, addressWriteInput);
+        ProcessRunner.run(input, addressWriteInput, RFInInput);
+
+        RFInInput.setData(new boolean[]{false});
         ProcessRunner.run(RFInInput);
 
         //Read reg6
@@ -142,19 +155,18 @@ class RegisterFileTest {
 
         //Read reg3
         addressReadInput.setData(new boolean[]{false, true, true});
-        ProcessRunner.run(addressReadInput);
+        ProcessRunner.run(addressReadInput, RFOutInput);
 
         assertArrayEquals(new boolean[]{true, false, false, true}, output.getData());
 
-        //Read reg4
+        //Read reg2
         addressReadInput.setData(new boolean[]{false, true, false});
-        ProcessRunner.run(addressReadInput);
+        ProcessRunner.run(addressReadInput, RFOutInput);
 
         assertArrayEquals(new boolean[]{true, true, false, false}, output.getData());
 
         //Read reg6
         addressReadInput.setData(new boolean[]{true, true, false});
-        RFOutInput.setData(new boolean[]{true});
         ProcessRunner.run(addressReadInput, RFOutInput);
 
         assertArrayEquals(new boolean[]{false, true, true, false}, output.getData());
