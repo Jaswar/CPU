@@ -2,8 +2,16 @@ package main.memory;
 
 import main.BitStream;
 import main.Node;
+import main.exceptions.BitStreamInputSizeMismatch;
+import main.exceptions.InconsistentBitStreamSources;
+import main.utils.DataConverter;
+import main.utils.ProcessRunner;
+import main.warnings.InconsistentBitStreamSourcesWarning;
 
+import javax.xml.crypto.Data;
 import java.beans.BeanInfo;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class RAM implements Node {
@@ -11,6 +19,9 @@ public class RAM implements Node {
     private BitStream address, dataIn, dataOut, read, write;
     private String name;
     private boolean inDebuggerMode;
+
+    private boolean lastWriteSignal;
+    private boolean[][] data;
 
     public RAM(BitStream address, BitStream dataIn, BitStream dataOut, BitStream write, BitStream read,
                String name, boolean inDebuggerMode) {
@@ -31,6 +42,10 @@ public class RAM implements Node {
 
         this.name = name;
         this.inDebuggerMode = inDebuggerMode;
+
+        this.lastWriteSignal = false;
+
+        this.data = new boolean[1 << this.address.getSize()][this.dataOut.getSize()];
 
         this.setup();
     }
@@ -85,5 +100,93 @@ public class RAM implements Node {
         this.inDebuggerMode = inDebuggerMode;
     }
 
+    @Override
+    public void setup() {
+        this.checkIfSizesMatch();
+        ProcessRunner.run(this);
+    }
+
+    @Override
+    public void checkIfSizesMatch() {
+        if (this.dataOut.getSize() != this.dataIn.getSize()
+                || this.write.getSize() != 1
+                || this.read.getSize() != 1) {
+            throw new BitStreamInputSizeMismatch(this);
+        }
+    }
+
+    @Override
+    public void evaluate(List<Node> queue) {
+        if (!this.write.getData()[0] && this.lastWriteSignal) {
+            this.data[DataConverter.convertBoolToUnsignedDec(this.address.getData())] = this.dataIn.getData().clone();
+        }
+        this.lastWriteSignal = this.write.getData()[0];
+
+        boolean[] newOutData = this.dataOut.getData();
+
+        if (this.read.getData()[0]) {
+            newOutData = this.data[DataConverter.convertBoolToUnsignedDec(this.address.getData())];
+        }
+
+        this.checkIfSourceIsConsistent(newOutData);
+
+        if (this.decideIfEvaluateFurther(newOutData)) {
+            this.addNeighboursToQueue(queue);
+        }
+
+        this.dataOut.setData(newOutData);
+        this.setSourceForOutStream();
+
+        if (this.isInDebuggerMode()) {
+            this.debug();
+        }
+    }
+
+    @Override
+    public void checkIfSourceIsConsistent(boolean[] newOutData) {
+        if (this.dataOut.getSource() != null && this.dataOut.getSource() != this) {
+            for (int i = 0; i < newOutData.length; i++) {
+                if (this.dataOut.getData()[i] != newOutData[i]) {
+                    InconsistentBitStreamSourcesWarning.show(this.dataOut.getSource(), this);
+                    break;
+                }
+            }
+        }
+    }
+
+    @Override
+    public boolean decideIfEvaluateFurther(boolean[] newOutData) {
+        for (int i = 0; i < newOutData.length; i++) {
+            if (this.dataOut.getData()[i] != newOutData[i]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void addNeighboursToQueue(List<Node> queue) {
+        queue.addAll(this.dataOut.getAllNeighbours(this));
+    }
+
+    @Override
+    public void setSourceForOutStream() {
+        this.dataOut.setSource(this);
+    }
+
+    @Override
+    public void debug() {
+        System.out.println("Evaluating " + this.name + ":\n"
+                + "Address: " + DataConverter.convertBoolToBin(this.address.getData())
+                + "\nData in: " + DataConverter.convertBoolToBin(this.dataIn.getData())
+                + "\nData out: " + DataConverter.convertBoolToBin(this.dataOut.getData()));
+    }
+
+    @Override
+    public String toString() {
+        return "RAM<" + this.name + ", " + DataConverter.convertBoolToBin(this.address.getData()) +
+                ", " + DataConverter.convertBoolToBin(this.dataIn.getData()) +
+                ", " + DataConverter.convertBoolToBin(this.dataOut.getData()) + ">";
+    }
 
 }

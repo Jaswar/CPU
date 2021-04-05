@@ -11,11 +11,11 @@ public interface Node {
     int WORD_SIZE = 16;
 
     void setup();
-    public void evaluate(List<Node> queue);
-    public void debug();
-    public void checkIfSizesMatch();
-    public void checkIfSourceIsConsistent(boolean[] newOut);
-    public void addNeighboursToQueue(List<Node> queue);
-    public void setSourceForOutStream();
-    public boolean decideIfEvaluateFurther(boolean[] newOutData);
+    void evaluate(List<Node> queue);
+    void debug();
+    void checkIfSizesMatch();
+    void checkIfSourceIsConsistent(boolean[] newOut);
+    void addNeighboursToQueue(List<Node> queue);
+    void setSourceForOutStream();
+    boolean decideIfEvaluateFurther(boolean[] newOutData);
 }
