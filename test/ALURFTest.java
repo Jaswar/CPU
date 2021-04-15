@@ -198,8 +198,13 @@ public class ALURFTest {
             opCodeInput.setData(new boolean[]{false, false, false, false, true});
             ProcessRunner.run(RFOutInput, aluInInput, opCodeInput);
 
+            zInInput.setData(new boolean[]{true});
+            ProcessRunner.run(zInInput);
+
+            zInInput.setData(new boolean[]{false});
+            ProcessRunner.run(zInInput);
+
             //Move Z to bus
-            aluInInput.setData(new boolean[]{false});
             zOutInput.setData(new boolean[]{true});
             ProcessRunner.run(aluInInput, zOutInput);
 
