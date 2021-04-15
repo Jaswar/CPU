@@ -22,9 +22,9 @@ public class ShiftRegisterTest {
         enable.setData(new boolean[]{true});
 
         DFlipFlop flipFlop1 = new DFlipFlop(in, clk, enable, new BitStream(1),
-                new BitStream(1), q1, new BitStream(1), true);
+                new BitStream(1), q1, new BitStream(1), true, "0");
         DFlipFlop flipFlop2 = new DFlipFlop(q1, clk, enable, new BitStream(1),
-                new BitStream(1), q2, new BitStream(1), true);
+                new BitStream(1), q2, new BitStream(1), true, "1");
         DFlipFlop flipFlop3 = new DFlipFlop(q2, clk, enable, new BitStream(1),
                 new BitStream(1), q3, new BitStream(1), true);
         DFlipFlop flipFlop4 = new DFlipFlop(q3, clk, enable, new BitStream(1),
@@ -33,12 +33,12 @@ public class ShiftRegisterTest {
         Input clock = new Input(new boolean[]{false}, clk);
 
         clock.setData(new boolean[]{false});
-        ProcessRunner.run(clock);
 
         Input input = new Input(new boolean[]{false}, in);
         input.setData(new boolean[]{true});
         clock.setData(new boolean[]{true});
         ProcessRunner.run(input);
+
         ProcessRunner.run(clock);
 
         assertArrayEquals(new boolean[]{true}, q1.getData());

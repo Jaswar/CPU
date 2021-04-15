@@ -132,9 +132,14 @@ public class ALURFTest {
 
         //Move Z to bus
         aluInInput.setData(new boolean[]{false});
-        zOutInput.setData(new boolean[]{true});
-        ProcessRunner.run(aluInInput, zOutInput);
+        zInInput.setData(new boolean[]{true});
+        ProcessRunner.run(aluInInput, zInInput);
 
+        zInInput.setData(new boolean[]{false});
+        ProcessRunner.run(zInInput);
+
+        zOutInput.setData(new boolean[]{true});
+        ProcessRunner.run(zOutInput);
 
         assertArrayEquals(new boolean[]{true, true, false, true}, bus.getData());
     }

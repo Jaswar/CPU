@@ -106,7 +106,7 @@ public class Multiplexer implements Circuit {
         }
 
         Decoder selectDecoder = new Decoder(this.select, decoderOut,
-                "selectDecoder", debugGates, this.debugDepth - 1);
+                "selectDecoder in " + this.name, debugGates, this.debugDepth - 1);
 
         List<BitStream> andOutputs = new ArrayList<>();
         for (int i = 0; i < this.input.size(); i++) {
@@ -117,14 +117,14 @@ public class Multiplexer implements Circuit {
             BitStream splitterOutStream = new BitStream(size);
             splitterOut.add(splitterOutStream);
 
-            Splitter splitter = new Splitter(splitterIn, splitterOut, "splitter" + i, debugGates);
+            Splitter splitter = new Splitter(splitterIn, splitterOut, "splitter" + i + " in " + this.name, debugGates);
 
             BitStream andOutput = new BitStream(size);
-            AND inAnd = new AND(this.input.get(i), splitterOutStream, andOutput, "in" + i + "And", debugGates);
+            AND inAnd = new AND(this.input.get(i), splitterOutStream, andOutput, "in" + i + "And in " + this.name, debugGates);
 
             andOutputs.add(andOutput);
         }
 
-        MultiOR mainOr = new MultiOR(andOutputs, this.output, "mainOr", debugGates);
+        MultiOR mainOr = new MultiOR(andOutputs, this.output, "mainOr in " + this.name, debugGates);
     }
 }
