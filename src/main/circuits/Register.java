@@ -106,8 +106,8 @@ public class Register implements Circuit {
         BitStream dFlipFlopQ = new BitStream(size);
         BitStream dFlipFlopNotQ = new BitStream(size);
 
-        DFlipFlop mainDFlipFlop = new DFlipFlop(this.input, this.regIn, this.enable, dFlipFlopQ, dFlipFlopNotQ, false,
-                "mainDFlipFlop", debugGates, this.debugDepth - 1);
+        DFlipFlop mainDFlipFlop = new DFlipFlop(this.input, this.regIn, this.enable, new BitStream(size), new BitStream(1),
+                dFlipFlopQ, dFlipFlopNotQ, false, "mainDFlipFlop", debugGates, this.debugDepth - 1);
 
         TriState outTriState = new TriState(dFlipFlopQ, this.regOut, this.output, "outTriState in " + this.name, debugGates);
     }

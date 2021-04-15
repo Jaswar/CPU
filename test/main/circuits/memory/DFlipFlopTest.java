@@ -21,7 +21,8 @@ class DFlipFlopTest {
         Input dInput = new Input(new boolean[]{true, false, false, true}, D);
         Input clockInput = new Input(new boolean[]{true}, clock);
 
-        DFlipFlop dFlipFlop = new DFlipFlop(D, clock, enable, Q, notQ, false);
+        DFlipFlop dFlipFlop = new DFlipFlop(D, clock, enable,
+                new BitStream(4), new BitStream(1), Q, notQ, false);
         ProcessRunner.run(dInput, clockInput);
 
         clockInput.setData(new boolean[]{false});
@@ -56,7 +57,8 @@ class DFlipFlopTest {
         Input dInput = new Input(new boolean[]{true, false, false, true}, D);
         Input clockInput = new Input(new boolean[]{false}, clock);
 
-        DFlipFlop dFlipFlop = new DFlipFlop(D, clock, enable, Q, notQ, true);
+        DFlipFlop dFlipFlop = new DFlipFlop(D, clock, enable,
+                new BitStream(4), new BitStream(1), Q, notQ, true, true, 1);
         ProcessRunner.run(dInput, clockInput);
 
         clockInput.setData(new boolean[]{true});

@@ -4,7 +4,9 @@ import main.BitStream;
 import main.circuits.Circuit;
 import main.circuits.Multiplexer;
 import main.control.Splitter;
+import main.gates.binary.NAND;
 import main.gates.binary.NOR;
+import main.gates.multi.MultiNAND;
 import main.gates.multi.MultiNOR;
 import main.gates.unary.NOT;
 
@@ -60,7 +62,7 @@ public class DFlipFlop extends FlipFlop {
         int size = this.getInput().getSize();
 
         List<BitStream> inputMuxInputList = new ArrayList<>();
-        inputMuxInputList.addAll(List.of(this.getInput(), this.getQ()));
+        inputMuxInputList.addAll(List.of(this.getQ(), this.getInput()));
         BitStream muxOut = new BitStream(size);
         Multiplexer inputMux = new Multiplexer(inputMuxInputList, this.getEnable(), muxOut,
                 "inputMux", debugGates, this.getDebugDepth() - 1);
@@ -83,5 +85,52 @@ public class DFlipFlop extends FlipFlop {
         BitStream muxOutNotOutput = new BitStream(size);
         NOT muxOutNot = new NOT(muxOut, muxOutNotOutput, "muxOutNot", debugGates);
 
+        BitStream nand1Out = new BitStream(size);
+        NAND nand1 = new NAND(muxOut, clockSplitOut, nand1Out, "nand1", debugGates);
+
+        BitStream nand5Out = new BitStream(size);
+        NAND nand5 = new NAND(muxOutNotOutput, clockSplitOut, nand5Out, "nand5", debugGates);
+
+        List<BitStream> clearSplitInputList = new ArrayList<>();
+        clearSplitInputList.addAll(List.of(this.getClear()));
+        BitStream clearSplitOut = new BitStream(size);
+        List<BitStream> clearSplitOutList = new ArrayList<>();
+        clearSplitOutList.addAll(List.of(clearSplitOut));
+
+        Splitter clearSplitter = new Splitter(clearSplitInputList, clearSplitOutList, "clearSplitter", debugGates);
+
+        BitStream clearNotOutput = new BitStream(size);
+        NOT clearNot = new NOT(clearSplitOut, clearNotOutput, "clearNot", debugGates);
+
+        BitStream presetNotOutput = new BitStream(size);
+        NOT presetNot = new NOT(this.getPreset(), presetNotOutput, "presetNot", debugGates);
+
+        BitStream nand2Out = new BitStream(size);
+        BitStream nand6Out = new BitStream(size);
+
+        List<BitStream> nand2InputList = new ArrayList<>();
+        nand2InputList.addAll(List.of(nand1Out, presetNotOutput, nand6Out));
+        MultiNAND nand2 = new MultiNAND(nand2InputList, nand2Out, "nand2", debugGates);
+
+        List<BitStream> nand6InputList = new ArrayList<>();
+        nand6InputList.addAll(List.of(nand2Out, nand5Out, clearNotOutput));
+        MultiNAND nand6 = new MultiNAND(nand6InputList, nand6Out, "nand6", debugGates);
+
+        BitStream flipNotOutput = new BitStream(size);
+        NOT flipNot = new NOT(clockSplitOut, flipNotOutput, "flipNot", debugGates);
+
+        BitStream nand3Out = new BitStream(size);
+        NAND nand3 = new NAND(nand2Out, flipNotOutput, nand3Out, "nand3", debugGates);
+
+        BitStream nand7Out = new BitStream(size);
+        NAND nand7 = new NAND(flipNotOutput, nand6Out, nand7Out, "nand7", debugGates);
+
+        List<BitStream> nand4InputList = new ArrayList<>();
+        nand4InputList.addAll(List.of(presetNotOutput, nand3Out, this.getNotQ()));
+        MultiNAND nand4 = new MultiNAND(nand4InputList, this.getQ(), "nand4", debugGates);
+
+        List<BitStream> nand8InputList = new ArrayList<>();
+        nand8InputList.addAll(List.of(this.getQ(), nand7Out, clearNotOutput));
+        MultiNAND nand8 = new MultiNAND(nand8InputList, this.getNotQ(), "nand8", debugGates);
     }
 }

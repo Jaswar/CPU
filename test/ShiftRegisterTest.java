@@ -21,10 +21,14 @@ public class ShiftRegisterTest {
         BitStream enable = new BitStream(1);
         enable.setData(new boolean[]{true});
 
-        DFlipFlop flipFlop1 = new DFlipFlop(in, clk, enable, q1, new BitStream(1), true);
-        DFlipFlop flipFlop2 = new DFlipFlop(q1, clk, enable, q2, new BitStream(1), true);
-        DFlipFlop flipFlop3 = new DFlipFlop(q2, clk, enable, q3, new BitStream(1), true);
-        DFlipFlop flipFlop4 = new DFlipFlop(q3, clk, enable, q4, new BitStream(1), true);
+        DFlipFlop flipFlop1 = new DFlipFlop(in, clk, enable, new BitStream(1),
+                new BitStream(1), q1, new BitStream(1), true);
+        DFlipFlop flipFlop2 = new DFlipFlop(q1, clk, enable, new BitStream(1),
+                new BitStream(1), q2, new BitStream(1), true);
+        DFlipFlop flipFlop3 = new DFlipFlop(q2, clk, enable, new BitStream(1),
+                new BitStream(1), q3, new BitStream(1), true);
+        DFlipFlop flipFlop4 = new DFlipFlop(q3, clk, enable, new BitStream(1),
+                new BitStream(1), q4, new BitStream(1), true);
 
         Input clock = new Input(new boolean[]{false}, clk);
 
