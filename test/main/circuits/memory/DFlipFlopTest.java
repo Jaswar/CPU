@@ -18,11 +18,15 @@ class DFlipFlopTest {
         BitStream Q = new BitStream(4);
         BitStream notQ = new BitStream(4);
 
-        BitStream preset = new BitStream(4);
+        BitStream preset = new BitStream(1);
 
         DFlipFlop dFlipFlop = new DFlipFlop(D, clock, enable,
                 preset, new BitStream(1), Q, notQ, false, false, 1);
-        Input presetInput = new Input(new boolean[]{false, false, false, false}, preset);
+
+        assertArrayEquals(new boolean[]{false, false, false, false}, Q.getData());
+        assertArrayEquals(new boolean[]{true, true, true, true}, notQ.getData());
+
+        Input presetInput = new Input(new boolean[]{false}, preset);
 
         Input dInput = new Input(new boolean[]{true, false, false, true}, D);
         Input clockInput = new Input(new boolean[]{true}, clock);
@@ -34,10 +38,11 @@ class DFlipFlopTest {
         assertArrayEquals(new boolean[]{true, false, false, true}, Q.getData());
         assertArrayEquals(new boolean[]{false, true, true, false}, notQ.getData());
 
-        presetInput.setData(new boolean[]{true, true, true, true});
+        presetInput.setData(new boolean[]{true});
         ProcessRunner.run(presetInput);
 
         assertArrayEquals(new boolean[]{true, true, true, true}, Q.getData());
+        assertArrayEquals(new boolean[]{false, false, false, false}, notQ.getData());
     }
 
     @Test

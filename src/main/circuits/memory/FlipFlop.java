@@ -11,6 +11,20 @@ public abstract class FlipFlop implements Circuit {
     private boolean inDebuggerMode;
     private int debugDepth;
 
+    /**Constructor for the abstract FlipFlop class, used to represent flip-flops.
+     *
+     * @param input - the main input to the flip-flop
+     * @param clock - the clock input
+     * @param enable - BitStream used to control if the flip-flop should be enabled or not
+     * @param preset - BitStream to preset value of the flip-flop to 1
+     * @param clear - BitStream to clear the value in the flip-flop
+     * @param Q - the main output of the flip-flop
+     * @param notQ - the complement of the main output
+     * @param risingEdge - boolean to specify if the flip-flop should be rising or falling edge
+     * @param name - the name of the flip-flop
+     * @param inDebuggerMode - boolean to specify if the circuit is in debug mode
+     * @param debugDepth - how deep should the debugging of gates go
+     */
     public FlipFlop(BitStream input, BitStream clock, BitStream enable, BitStream preset, BitStream clear,
                     BitStream Q, BitStream notQ, boolean risingEdge,
                     String name, boolean inDebuggerMode, int debugDepth) {
@@ -28,6 +42,8 @@ public abstract class FlipFlop implements Circuit {
         this.debugDepth = debugDepth;
     }
 
+    /**Getters for all the attributes of the class.
+     */
     public BitStream getInput() {
         return input;
     }
@@ -72,6 +88,8 @@ public abstract class FlipFlop implements Circuit {
         return debugDepth;
     }
 
+    /**Setters for some of the attributes. Setting BitStreams is not allowed.
+     */
     public void setName(String name) {
         this.name = name;
     }

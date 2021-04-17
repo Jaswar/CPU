@@ -93,6 +93,17 @@ public class DFlipFlop extends FlipFlop {
         BitStream nand5Out = new BitStream(size);
         NAND nand5 = new NAND(muxOutNotOutput, clockSplitOut, nand5Out, "nand5 in " + this.getName(), debugGates);
 
+        List<BitStream> presetSplitInputList = new ArrayList<>();
+        presetSplitInputList.addAll(List.of(this.getPreset()));
+        BitStream presetSplitOut = new BitStream(size);
+        List<BitStream> presetSplitOutList = new ArrayList<>();
+        presetSplitOutList.addAll(List.of(presetSplitOut));
+
+        Splitter presetSplitter = new Splitter(presetSplitInputList, presetSplitOutList, "presetSplitter in " + this.getName(), debugGates);
+
+        BitStream presetNotOutput = new BitStream(size);
+        NOT presetNot = new NOT(presetSplitOut, presetNotOutput, "presetNot in " + this.getName(), debugGates);
+
         List<BitStream> clearSplitInputList = new ArrayList<>();
         clearSplitInputList.addAll(List.of(this.getClear()));
         BitStream clearSplitOut = new BitStream(size);
@@ -103,9 +114,6 @@ public class DFlipFlop extends FlipFlop {
 
         BitStream clearNotOutput = new BitStream(size);
         NOT clearNot = new NOT(clearSplitOut, clearNotOutput, "clearNot in " + this.getName(), debugGates);
-
-        BitStream presetNotOutput = new BitStream(size);
-        NOT presetNot = new NOT(this.getPreset(), presetNotOutput, "presetNot in " + this.getName(), debugGates);
 
         BitStream nand2Out = new BitStream(size);
         BitStream nand6Out = new BitStream(size);
@@ -135,6 +143,5 @@ public class DFlipFlop extends FlipFlop {
         List<BitStream> nand4InputList = new ArrayList<>();
         nand4InputList.addAll(List.of(presetNotOutput, nand3Out, this.getNotQ()));
         MultiNAND nand4 = new MultiNAND(nand4InputList, this.getQ(), "nand4 in " + this.getName(), debugGates);
-
     }
 }
