@@ -20,6 +20,21 @@ public class Microprocessor implements Circuit {
     public static final int INSTRUCTION_SIZE = 8;
     public static final int MAPPING_OUT_SIZE = 8;
 
+    /**Constructors for the Microprocessor class. This component is a part of the Control Unit.
+     *
+     * @param input - the main input to the circuit
+     * @param clock - the clock input
+     * @param reset - BitStream used to reset the microinstruction counter
+     * @param IR1In - specify if IR1 should read data
+     * @param IR2In - specify if IR2 should read data
+     * @param microinstruction - output BitStream to read microinstructions
+     * @param intermediate - the output of the intermediate value
+     * @param source - the source register as read from the instruction
+     * @param destination - the destination register as read from the instruction
+     * @param name - the name of the circuit
+     * @param inDebuggerMode - boolean to specify if the circuit is in debug mode
+     * @param debugDepth - how deep should debugging go
+     */
     public Microprocessor(BitStream input, BitStream clock, BitStream reset, BitStream IR1In, BitStream IR2In,
                           BitStream microinstruction, BitStream intermediate, BitStream source, BitStream destination,
                           String name, boolean inDebuggerMode, int debugDepth) {
@@ -61,6 +76,8 @@ public class Microprocessor implements Circuit {
                 "Microprocessor", false, 0);
     }
 
+    /**Getters for all the attributes.
+     */
     public BitStream getInput() {
         return input;
     }
@@ -109,6 +126,8 @@ public class Microprocessor implements Circuit {
         return debugDepth;
     }
 
+    /**Setters for some of the attributes. Setting BitStreams is not possible.
+     */
     public void setName(String name) {
         this.name = name;
     }
@@ -121,6 +140,8 @@ public class Microprocessor implements Circuit {
         this.debugDepth = debugDepth;
     }
 
+    /**Build the circuit as is defined in the documentation.
+     */
     @Override
     public void build() {
         boolean debugGates = this.debugDepth > 0 ? this.inDebuggerMode : false;
