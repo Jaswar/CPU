@@ -9,6 +9,7 @@ import main.utils.ProcessRunner;
 import main.warnings.InconsistentBitStreamSourcesWarning;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Input implements Node {
@@ -134,15 +135,13 @@ public class Input implements Node {
 
     /**Check if the current source of the "out" stream is consistent with the input data.
      *
-     * @param newOut - the input data
+     * @param newOutData - the input data
      */
     @Override
-    public void checkIfSourceIsConsistent(boolean[] newOut) {
+    public void checkIfSourceIsConsistent(boolean[] newOutData) {
         if (this.out.getSource() != null && this.out.getSource() != this) {
-            for (int i = 0; i < newOut.length; i++) {
-                if (newOut[i] != this.out.getData()[i]) {
-                    InconsistentBitStreamSourcesWarning.show(this.out.getSource(), this);
-                }
+            if (!Arrays.equals(this.out.getData(), newOutData)) {
+                InconsistentBitStreamSourcesWarning.show(this.out.getSource(), this);
             }
         }
     }

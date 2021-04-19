@@ -8,6 +8,7 @@ import main.utils.DataConverter;
 import main.utils.ProcessRunner;
 import main.warnings.InconsistentBitStreamSourcesWarning;
 
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -175,11 +176,8 @@ public class RAM implements Node {
     @Override
     public void checkIfSourceIsConsistent(boolean[] newOutData) {
         if (this.dataOut.getSource() != null && this.dataOut.getSource() != this) {
-            for (int i = 0; i < newOutData.length; i++) {
-                if (this.dataOut.getData()[i] != newOutData[i]) {
-                    InconsistentBitStreamSourcesWarning.show(this.dataOut.getSource(), this);
-                    break;
-                }
+            if (!Arrays.equals(this.dataOut.getData(), newOutData)) {
+                InconsistentBitStreamSourcesWarning.show(this.dataOut.getSource(), this);
             }
         }
     }
@@ -192,12 +190,7 @@ public class RAM implements Node {
      */
     @Override
     public boolean decideIfEvaluateFurther(boolean[] newOutData) {
-        for (int i = 0; i < newOutData.length; i++) {
-            if (this.dataOut.getData()[i] != newOutData[i]) {
-                return true;
-            }
-        }
-        return false;
+        return !Arrays.equals(this.dataOut.getData(), newOutData);
     }
 
     /**Add all the neighbours of RAM to the queue.

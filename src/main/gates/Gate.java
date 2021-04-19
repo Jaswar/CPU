@@ -7,6 +7,7 @@ import main.utils.ProcessRunner;
 import main.warnings.InconsistentBitStreamSourcesWarning;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class Gate implements Node {
@@ -110,30 +111,22 @@ public abstract class Gate implements Node {
      */
     @Override
     public boolean decideIfEvaluateFurther(boolean[] newOutData) {
-        for (int i = 0; i < newOutData.length; i++) {
-            if (newOutData[i] != this.out.getData()[i]) {
-                return true;
-            }
-        }
-        return false;
+        return !Arrays.equals(this.out.getData(), newOutData);
     }
 
     /**Method to check if the sources of the out stream are consistent. In particular, check if the source
      * of the out stream is the current logic gate and if not check if it is possible to merge the old source
      * with the current logic gate.
      *
-     * @param newOut - the newly calculated output of the branch, to be compared with the old value of the
+     * @param newOutData - the newly calculated output of the branch, to be compared with the old value of the
      * out stream. If the source is not the current logic gate, newOut is compared with old BitStream and
      * if they differ at any bit, the method throws an InconsistentBitStreamSources error.
      */
     @Override
-    public void checkIfSourceIsConsistent(boolean[] newOut) {
+    public void checkIfSourceIsConsistent(boolean[] newOutData) {
         if (this.out.getSource() != null && this.out.getSource() != this) {
-            for (int i = 0; i < newOut.length; i++) {
-                if (newOut[i] != this.out.getData()[i]) {
-                    InconsistentBitStreamSourcesWarning.show(this.out.getSource(), this);
-                    break;
-                }
+            if (!Arrays.equals(this.out.getData(), newOutData)) {
+                InconsistentBitStreamSourcesWarning.show(this.out.getSource(), this);
             }
         }
     }
