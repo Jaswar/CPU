@@ -7,11 +7,20 @@ public class Storage implements Serializable {
     private boolean[][] data;
     private transient String filepath;
 
+    /**Constructor for the Storage class. This class can be saved and written
+     * to a file. Used to store data in files.
+     *
+     * @param filepath - the path to the file this class is connected to
+     * @param numRows - the number of entries in data
+     * @param wordSize - the width of each data entry
+     */
     public Storage(String filepath, int numRows, int wordSize) {
         this.data = new boolean[numRows][wordSize];
         this.filepath = filepath;
     }
 
+    /**Getters for some attributes and additional data.
+     */
     public boolean[][] getData() {
         return data;
     }
@@ -28,14 +37,26 @@ public class Storage implements Serializable {
         return this.data[0].length;
     }
 
+    /**Setter for the filepath.
+     */
     public void setFilepath(String filepath) {
         this.filepath = filepath;
     }
 
+    /**Put data at given address. Does not save the data automatically to the file.
+     *
+     * @param address - the address where to put data
+     * @param data - the data to put
+     */
     public void putData(int address, boolean[] data) {
         this.data[address] = data;
     }
 
+    /**Static method to read the storage from a file.
+     *
+     * @param filepath - filepath to read the Storage from
+     * @return - the read Storage
+     */
     public static Storage read(String filepath) {
         try {
             FileInputStream fis = new FileInputStream(filepath);
@@ -50,6 +71,8 @@ public class Storage implements Serializable {
         }
     }
 
+    /**Save the Storage to its filepath.
+     */
     public void save() {
         try {
             FileOutputStream fos = new FileOutputStream(filepath);
@@ -61,6 +84,11 @@ public class Storage implements Serializable {
         }
     }
 
+    /**Define the equals method to check if two storages are equal.
+     *
+     * @param o - the other object to check if equal to "this"
+     * @return - true if o.equals(this), false otherwise
+     */
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Storage)) {
@@ -81,6 +109,10 @@ public class Storage implements Serializable {
         return true;
     }
 
+    /**Define the toString method.
+     *
+     * @return - a String representation of this
+     */
     @Override
     public String toString() {
         return "Storage<" + this.data.length + ", " + this.data[0].length +">";

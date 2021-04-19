@@ -119,7 +119,7 @@ public abstract class Gate implements Node {
      * with the current logic gate.
      *
      * @param newOutData - the newly calculated output of the branch, to be compared with the old value of the
-     * out stream. If the source is not the current logic gate, newOut is compared with old BitStream and
+     * out stream. If the source is not the current logic gate, newOutData is compared with old BitStream and
      * if they differ at any bit, the method throws an InconsistentBitStreamSources error.
      */
     @Override

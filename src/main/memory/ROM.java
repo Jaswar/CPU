@@ -21,6 +21,14 @@ public class ROM implements Node {
     private String name;
     private boolean inDebuggerMode;
 
+    /**Constructors for the ROM class (Read-only memory).
+     *
+     * @param filepath - the path of the file where ROM is saved
+     * @param address - BitStream used to specify the address of the data that should be read
+     * @param output - the output from the ROM
+     * @param name - the name of ROM
+     * @param inDebuggerMode - boolean to specify if the memory is in debug mode
+     */
     public ROM(String filepath, BitStream address, BitStream output, String name, boolean inDebuggerMode) {
         this.storage = Storage.read(filepath);
         this.filepath = filepath;
@@ -46,6 +54,8 @@ public class ROM implements Node {
         this(filepath, address, output, "ROM", false);
     }
 
+    /**Getters for the attributes of the class.
+     */
     public Storage getStorage() {
         return storage;
     }
@@ -70,6 +80,8 @@ public class ROM implements Node {
         return inDebuggerMode;
     }
 
+    /**Setters for some of the attributes. Setting BitStreams is not possible.
+     */
     public void setName(String name) {
         this.name = name;
     }
@@ -78,12 +90,17 @@ public class ROM implements Node {
         this.inDebuggerMode = inDebuggerMode;
     }
 
+    /**Method to setup the circuit starting in "this".
+     */
     @Override
     public void setup() {
         this.checkIfSizesMatch();
         ProcessRunner.run(this);
     }
 
+    /**Method to check if the size of the output matches the word size of
+     * the storage. Throws BitStreamInputSizeMismatch if not.
+     */
     @Override
     public void checkIfSizesMatch() {
         if (this.output.getSize() != this.storage.getWordSize()) {
@@ -91,6 +108,11 @@ public class ROM implements Node {
         }
     }
 
+    /**Evaluate the ROM. This also includes checking if evaluation is possible, setting the
+     * source of the output stream to this ROM and adding all neighbours to the execution queue.
+     *
+     * @param queue - the execution queue
+     */
     @Override
     public void evaluate(List<Node> queue) {
         int address = DataConverter.convertBoolToUnsignedDec(this.address.getData());
@@ -110,6 +132,10 @@ public class ROM implements Node {
         }
     }
 
+    /**Check if the current source of the "out" stream is consistent with the input data.
+     *
+     * @param newOutData - the input data
+     */
     @Override
     public void checkIfSourceIsConsistent(boolean[] newOutData) {
         if (this.output.getSource() != this && this.output.getSource() != null) {
@@ -119,21 +145,34 @@ public class ROM implements Node {
         }
     }
 
+    /**Decide if the circuit should be evaluated further.
+     *
+     * @param newOutData - the data that should be the new output of the ROM
+     * @return - true if the circuit should be evaluated further, false otherwise
+     */
     @Override
     public boolean decideIfEvaluateFurther(boolean[] newOutData) {
         return !Arrays.equals(this.output.getData(), newOutData);
     }
 
+    /**Add all neighbours of the ROM to the queue.
+     *
+     * @param queue - the execution queue
+     */
     @Override
     public void addNeighboursToQueue(List<Node> queue) {
         queue.addAll(this.output.getAllNeighbours(this));
     }
 
+    /**Set the source of the output stream to this.
+     */
     @Override
     public void setSourceForOutStream() {
         this.output.setSource(this);
     }
 
+    /**Display additional debug information.
+     */
     @Override
     public void debug() {
         System.out.println("Evaluating " + this.name + ":\n"
