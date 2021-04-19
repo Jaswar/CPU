@@ -144,7 +144,7 @@ public class Microprocessor implements Circuit {
         BitStream instruction = new BitStream(INSTRUCTION_SIZE);
         BitStream empty = new BitStream(WORD_SIZE - this.source.getSize()
                 - this.destination.getSize() - INSTRUCTION_SIZE);
-        instructionSplitterOutList.addAll(List.of(instruction, this.source, this.destination, empty));
+        instructionSplitterOutList.addAll(List.of(empty, this.destination, this.source, instruction));
         List<BitStream> instructionSplitterInputList = new ArrayList<>();
         instructionSplitterInputList.add(IR1Out);
 
@@ -152,6 +152,7 @@ public class Microprocessor implements Circuit {
                 "instructionSplitter", debugGates);
 
         BitStream mapRomOut = new BitStream(MAPPING_OUT_SIZE);
+
         ROM mapRom = new ROM("./storage/main/microMapping.stg", instruction, mapRomOut, "mapRom", debugGates);
 
         BitStream constant = new BitStream(1);
@@ -175,8 +176,8 @@ public class Microprocessor implements Circuit {
                 tFlipFlop2Q, tFlipFlop2NotQ, true, "tFlipFlop2", debugGates, debugDepth - 1);
 
         List<BitStream> counterSplitterInputList = new ArrayList<>();
-        counterSplitterInputList.addAll(List.of(tFlipFlop0Q, tFlipFlop1Q, tFlipFlop2Q,
-                new BitStream(MAPPING_OUT_SIZE - 3)));
+        counterSplitterInputList.addAll(List.of(new BitStream(MAPPING_OUT_SIZE - 3),
+                tFlipFlop2Q, tFlipFlop1Q, tFlipFlop0Q));
 
         BitStream counterSplitterOut = new BitStream(MAPPING_OUT_SIZE);
         List<BitStream> counterSplitterOutList = new ArrayList<>();

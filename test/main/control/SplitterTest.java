@@ -261,42 +261,6 @@ class SplitterTest {
     }
 
     @Test
-    void testMismatch2() {
-        BitStream in1 = new BitStream(3);
-        BitStream in2 = new BitStream(3);
-
-        BitStream out1 = new BitStream(4);
-        BitStream out2 = new BitStream(2);
-
-        List<BitStream> inputs = new ArrayList<>();
-        inputs.addAll(List.of(in1, in2));
-        List<BitStream> outputs = new ArrayList<>();
-        outputs.addAll(List.of(out1, out2));
-
-        assertThrows(IllegalSplitException.class, () -> {
-            Splitter extender = new Splitter(inputs, outputs);
-        });
-    }
-
-    @Test
-    void testMismatch3() {
-        BitStream in1 = new BitStream(4);
-        BitStream in2 = new BitStream(2);
-
-        BitStream out1 = new BitStream(3);
-        BitStream out2 = new BitStream(3);
-
-        List<BitStream> inputs = new ArrayList<>();
-        inputs.addAll(List.of(in1, in2));
-        List<BitStream> outputs = new ArrayList<>();
-        outputs.addAll(List.of(out1, out2));
-
-        assertThrows(IllegalSplitException.class, () -> {
-            Splitter extender = new Splitter(inputs, outputs);
-        });
-    }
-
-    @Test
     void testMismatch4() {
         BitStream in1 = new BitStream(5);
 

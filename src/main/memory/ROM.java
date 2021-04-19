@@ -180,4 +180,13 @@ public class ROM implements Node {
                 + "\nOutput: " + DataConverter.convertBoolToBin(this.output.getData()));
     }
 
+    /**Override the default toString method.
+     *
+     * @return - a String representation of this
+     */
+    @Override
+    public String toString() {
+        return "ROM<" + this.name + ", " + this.address.getSize() + ", " + this.output.getSize() + ">";
+    }
+
 }
