@@ -189,6 +189,7 @@ public class Microprocessor implements Circuit {
         AddSubtract addSub = new AddSubtract(counterSplitterOut, mapRomOut, addSubOutput,
                 new BitStream(1), new BitStream(1), "addSub", debugGates, this.debugDepth - 1);
 
-
+        ROM microinstructionRom = new ROM("./storage/main/microinstructions.stg", addSubOutput, this.microinstruction,
+                "microinstructionRom", debugGates);
     }
 }

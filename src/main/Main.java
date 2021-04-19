@@ -12,9 +12,20 @@ public class Main {
 
 
     public static void main(String[] args) {
-        Storage microMapping = new Storage("./storage/main/microinstructions.stg", 256, 17);
-        microMapping.putData(0, new boolean[]{false, false, false, false, false, false, false});
-        microMapping.putData(1, new boolean[]{false, false, false, false, false, false, true});
-        microMapping.save();
+        Storage microinstructions = new Storage("./storage/main/microinstructions.stg", 256, 24);
+        microinstructions.putData(0, new boolean[]{true, true, true, false, false, false, false, false,
+                false, false, false, false, false, false, false, false,
+                false, false, false, false, false, false, false, false});
+        microinstructions.putData(1, new boolean[]{false, false, true, false, true, true, false, false,
+                false, false, false, false, false, false, false, false,
+                false, false, false, false, false, false, false, false});
+        microinstructions.putData(2, new boolean[]{false, false, true, false, false, false, false, false,
+                false, false, false, true, true, false, false, false,
+                false, false, false, false, false, false, false, false});
+        microinstructions.putData(2, new boolean[]{true, true, false, false, false, false, false, false,
+                false, false, false, false, false, true, false, false,
+                false, false, false, false, false, false, false, false});
+        microinstructions.save();
+
     }
 }
