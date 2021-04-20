@@ -126,6 +126,7 @@ public class ControlUnit implements Circuit {
                 "clockTFlipFlop", debugGates, this.debugDepth - 1);
 
         BitStream state0Out = new BitStream(1);
+        state0Out.setData(new boolean[]{true});
         BitStream state1Out = new BitStream(1);
         BitStream state2Out = new BitStream(1);
         BitStream state3Out = new BitStream(1);
@@ -161,7 +162,6 @@ public class ControlUnit implements Circuit {
                 state7Out, new BitStream(1), true,
                 "state0", debugGates, this.debugDepth - 1);
 
-        state0Out.setData(new boolean[]{true});
 
         BitStream microprocessorOut = new BitStream(NUM_MICROINSTRUCTIONS);
 
@@ -197,7 +197,7 @@ public class ControlUnit implements Circuit {
         enable.setData(new boolean[]{true});
         BitStream microinstruction = new BitStream(NUM_MICROINSTRUCTIONS);
         DFlipFlop microDFlipFlop = new DFlipFlop(commonBus, clockTFlipFlopOut, enable, new BitStream(1), new BitStream(1),
-                microinstruction, new BitStream(1), false,
+                microinstruction, new BitStream(NUM_MICROINSTRUCTIONS), false,
                 "microDFlipFlop", debugGates, this.debugDepth - 1);
 
         BitStream end = new BitStream(1);
@@ -228,13 +228,13 @@ public class ControlUnit implements Circuit {
         TriState interTriState = new TriState(microprocessorInter, interOut, this.intermediate,
                 "interTriState", debugGates);
 
-        AND rfInAnd = new AND(rfInControl, clockTFlipFlopOut, this.RFIn, "rfInAnd", debugGates);
-        AND xInAnd = new AND(xInControl, clockTFlipFlopOut, this.XIn, "xInAnd", debugGates);
-        AND zInAnd = new AND(zInControl, clockTFlipFlopOut, this.ZIn, "zInAnd", debugGates);
-        AND pcInAnd = new AND(pcInControl, clockTFlipFlopOut, this.PCIn, "pcInAnd", debugGates);
-        AND writeAnd = new AND(memWriteControl, clockTFlipFlopOut, this.memWrite, "writeAnd", debugGates);
-        AND addressAnd = new AND(memAddressControl, clockTFlipFlopOut, this.memAddress, "addressAnd", debugGates);
-        AND dataInAnd = new AND(memDataInControl, clockTFlipFlopOut, this.memDataIn, "dataInAnd", debugGates);
+        AND rfInAnd = new AND(rfInControl, processMicroinstruction, this.RFIn, "rfInAnd", debugGates);
+        AND xInAnd = new AND(xInControl, processMicroinstruction, this.XIn, "xInAnd", debugGates);
+        AND zInAnd = new AND(zInControl, processMicroinstruction, this.ZIn, "zInAnd", debugGates);
+        AND pcInAnd = new AND(pcInControl, processMicroinstruction, this.PCIn, "pcInAnd", debugGates);
+        AND writeAnd = new AND(memWriteControl, processMicroinstruction, this.memWrite, "writeAnd", debugGates);
+        AND addressAnd = new AND(memAddressControl, processMicroinstruction, this.memAddress, "addressAnd", debugGates);
+        AND dataInAnd = new AND(memDataInControl, processMicroinstruction, this.memDataIn, "dataInAnd", debugGates);
 
         List<BitStream> rfAddrReadMuxList = new ArrayList<>();
         rfAddrReadMuxList.addAll(List.of(source, destination));
