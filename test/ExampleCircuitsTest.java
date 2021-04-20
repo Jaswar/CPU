@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class exampleCircuitsTest {
+public class ExampleCircuitsTest {
 
     @Test
     void RSLatch() {

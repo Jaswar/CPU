@@ -125,14 +125,8 @@ public class ALU implements Circuit {
         boolean debugGates = this.debugDepth > 0 ? this.inDebuggerMode : false;
         int size = this.source.getSize();
 
-        BitStream srcDFlipFlopQ = new BitStream(size);
-        BitStream srcDFlipFlopNotQ = new BitStream(size);
-
         BitStream sourceEnabled = new BitStream(1);
         sourceEnabled.setData(new boolean[]{true});
-
-//        DFlipFlop sourceDFlipFlop = new DFlipFlop(this.source, this.aluIn, sourceEnabled, srcDFlipFlopQ, srcDFlipFlopNotQ, false,
-//                "sourceDLatch", debugGates, this.debugDepth - 1);
 
         List<BitStream> decoderOut = new ArrayList<>();
         for (int i = 0; i < (int)Math.pow(2, this.opCode.getSize()); i++) {

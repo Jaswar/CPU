@@ -31,7 +31,7 @@ class RegisterFileTest {
 
         output = new Output(out);
 
-        RegisterFile rf = new RegisterFile(in, out, RFIn, RFOut, addressWrite, addressRead, true, 1);
+        RegisterFile rf = new RegisterFile(in, out, RFIn, RFOut, addressWrite, addressRead, false, 1);
     }
 
     @Test

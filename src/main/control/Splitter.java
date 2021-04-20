@@ -149,20 +149,6 @@ public class Splitter implements Node {
         if (inSize > outSize || outSize % inSize != 0) {
             throw new IllegalSplitException(this);
         }
-
-        int inBitSize = this.in.get(0).getSize();
-        for (BitStream inStream : this.in) {
-            if (inStream.getSize() != inBitSize) {
-                throw new IllegalSplitException(this);
-            }
-        }
-
-        int outBitSize = this.out.get(0).getSize();
-        for (BitStream outStream : this.out) {
-            if (outStream.getSize() != outBitSize) {
-                throw new IllegalSplitException(this);
-            }
-        }
     }
 
     /**Check if the sources of the output BitStreams are consistent.
@@ -270,6 +256,6 @@ public class Splitter implements Node {
      */
     @Override
     public String toString() {
-        return "BitExtender<" + this.name + ", " + this.in.size() + ", " + this.out.size() + ">";
+        return "Splitter<" + this.name + ", " + this.in.size() + ", " + this.out.size() + ">";
     }
 }
