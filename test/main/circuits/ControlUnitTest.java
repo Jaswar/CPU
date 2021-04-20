@@ -164,8 +164,196 @@ class ControlUnitTest {
 
         assertTrue(ZOut.getData()[0]);
         assertFalse(PCIn.getData()[0]);
-
     }
 
+    @Test
+    void testFirstInstruction() {
+        testCommonMicroinstructions();
 
+        //microinstruction
+        clock.setData(new boolean[]{true});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{false});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{true});
+        ProcessRunner.run(clock);
+
+        assertTrue(RFIn.getData()[0]);
+        assertTrue(RFOut.getData()[0]);
+        assertEquals("000", DataConverter.convertBoolToBin(RFAddrRead.getData()));
+        assertEquals("000", DataConverter.convertBoolToBin(RFAddrWrite.getData()));
+
+        clock.setData(new boolean[]{false});
+        ProcessRunner.run(clock);
+
+        assertFalse(RFIn.getData()[0]);
+        assertTrue(RFOut.getData()[0]);
+        assertEquals("000", DataConverter.convertBoolToBin(RFAddrRead.getData()));
+        assertEquals("000", DataConverter.convertBoolToBin(RFAddrWrite.getData()));
+
+        //common 1
+        clock.setData(new boolean[]{true});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{false});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{true});
+        ProcessRunner.run(clock);
+
+        assertTrue(PCOut.getData()[0]);
+        assertTrue(memRead.getData()[0]);
+        assertTrue(memAddress.getData()[0]);
+
+        clock.setData(new boolean[]{false});
+        ProcessRunner.run(clock);
+
+        assertTrue(PCOut.getData()[0]);
+        assertTrue(memRead.getData()[0]);
+        assertFalse(memAddress.getData()[0]);
+
+        mainInput.setData(new boolean[]{false, false, false, true, true, false, false, true,
+                false, false, false, false, false, false, false, false});
+        ProcessRunner.run(mainInput);
+
+        for (int i = 2; i <= 7; i++) {
+            clock.setData(new boolean[]{true});
+            ProcessRunner.run(clock);
+            clock.setData(new boolean[]{false});
+            ProcessRunner.run(clock);
+            clock.setData(new boolean[]{true});
+            ProcessRunner.run(clock);
+            clock.setData(new boolean[]{false});
+            ProcessRunner.run(clock);
+        }
+
+        //microinstruction
+        clock.setData(new boolean[]{true});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{false});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{true});
+        ProcessRunner.run(clock);
+
+        assertTrue(RFIn.getData()[0]);
+        assertTrue(RFOut.getData()[0]);
+        assertEquals("001", DataConverter.convertBoolToBin(RFAddrRead.getData()));
+        assertEquals("011", DataConverter.convertBoolToBin(RFAddrWrite.getData()));
+
+        clock.setData(new boolean[]{false});
+        ProcessRunner.run(clock);
+
+        assertFalse(RFIn.getData()[0]);
+        assertTrue(RFOut.getData()[0]);
+        assertEquals("001", DataConverter.convertBoolToBin(RFAddrRead.getData()));
+        assertEquals("011", DataConverter.convertBoolToBin(RFAddrWrite.getData()));
+    }
+
+    @Test
+    void testSecondInstruction() {
+        testCommonMicroinstructions();
+
+        //microinstruction
+        clock.setData(new boolean[]{true});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{false});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{true});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{false});
+        ProcessRunner.run(clock);
+
+        //common 1
+        clock.setData(new boolean[]{true});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{false});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{true});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{false});
+        ProcessRunner.run(clock);
+
+        mainInput.setData(new boolean[]{false, false, false, true, true, false, false, true,
+                false, false, false, false, false, false, false, true});
+        ProcessRunner.run(mainInput);
+
+        for (int i = 2; i <= 7; i++) {
+            clock.setData(new boolean[]{true});
+            ProcessRunner.run(clock);
+            clock.setData(new boolean[]{false});
+            ProcessRunner.run(clock);
+            clock.setData(new boolean[]{true});
+            ProcessRunner.run(clock);
+            clock.setData(new boolean[]{false});
+            ProcessRunner.run(clock);
+        }
+
+        clock.setData(new boolean[]{true});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{false});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{true});
+        ProcessRunner.run(clock);
+
+        assertTrue(RFOut.getData()[0]);
+        assertEquals("011", DataConverter.convertBoolToBin(RFAddrRead.getData()));
+        assertTrue(XIn.getData()[0]);
+
+        clock.setData(new boolean[]{false});
+        ProcessRunner.run(clock);
+
+        clock.setData(new boolean[]{true});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{false});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{true});
+        ProcessRunner.run(clock);
+
+        assertTrue(RFOut.getData()[0]);
+        assertTrue(ZIn.getData()[0]);
+        assertEquals("001", DataConverter.convertBoolToBin(RFAddrRead.getData()));
+        assertEquals("00001", DataConverter.convertBoolToBin(ALUOpcode.getData()));
+
+        clock.setData(new boolean[]{false});
+        ProcessRunner.run(clock);
+
+        assertTrue(RFOut.getData()[0]);
+        assertFalse(ZIn.getData()[0]);
+        assertEquals("001", DataConverter.convertBoolToBin(RFAddrRead.getData()));
+        assertEquals("00001", DataConverter.convertBoolToBin(ALUOpcode.getData()));
+
+        clock.setData(new boolean[]{true});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{false});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{true});
+        ProcessRunner.run(clock);
+
+        assertTrue(RFIn.getData()[0]);
+        assertEquals("011", DataConverter.convertBoolToBin(RFAddrWrite.getData()));
+        assertTrue(ZOut.getData()[0]);
+
+        clock.setData(new boolean[]{false});
+        ProcessRunner.run(clock);
+
+        assertFalse(RFIn.getData()[0]);
+        assertEquals("011", DataConverter.convertBoolToBin(RFAddrWrite.getData()));
+        assertTrue(ZOut.getData()[0]);
+
+        clock.setData(new boolean[]{true});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{false});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{true});
+        ProcessRunner.run(clock);
+
+        assertTrue(PCOut.getData()[0]);
+        assertTrue(memRead.getData()[0]);
+        assertTrue(memAddress.getData()[0]);
+
+        clock.setData(new boolean[]{false});
+        ProcessRunner.run(clock);
+
+        assertTrue(PCOut.getData()[0]);
+        assertTrue(memRead.getData()[0]);
+        assertFalse(memAddress.getData()[0]);
+    }
 }
