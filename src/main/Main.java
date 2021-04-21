@@ -11,13 +11,16 @@ public class Main {
         microinstructions.putData(0, new boolean[]{true, true, true, false, false, false, false, false,
                 false, false, false, false, false, false, false, false,
                 false, false, false, false, false, false, false, false});
-        microinstructions.putData(1, new boolean[]{false, false, true, false, true, true, false, false,
+        microinstructions.putData(1, new boolean[]{true, true, false, false, false, false, false, false,
+                false, false, false, false, false, false, false, false,
+                false, false, false, false, false, false, false, true});
+        microinstructions.putData(2, new boolean[]{false, false, true, false, true, true, false, false,
                 false, false, false, false, false, false, false, false,
                 false, false, false, false, false, false, false, false});
-        microinstructions.putData(2, new boolean[]{false, false, true, false, false, false, false, false,
+        microinstructions.putData(3, new boolean[]{false, false, true, false, false, false, false, false,
                 false, false, false, true, true, false, false, false,
                 false, false, false, false, false, false, false, false});
-        microinstructions.putData(3, new boolean[]{true, true, false, false, false, false, false, false,
+        microinstructions.putData(4, new boolean[]{true, true, false, false, false, false, false, false,
                 false, false, false, false, false, true, false, false,
                 false, false, false, false, false, false, false, false});
         microinstructions.save();
@@ -25,6 +28,7 @@ public class Main {
         Storage mapping = new Storage("./storage/main/microMapping.stg", 256, 8);
         mapping.putData(0, new boolean[]{false, false, false, false, false, false, false, false});
         mapping.putData(1, new boolean[]{false, false, false, false, false, false, false, true});
+        mapping.putData(2, new boolean[]{false, false, false, false, false, false, true, false});
         mapping.save();
     }
 

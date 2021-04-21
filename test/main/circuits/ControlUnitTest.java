@@ -50,6 +50,7 @@ class ControlUnitTest {
                 false, false, false, false, false, false, false, false}, input);
         clock = new Input(new boolean[]{false}, clk);
         ProcessRunner.run(mainInput, clock);
+
     }
 
     @Test
@@ -271,8 +272,96 @@ class ControlUnitTest {
         clock.setData(new boolean[]{false});
         ProcessRunner.run(clock);
 
-        mainInput.setData(new boolean[]{false, false, false, true, true, false, false, true,
+        mainInput.setData(new boolean[]{false, false, true, false, false, false, false, false,
                 false, false, false, false, false, false, false, true});
+        ProcessRunner.run(mainInput);
+
+        // common 2
+        clock.setData(new boolean[]{true});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{false});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{true});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{false});
+        ProcessRunner.run(clock);
+
+        // common 3
+        clock.setData(new boolean[]{true});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{false});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{true});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{false});
+        ProcessRunner.run(clock);
+
+        // common 4
+        clock.setData(new boolean[]{true});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{false});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{true});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{false});
+        ProcessRunner.run(clock);
+
+        mainInput.setData(new boolean[]{true, false, false, false, false, false, false, false,
+                false, false, true, false, false, false, true, true});
+        ProcessRunner.run(mainInput);
+
+        for (int i = 5; i <= 7; i++) {
+            clock.setData(new boolean[]{true});
+            ProcessRunner.run(clock);
+            clock.setData(new boolean[]{false});
+            ProcessRunner.run(clock);
+            clock.setData(new boolean[]{true});
+            ProcessRunner.run(clock);
+            clock.setData(new boolean[]{false});
+            ProcessRunner.run(clock);
+        }
+
+        //microinstruction
+        clock.setData(new boolean[]{true});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{false});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{true});
+        ProcessRunner.run(clock);
+
+        assertEquals("100", DataConverter.convertBoolToBin(RFAddrWrite.getData()));
+        assertArrayEquals(new boolean[]{true, false, false, false, false, false, false, false,
+                false, false, true, false, false, false, true, true}, intermediate.getData());
+
+    }
+
+    @Test
+    void testThirdInstruction() {
+
+        testCommonMicroinstructions();
+
+        //microinstruction
+        clock.setData(new boolean[]{true});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{false});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{true});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{false});
+        ProcessRunner.run(clock);
+
+        //common 1
+        clock.setData(new boolean[]{true});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{false});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{true});
+        ProcessRunner.run(clock);
+        clock.setData(new boolean[]{false});
+        ProcessRunner.run(clock);
+
+        mainInput.setData(new boolean[]{false, false, false, true, true, true, false, true,
+                false, false, false, false, false, false, true, false});
         ProcessRunner.run(mainInput);
 
         for (int i = 2; i <= 7; i++) {
@@ -309,7 +398,7 @@ class ControlUnitTest {
 
         assertTrue(RFOut.getData()[0]);
         assertTrue(ZIn.getData()[0]);
-        assertEquals("001", DataConverter.convertBoolToBin(RFAddrRead.getData()));
+        assertEquals("101", DataConverter.convertBoolToBin(RFAddrRead.getData()));
         assertEquals("00001", DataConverter.convertBoolToBin(ALUOpcode.getData()));
 
         clock.setData(new boolean[]{false});
@@ -317,7 +406,7 @@ class ControlUnitTest {
 
         assertTrue(RFOut.getData()[0]);
         assertFalse(ZIn.getData()[0]);
-        assertEquals("001", DataConverter.convertBoolToBin(RFAddrRead.getData()));
+        assertEquals("101", DataConverter.convertBoolToBin(RFAddrRead.getData()));
         assertEquals("00001", DataConverter.convertBoolToBin(ALUOpcode.getData()));
 
         clock.setData(new boolean[]{true});

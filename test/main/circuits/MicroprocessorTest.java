@@ -49,9 +49,9 @@ class MicroprocessorTest {
     }
 
     @Test
-    void testSecondInstruction() {
+    void testThirdInstruction() {
         mainInput.setData(new boolean[]{false, false, false, false, false, false, false, false,
-                false, false, false, false, false, false, false, true});
+                false, false, false, false, false, false, true, false});
         IR1InControl.setData(new boolean[]{true});
         ProcessRunner.run(mainInput, IR1InControl);
 
@@ -67,7 +67,7 @@ class MicroprocessorTest {
 
     @Test
     void testProgressingSecondInstruction() {
-        testSecondInstruction();
+        testThirdInstruction();
 
         clock.setData(new boolean[]{true});
         ProcessRunner.run(clock);

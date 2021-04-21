@@ -23,6 +23,31 @@ public class ControlUnit implements Circuit {
 
     private final static int NUM_MICROINSTRUCTIONS = 24;
 
+    /**Constructors for the ControlUnit circuit. It controls what the components of the CPU should do.
+     *
+     * @param input - the main input to the unit
+     * @param clock - the clock input to the circuit
+     * @param intermediate - the output of the intermediate value
+     * @param RFIn - BitStream specifying that the register file should read data
+     * @param RFOut - BitStream specifying that the register file should output data
+     * @param RFAddrWrite - BitStream to specify the address of the register that is written to
+     * @param RFAddrRead - BitStream to specify the address of the register that is read from
+     * @param XIn - specify if the X register should read data
+     * @param MUXConst - specify if the input to the ALU is a constant value or X
+     * @param ALUOpcode - BitStream to specify the operation that is performed by the ALU
+     * @param ZIn - specify if the Z register should read data
+     * @param ZOut - specify if the Z register should output data
+     * @param PCIn - specify if the program counter should read data
+     * @param PCOut - specify if the program counter should output data
+     * @param memRead - specify if the memory should perform a read operation
+     * @param memWrite - specify if the memory should perform a write operation
+     * @param memAddress - specify if the memory address register should read data
+     * @param memDataIn - specify if the memory data in register should read data
+     * @param memDataOut - specify if the output of the memory should be read
+     * @param name - the name of the circuit
+     * @param inDebuggerMode - boolean to specify if the circuit is in debug mode
+     * @param debugDepth - how deep should debugging go
+     */
     public ControlUnit(BitStream input, BitStream clock, BitStream intermediate, BitStream RFIn, BitStream RFOut,
                        BitStream RFAddrWrite, BitStream RFAddrRead, BitStream XIn, BitStream MUXConst, BitStream ALUOpcode,
                        BitStream ZIn, BitStream ZOut, BitStream PCIn, BitStream PCOut, BitStream memRead,
@@ -82,6 +107,8 @@ public class ControlUnit implements Circuit {
                 "ControlUnit", false, 0);
     }
 
+    /**Build the circuit as defined in the documentation.
+     */
     @Override
     public void build() {
         boolean debugGates = this.debugDepth > 0 ? this.inDebuggerMode : false;
@@ -195,10 +222,13 @@ public class ControlUnit implements Circuit {
 
         BitStream enable = new BitStream(1);
         enable.setData(new boolean[]{true});
-        BitStream microinstruction = new BitStream(NUM_MICROINSTRUCTIONS);
+        BitStream notMicroinstruction = new BitStream(NUM_MICROINSTRUCTIONS);
         DFlipFlop microDFlipFlop = new DFlipFlop(commonBus, clockTFlipFlopOut, enable, new BitStream(1), new BitStream(1),
-                microinstruction, new BitStream(NUM_MICROINSTRUCTIONS), false,
+                new BitStream(NUM_MICROINSTRUCTIONS), notMicroinstruction, false,
                 "microDFlipFlop", debugGates, this.debugDepth - 1);
+
+        BitStream microinstruction = new BitStream(NUM_MICROINSTRUCTIONS);
+        NOT microinstructionNot = new NOT(notMicroinstruction, microinstruction, "microinstructionNot", debugGates);
 
         BitStream end = new BitStream(1);
         BitStream rfInControl = new BitStream(1);
