@@ -8,6 +8,8 @@ import main.utils.ProcessRunner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.naming.ldap.Control;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class CPUTest {
@@ -50,6 +52,9 @@ class CPUTest {
             ProcessRunner.run(clock);
             clock.setData(new boolean[]{false});
             ProcessRunner.run(clock);
+
+            System.out.println(cpu.requestStatus());
+            System.out.println();
         }
         assertArrayEquals(new boolean[]{false, false, false, false, false, false, false, false,
                 false, false, false, false, false, true, false, true},

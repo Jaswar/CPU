@@ -16,6 +16,9 @@ public class Microprocessor implements Circuit {
     private final boolean inDebuggerMode;
     private final int debugDepth;
 
+    private Register IR1;
+    private Register IR2;
+
     public static final int WORD_SIZE = 16;
     public static final int INSTRUCTION_SIZE = 8;
     public static final int MAPPING_OUT_SIZE = 8;
@@ -76,6 +79,14 @@ public class Microprocessor implements Circuit {
                 "Microprocessor", false, 0);
     }
 
+    public Register getIR1() {
+        return IR1;
+    }
+
+    public Register getIR2() {
+        return IR2;
+    }
+
     /**Build the circuit as is defined in the documentation.
      */
     @Override
@@ -87,14 +98,14 @@ public class Microprocessor implements Circuit {
         IR1OutControl.setData(new boolean[]{true});
         BitStream IR1Enable = new BitStream(1);
         IR1Enable.setData(new boolean[]{true});
-        Register IR1 = new Register(this.input, IR1Out, this.IR1In, IR1OutControl, IR1Enable,
+        this.IR1 = new Register(this.input, IR1Out, this.IR1In, IR1OutControl, IR1Enable,
                 "IR1", debugGates, this.debugDepth - 1);
 
         BitStream IR2OutControl = new BitStream(1);
         IR2OutControl.setData(new boolean[]{true});
         BitStream IR2Enable = new BitStream(1);
         IR2Enable.setData(new boolean[]{true});
-        Register IR2 = new Register(this.input, this.intermediate, this.IR2In, IR2OutControl, IR2Enable,
+        this.IR2 = new Register(this.input, this.intermediate, this.IR2In, IR2OutControl, IR2Enable,
                 "IR2", debugGates, this.debugDepth - 1);
 
         List<BitStream> instructionSplitterOutList = new ArrayList<>();

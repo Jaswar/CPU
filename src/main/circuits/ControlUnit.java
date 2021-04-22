@@ -8,6 +8,7 @@ import main.gates.TriState;
 import main.gates.binary.AND;
 import main.gates.binary.OR;
 import main.gates.unary.NOT;
+import main.utils.DataConverter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,9 @@ public class ControlUnit implements Circuit {
     private final String name;
     private final boolean inDebuggerMode;
     private final int debugDepth;
+
+    private Microprocessor microprocessor;
+    private BitStream microinstruction;
 
     private final static int NUM_MICROINSTRUCTIONS = 24;
 
@@ -105,6 +109,14 @@ public class ControlUnit implements Circuit {
         this(input, clock, intermediate, RFIn, RFOut, RFAddrWrite, RFAddrRead, XIn, MUXConst, ALUOpcode,
                 ZIn, ZOut, PCIn, PCOut, memRead, memWrite, memAddress, memDataIn, memDataOut,
                 "ControlUnit", false, 0);
+    }
+
+    public String requestStatus() {
+        String status = "Control Unit (" + this.name + ")\n";
+        status += this.microprocessor.getIR1().requestStatus() + "\n";
+        status += this.microprocessor.getIR2().requestStatus() + "\n";
+        status += "Micro Instruction: " + DataConverter.convertBoolToBin(this.microinstruction.getData());
+        return status;
     }
 
     /**Build the circuit as defined in the documentation.
@@ -216,7 +228,7 @@ public class ControlUnit implements Circuit {
         BitStream source = new BitStream(3);
         BitStream destination = new BitStream(3);
         BitStream microprocessorInter = new BitStream(this.input.getSize());
-        Microprocessor microprocessor = new Microprocessor(this.input, clockTFlipFlopOut, state6Out, IR1In, IR2In,
+        this.microprocessor = new Microprocessor(this.input, clockTFlipFlopOut, state6Out, IR1In, IR2In,
                 microprocessorOut, microprocessorInter, source, destination,
                 "microprocessor", debugGates, this.debugDepth - 1);
 
@@ -227,7 +239,7 @@ public class ControlUnit implements Circuit {
                 new BitStream(NUM_MICROINSTRUCTIONS), notMicroinstruction, false,
                 "microDFlipFlop", debugGates, this.debugDepth - 1);
 
-        BitStream microinstruction = new BitStream(NUM_MICROINSTRUCTIONS);
+        microinstruction = new BitStream(NUM_MICROINSTRUCTIONS);
         NOT microinstructionNot = new NOT(notMicroinstruction, microinstruction, "microinstructionNot", debugGates);
 
         BitStream end = new BitStream(1);

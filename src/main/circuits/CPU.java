@@ -27,6 +27,7 @@ public class CPU implements Circuit {
     private Register Z;
     private BitStream ZIn;
     private BitStream ZOut;
+    private ControlUnit controlUnit;
 
     public CPU(BitStream clock, BitStream memRead, BitStream memWrite,
                BitStream memoryDataOut, BitStream memoryDataIn, BitStream memoryAddress,
@@ -82,6 +83,7 @@ public class CPU implements Circuit {
         status += "BUS: " + DataConverter.convertBoolToBin(this.bus.getData()) +
                 " (" + DataConverter.convertBoolToUnsignedDec(this.bus.getData()) + ", " +
                 DataConverter.convertBoolToSignedDec(this.bus.getData(), this.bus.getSize()) + ")\n";
+        status += this.controlUnit.requestStatus() + "\n";
         status += this.iag.requestStatus() + "\n";
         status += this.registerFile.requestStatus() + "\n";
         status += "X Register:\n";
@@ -90,7 +92,11 @@ public class CPU implements Circuit {
         status += this.alu.requestStatus() + "\n";
         status += "Z Register:\n";
         status += "ZIn: " + this.ZIn.getData()[0] + "\tZOut: " + this.ZOut.getData()[0] + "\n";
-        status += this.Z.requestStatus();
+        status += this.Z.requestStatus() + "\n";
+        status += "Memory Interface\n";
+        status += "MA: " + DataConverter.convertBoolToBin(this.memoryAddress.getData()) + "\n";
+        status += "MDI: " + DataConverter.convertBoolToBin(this.memoryDataIn.getData()) + "\n";
+        status += "MDO: " + DataConverter.convertBoolToBin(this.memoryDataOut.getData());
         return status;
     }
 
@@ -116,7 +122,7 @@ public class CPU implements Circuit {
         BitStream memDataIn = new BitStream(1);
         BitStream memDataOut = new BitStream(1);
 
-        ControlUnit controlUnit = new ControlUnit(bus, this.clock, bus, RFIn, RFOut, rfAddrWrite, rfAddrRead,
+        this.controlUnit = new ControlUnit(bus, this.clock, bus, RFIn, RFOut, rfAddrWrite, rfAddrRead,
                 XIn, MUXConst, ALUOpcode, ZIn, ZOut, PCIn, PCOut, memRead, memWrite, memAddress, memDataIn, memDataOut,
                 "controlUnit", debugGates, this.debugDepth - 1);
 

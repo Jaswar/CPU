@@ -75,7 +75,7 @@ public class RegisterFile implements Circuit {
         status += "RFOut: " + this.RFOut.getData()[0] + "\t";
         status += "RFIn: " + this.RFIn.getData()[0] + "\n";
         status += "Address Read: " + DataConverter.convertBoolToBin(this.addressRead.getData()) +
-                " (" + DataConverter.convertBoolToUnsignedDec(this.addressRead.getData()) + ") ";
+                " (" + DataConverter.convertBoolToUnsignedDec(this.addressRead.getData()) + ")\t";
         status += "Address Write: " + DataConverter.convertBoolToBin(this.addressWrite.getData()) +
                 " (" + DataConverter.convertBoolToUnsignedDec(this.addressWrite.getData()) + ")\n";
         for (int i = 0; i < this.registers.size(); i++) {
@@ -83,7 +83,7 @@ public class RegisterFile implements Circuit {
             if (i % 2 == 1 && i != this.registers.size() - 1) {
                 status += "\n";
             } else if (i % 2 == 0){
-                status += "\t";
+                status += "\t\t";
             }
         }
         return status;
@@ -96,6 +96,7 @@ public class RegisterFile implements Circuit {
         boolean debugGates = this.debugDepth > 0 ? this.inDebuggerMode : false;
         int size = this.input.getSize();
         int registerCount = 1 << this.addressRead.getSize();
+        List<String> registerNames = new ArrayList<>(List.of("AX", "BX", "CX", "DX", "DI", "SI", "BP", "SP"));
 
         List<BitStream> addrWriteDecoderOutList = new ArrayList<>();
         List<BitStream> addrReadDecoderOutList = new ArrayList<>();
@@ -118,8 +119,13 @@ public class RegisterFile implements Circuit {
 
             AND regOutAnd = new AND(this.RFOut, addrReadDecoderOutList.get(i), regOut, "regOutAnd" + i, debugGates);
 
+            String registerName = "REG" + i;
+            if (i < registerNames.size()) {
+                registerName = registerNames.get(i);
+            }
+
             Register register = new Register(this.input, this.output, this.RFIn, regOut, addrWriteDecoderOutList.get(i),
-                    "reg" + i, debugGates, this.debugDepth - 1);
+                    registerName, debugGates, this.debugDepth - 1);
             this.registers.add(register);
         }
     }
