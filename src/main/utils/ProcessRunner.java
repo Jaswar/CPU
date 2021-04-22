@@ -16,7 +16,6 @@ public class ProcessRunner {
         for (Node node : nodes) {
             queue.add(node);
         }
-
         while (queue.size() > 0) {
             Node next = queue.remove(0);
             next.evaluate(queue);

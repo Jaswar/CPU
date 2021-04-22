@@ -1,6 +1,7 @@
-package main.circuits;
+package main.circuits.memory;
 
 import main.BitStream;
+import main.circuits.Circuit;
 import main.control.Splitter;
 import main.gates.binary.AND;
 import main.gates.binary.NOR;
@@ -11,10 +12,10 @@ import java.util.List;
 
 public class DLatch implements Circuit {
 
-    private BitStream D, enable, Q, notQ;
-    private String name;
-    private boolean inDebuggerMode;
-    private int debugDepth;
+    private final BitStream D, enable, Q, notQ;
+    private final String name;
+    private final boolean inDebuggerMode;
+    private final int debugDepth;
 
     /**Constructors for the DLatch class.
      *
@@ -51,51 +52,6 @@ public class DLatch implements Circuit {
 
     public DLatch(BitStream D, BitStream enable, BitStream Q, BitStream notQ) {
         this(D, enable, Q, notQ, "DLatch", false, 0);
-    }
-
-    /**Getters for all the attributes.
-     */
-    public BitStream getD() {
-        return D;
-    }
-
-    public BitStream getEnable() {
-        return enable;
-    }
-
-    public BitStream getQ() {
-        return Q;
-    }
-
-    public BitStream getNotQ() {
-        return notQ;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public boolean isInDebuggerMode() {
-        return inDebuggerMode;
-    }
-
-    public int getDebugDepth() {
-        return debugDepth;
-    }
-
-    /**Setters for some of the attributes.
-     * Setting BitStreams is not possible.
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setInDebuggerMode(boolean inDebuggerMode) {
-        this.inDebuggerMode = inDebuggerMode;
-    }
-
-    public void setDebugDepth(int debugDepth) {
-        this.debugDepth = debugDepth;
     }
 
     /**Build the DLatch circuit as defined in the documentation.

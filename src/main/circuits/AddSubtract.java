@@ -11,10 +11,10 @@ import java.util.List;
 
 public class AddSubtract implements Circuit {
 
-    private BitStream source, destination, out, control, overflow;
-    private String name;
-    private boolean inDebuggerMode;
-    private int debugDepth;
+    private final BitStream source, destination, out, control, overflow;
+    private final String name;
+    private final boolean inDebuggerMode;
+    private final int debugDepth;
 
     /**Constructors for the AddSubtract circuit.
      *
@@ -61,54 +61,6 @@ public class AddSubtract implements Circuit {
                        BitStream out, BitStream control,
                        BitStream overflow) {
         this(source, destination, out, control, overflow, "ADD/SUB", false, 0);
-    }
-
-    /**Getters for all the attributes of the class.
-     */
-    public BitStream getSource() {
-        return source;
-    }
-
-    public BitStream getDestination() {
-        return destination;
-    }
-
-    public BitStream getOut() {
-        return out;
-    }
-
-    public BitStream getControl() {
-        return control;
-    }
-
-    public BitStream getOverflow() {
-        return overflow;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public boolean isInDebuggerMode() {
-        return inDebuggerMode;
-    }
-
-    /**Setters for some of the attributes. Setting BitStreams is not possible.
-     */
-    public int getDebugDepth() {
-        return debugDepth;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setInDebuggerMode(boolean inDebuggerMode) {
-        this.inDebuggerMode = inDebuggerMode;
-    }
-
-    public void setDebugDepth(int debugDepth) {
-        this.debugDepth = debugDepth;
     }
 
     /**Method to build the circuit as defined in documentation/AddSub.png.

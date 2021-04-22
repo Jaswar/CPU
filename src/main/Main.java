@@ -1,31 +1,35 @@
 package main;
 
-import main.control.Input;
-import main.control.Output;
-import main.gates.binary.AND;
-import main.gates.binary.NOR;
-import main.gates.binary.OR;
+import main.memory.Storage;
 import main.utils.ProcessRunner;
 
 public class Main {
 
 
     public static void main(String[] args) {
-        BitStream streamIn1 = new BitStream(1);
-        BitStream streamIn2 = new BitStream(1);
-        BitStream out = new BitStream(1);
+        Storage microinstructions = new Storage("./storage/main/microinstructions.stg", 256, 24);
+        microinstructions.putData(0, new boolean[]{true, true, true, false, false, false, false, false,
+                false, false, false, false, false, false, false, false,
+                false, false, false, false, false, false, false, false});
+        microinstructions.putData(1, new boolean[]{true, true, false, false, false, false, false, false,
+                false, false, false, false, false, false, false, false,
+                false, false, false, false, false, false, false, true});
+        microinstructions.putData(2, new boolean[]{false, false, true, false, true, true, false, false,
+                false, false, false, false, false, false, false, false,
+                false, false, false, false, false, false, false, false});
+        microinstructions.putData(3, new boolean[]{false, false, true, false, false, false, false, false,
+                false, false, false, true, true, false, false, false,
+                false, false, false, false, false, false, false, false});
+        microinstructions.putData(4, new boolean[]{true, true, false, false, false, false, false, false,
+                false, false, false, false, false, true, false, false,
+                false, false, false, false, false, false, false, false});
+        microinstructions.save();
 
-        Input r = new Input(new boolean[]{false}, streamIn1, "R", false);
-        Input s = new Input(new boolean[]{true}, streamIn2, "S", false);
-
-        OR or = new OR(streamIn1, streamIn2, out);
-        AND and = new AND(streamIn1, streamIn2, out);
-
-        Output output = new Output(out, "Q", false);
-
-        ProcessRunner.run(r, s);
-
-        System.out.println(output.getData());
-
+        Storage mapping = new Storage("./storage/main/microMapping.stg", 256, 8);
+        mapping.putData(0, new boolean[]{false, false, false, false, false, false, false, false});
+        mapping.putData(1, new boolean[]{false, false, false, false, false, false, false, true});
+        mapping.putData(2, new boolean[]{false, false, false, false, false, false, true, false});
+        mapping.save();
     }
+
 }

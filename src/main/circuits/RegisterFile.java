@@ -3,16 +3,19 @@ package main.circuits;
 
 import main.BitStream;
 import main.gates.binary.AND;
+import main.utils.DataConverter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RegisterFile implements Circuit {
 
-    private BitStream input, output, RFIn, RFOut, addressWrite, addressRead;
-    private String name;
-    private boolean inDebuggerMode;
-    private int debugDepth;
+    private final BitStream input, output, RFIn, RFOut, addressWrite, addressRead;
+    private final String name;
+    private final boolean inDebuggerMode;
+    private final int debugDepth;
+
+    private List<Register> registers;
 
     /**Constructors for the RegisterFile class.
      *
@@ -59,64 +62,45 @@ public class RegisterFile implements Circuit {
         this(input, output, RFIn, RFOut, addressWrite, addressRead, "RegisterFile", false, 0);
     }
 
-    /**Getters for all the attributes.
+    /**Getter for the list of registers from this RegisterFile.
+     *
+     * @return - the list of the registers
      */
-    public BitStream getInput() {
-        return input;
+    public List<Register> getRegisters() {
+        return registers;
     }
 
-    public BitStream getOutput() {
-        return output;
-    }
-
-    public BitStream getRFIn() {
-        return RFIn;
-    }
-
-    public BitStream getRFOut() {
-        return RFOut;
-    }
-
-    public BitStream getAddressWrite() {
-        return addressWrite;
-    }
-
-    public BitStream getAddressRead() {
-        return addressRead;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public boolean isInDebuggerMode() {
-        return inDebuggerMode;
-    }
-
-    public int getDebugDepth() {
-        return debugDepth;
-    }
-
-    /**Setters for some of the attributes. Setting BitStreams is not possible.
+    /**Method to return the current state of the RegisterFile.
+     *
+     * @return - the status of the RegisterFile as String
      */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setInDebuggerMode(boolean inDebuggerMode) {
-        this.inDebuggerMode = inDebuggerMode;
-    }
-
-    public void setDebugDepth(int debugDepth) {
-        this.debugDepth = debugDepth;
+    public String requestStatus() {
+        String status = "Register File (" + this.name + "):\n";
+        status += "RFOut: " + this.RFOut.getData()[0] + "\t";
+        status += "RFIn: " + this.RFIn.getData()[0] + "\n";
+        status += "Address Read: " + DataConverter.convertBoolToBin(this.addressRead.getData()) +
+                " (" + DataConverter.convertBoolToUnsignedDec(this.addressRead.getData()) + ")\t";
+        status += "Address Write: " + DataConverter.convertBoolToBin(this.addressWrite.getData()) +
+                " (" + DataConverter.convertBoolToUnsignedDec(this.addressWrite.getData()) + ")\n";
+        for (int i = 0; i < this.registers.size(); i++) {
+            status += this.registers.get(i).requestStatus();
+            if (i % 2 == 1 && i != this.registers.size() - 1) {
+                status += "\n";
+            } else if (i % 2 == 0){
+                status += "\t\t";
+            }
+        }
+        return status;
     }
 
     /**Define the build method to construct the circuit as described in the documentation.
      */
+    @Override
     public void build() {
         boolean debugGates = this.debugDepth > 0 ? this.inDebuggerMode : false;
         int size = this.input.getSize();
         int registerCount = 1 << this.addressRead.getSize();
+        List<String> registerNames = new ArrayList<>(List.of("AX", "BX", "CX", "DX", "DI", "SI", "BP", "SP"));
 
         List<BitStream> addrWriteDecoderOutList = new ArrayList<>();
         List<BitStream> addrReadDecoderOutList = new ArrayList<>();
@@ -133,14 +117,20 @@ public class RegisterFile implements Circuit {
         Decoder addrReadDecoder = new Decoder(this.addressRead, addrReadDecoderOutList,
                 "addrReadDecoder", debugGates, this.debugDepth - 1);
 
+        this.registers = new ArrayList<>();
         for (int i = 0; i < registerCount; i++) {
-            BitStream regIn = new BitStream(1);
             BitStream regOut = new BitStream(1);
 
-            AND regInAnd = new AND(this.RFIn, addrWriteDecoderOutList.get(i), regIn, "regInAnd" + i, debugGates);
             AND regOutAnd = new AND(this.RFOut, addrReadDecoderOutList.get(i), regOut, "regOutAnd" + i, debugGates);
 
-            Register register = new Register(this.input, this.output, regIn, regOut, "reg" + i, debugGates, this.debugDepth - 1);
+            String registerName = "REG" + i;
+            if (i < registerNames.size()) {
+                registerName = registerNames.get(i);
+            }
+
+            Register register = new Register(this.input, this.output, this.RFIn, regOut, addrWriteDecoderOutList.get(i),
+                    registerName, debugGates, this.debugDepth - 1);
+            this.registers.add(register);
         }
     }
 }

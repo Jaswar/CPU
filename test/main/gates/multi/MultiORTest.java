@@ -68,11 +68,9 @@ class MultiORTest {
         input.addAll(List.of(in1, in2, in3));
 
         in1.setData(new boolean[]{false});
-        in2.setData(new boolean[]{false, true});
-        in3.setData(new boolean[]{false});
 
         assertThrows(BitStreamInputSizeMismatch.class, () -> {
-            MultiOR or = new MultiOR(input, out);
+            in2.setData(new boolean[]{false, true});
         });
     }
 

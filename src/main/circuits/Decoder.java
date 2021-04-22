@@ -12,11 +12,11 @@ import java.util.List;
 
 public class Decoder implements Circuit {
 
-    private BitStream input;
-    private List<BitStream> outputs;
-    private String name;
-    private boolean inDebuggerMode;
-    private int debugDepth;
+    private final BitStream input;
+    private final List<BitStream> outputs;
+    private final String name;
+    private final boolean inDebuggerMode;
+    private final int debugDepth;
 
     /**Constructors for the Decoder class. See documentation/Decoder.png for the build.
      *
@@ -49,42 +49,6 @@ public class Decoder implements Circuit {
 
     public Decoder(BitStream input, List<BitStream> outputs) {
         this(input, outputs, "Decoder", false, 0);
-    }
-
-    /**Getters for all the attributes.
-     */
-    public BitStream getInputs() {
-        return input;
-    }
-
-    public List<BitStream> getOutputs() {
-        return outputs;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public boolean isInDebuggerMode() {
-        return inDebuggerMode;
-    }
-
-    public int getDebugDepth() {
-        return debugDepth;
-    }
-
-    /**Setters for some of the attributes. Setting BitStreams is not possible.
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setInDebuggerMode(boolean inDebuggerMode) {
-        this.inDebuggerMode = inDebuggerMode;
-    }
-
-    public void setDebugDepth(int debugDepth) {
-        this.debugDepth = debugDepth;
     }
 
     /**Builds the decoder circuit for the given input and the list of outputs.

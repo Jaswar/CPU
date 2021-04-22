@@ -1,6 +1,7 @@
-package main.circuits;
+package main.circuits.memory;
 
 import main.BitStream;
+import main.circuits.memory.DLatch;
 import main.control.Input;
 import main.utils.ProcessRunner;
 import org.junit.jupiter.api.Test;

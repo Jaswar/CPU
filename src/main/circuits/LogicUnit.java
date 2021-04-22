@@ -11,13 +11,13 @@ import java.util.List;
 
 public class LogicUnit implements Circuit {
 
-    private BitStream source;
-    private BitStream destination;
-    private BitStream output;
-    private List<BitStream> controls;
-    private String name;
-    private boolean inDebuggerMode;
-    private int debugDepth;
+    private final BitStream source;
+    private final BitStream destination;
+    private final BitStream output;
+    private final List<BitStream> controls;
+    private final String name;
+    private final boolean inDebuggerMode;
+    private final int debugDepth;
 
     /**Constructors for the LogicUnit class.
      *
@@ -59,50 +59,6 @@ public class LogicUnit implements Circuit {
     public LogicUnit(BitStream source, BitStream destination,
                      BitStream output, List<BitStream> controls) {
         this(source, destination, output, controls, "Logic Unit", false, 0);
-    }
-
-    /**Getters for all the attributes of the class.
-     */
-    public BitStream getSource() {
-        return source;
-    }
-
-    public BitStream getDestination() {
-        return destination;
-    }
-
-    public BitStream getOutput() {
-        return output;
-    }
-
-    public List<BitStream> getcontrols() {
-        return controls;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public boolean isInDebuggerMode() {
-        return inDebuggerMode;
-    }
-
-    public int getDebugDepth() {
-        return debugDepth;
-    }
-
-    /**Setters for some of the attributes. Setting BitStreams is not possible.
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setInDebuggerMode(boolean inDebuggerMode) {
-        this.inDebuggerMode = inDebuggerMode;
-    }
-
-    public void setDebugDepth(int debugDepth) {
-        this.debugDepth = debugDepth;
     }
 
     /**Build the circuit with logic gates. Exact build is as in documentation/LogicUnit.png.

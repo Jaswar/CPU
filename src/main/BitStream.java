@@ -1,5 +1,6 @@
 package main;
 
+import main.exceptions.BitStreamInputSizeMismatch;
 import main.utils.DataConverter;
 
 import java.util.ArrayList;
@@ -60,7 +61,12 @@ public class BitStream {
     }
 
     public void setData(boolean[] data) {
-        this.data = data;
+        if (data.length != this.data.length) {
+            throw new BitStreamInputSizeMismatch(this);
+        }
+        for (int i = 0; i < data.length; i++) {
+            this.data[i] = data[i];
+        }
     }
 
     public void setSource(Node source) {this.source = source;}
