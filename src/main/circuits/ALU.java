@@ -78,10 +78,13 @@ public class ALU implements Circuit {
                 "Overflow: " + this.overflow.getData()[0] + "\n";
         status += "SRC: " + DataConverter.convertBoolToBin(this.source.getData()) +
                 " (" + DataConverter.convertBoolToUnsignedDec(this.source.getData()) + ", " +
-                DataConverter.convertBoolToSignedDec(this.source.getData(), this.source.getSize()) + ")\n";
+                DataConverter.convertBoolToSignedDec(this.source.getData(), this.source.getSize()) + ")\t";
         status += "DEST: " + DataConverter.convertBoolToBin(this.destination.getData()) +
                 " (" + DataConverter.convertBoolToUnsignedDec(this.destination.getData()) + ", " +
-                DataConverter.convertBoolToSignedDec(this.destination.getData(), this.destination.getSize()) + ")";
+                DataConverter.convertBoolToSignedDec(this.destination.getData(), this.destination.getSize()) + ")\n";
+        status += "OUT: " + DataConverter.convertBoolToBin(this.out.getData()) +
+                " (" + DataConverter.convertBoolToUnsignedDec(this.out.getData()) + ", " +
+                DataConverter.convertBoolToSignedDec(this.out.getData(), this.out.getSize()) + ")";
         return status;
     }
 

@@ -7,6 +7,7 @@ import main.utils.DataConverter;
 
 import java.beans.BeanInfo;
 import java.net.http.HttpRequest;
+import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,11 @@ public class CPU implements Circuit {
     private RegisterFile registerFile;
     private IAG iag;
     private ALU alu;
+    private Register X;
+    private BitStream XIn;
+    private Register Z;
+    private BitStream ZIn;
+    private BitStream ZOut;
 
     public CPU(BitStream clock, BitStream memRead, BitStream memWrite,
                BitStream memoryDataOut, BitStream memoryDataIn, BitStream memoryAddress,
@@ -74,7 +80,13 @@ public class CPU implements Circuit {
                 DataConverter.convertBoolToSignedDec(this.bus.getData(), this.bus.getSize()) + ")\n";
         status += this.iag.requestStatus() + "\n";
         status += this.registerFile.requestStatus() + "\n";
-        status += this.alu.requestStatus();
+        status += "X Register:\n";
+        status += "XIn: " + this.XIn.getData()[0] + "\n";
+        status += this.X.requestStatus() + "\n";
+        status += this.alu.requestStatus() + "\n";
+        status += "Z Register:\n";
+        status += "ZIn: " + this.ZIn.getData()[0] + "\tZOut: " + this.ZOut.getData()[0] + "\n";
+        status += this.Z.requestStatus();
         return status;
     }
 
@@ -89,11 +101,11 @@ public class CPU implements Circuit {
         BitStream RFOut = new BitStream(1);
         BitStream rfAddrWrite = new BitStream(3);
         BitStream rfAddrRead = new BitStream(3);
-        BitStream XIn = new BitStream(1);
+        XIn = new BitStream(1);
         BitStream MUXConst = new BitStream(1);
         BitStream ALUOpcode = new BitStream(5);
-        BitStream ZIn = new BitStream(1);
-        BitStream ZOut = new BitStream(1);
+        ZIn = new BitStream(1);
+        ZOut = new BitStream(1);
         BitStream PCIn = new BitStream(1);
         BitStream PCOut = new BitStream(1);
         BitStream memAddress = new BitStream(1);
@@ -129,7 +141,7 @@ public class CPU implements Circuit {
         xOut.setData(new boolean[]{true});
         BitStream xEnable = new BitStream(1);
         xEnable.setData(new boolean[]{true});
-        Register X = new Register(bus, xOutput, XIn, xOut, xEnable, "X", debugGates, this.debugDepth - 1);
+        this.X = new Register(bus, xOutput, XIn, xOut, xEnable, "X", debugGates, this.debugDepth - 1);
 
         BitStream constant = new BitStream(size);
         constant.setData(new boolean[]{false, false, false, false, false, false, false, false,
@@ -147,6 +159,6 @@ public class CPU implements Circuit {
 
         BitStream zEnable = new BitStream(1);
         zEnable.setData(new boolean[]{true});
-        Register Z = new Register(aluOutput, bus, ZIn, ZOut, zEnable, "Z", debugGates, this.debugDepth - 1);
+        this.Z = new Register(aluOutput, bus, ZIn, ZOut, zEnable, "Z", debugGates, this.debugDepth - 1);
     }
 }

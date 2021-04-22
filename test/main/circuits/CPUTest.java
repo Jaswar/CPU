@@ -8,8 +8,6 @@ import main.utils.ProcessRunner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.imageio.plugins.tiff.BaselineTIFFTagSet;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class CPUTest {
@@ -35,8 +33,14 @@ class CPUTest {
 
         ram.putData(0, new boolean[]{false, false, false, true, false, false, false, false,
                 false, false, false, false, false, false, false, true});
-        ram.putData(1, new boolean[]{true, false, false, false, false, false, false, false,
+        ram.putData(1, new boolean[]{false, false, false, false, false, false, false, false,
+                false, false, false, false, false, true, false, true});
+        ram.putData(2, new boolean[]{false, false, false, false, true, false, true, false,
                 false, false, false, false, false, false, false, false});
+        ram.putData(4, new boolean[]{false, false, false, false, true, false, true, false,
+                false, false, false, false, false, false, true, false});
+        ram.putData(6, new boolean[]{false, false, false, false, true, false, false, true,
+                false, false, false, false, false, false, true, false});
     }
 
     @Test
@@ -54,8 +58,33 @@ class CPUTest {
             System.out.println(cpu.requestStatus());
             System.out.println();
         }
-        assertArrayEquals(new boolean[]{true, false, false, false, false, false, false, false,
-                false, false, false, false, false, false, false, false}, bus.getData());
+        assertArrayEquals(new boolean[]{false, false, false, false, false, false, false, false,
+                false, false, false, false, false, true, false, true}, bus.getData());
+        for (int i = 0; i < 8; i++) {
+            clock.setData(new boolean[]{true});
+            ProcessRunner.run(clock);
+            clock.setData(new boolean[]{false});
+            ProcessRunner.run(clock);
+            clock.setData(new boolean[]{true});
+            ProcessRunner.run(clock);
+            clock.setData(new boolean[]{false});
+            ProcessRunner.run(clock);
+            System.out.println(cpu.requestStatus());
+            System.out.println();
+        }
+
+        for (int i = 0; i < 20; i++) {
+            clock.setData(new boolean[]{true});
+            ProcessRunner.run(clock);
+            clock.setData(new boolean[]{false});
+            ProcessRunner.run(clock);
+            clock.setData(new boolean[]{true});
+            ProcessRunner.run(clock);
+            clock.setData(new boolean[]{false});
+            ProcessRunner.run(clock);
+            System.out.println(cpu.requestStatus());
+            System.out.println();
+        }
     }
 
 }
