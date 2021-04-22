@@ -62,6 +62,10 @@ public class RegisterFile implements Circuit {
         this(input, output, RFIn, RFOut, addressWrite, addressRead, "RegisterFile", false, 0);
     }
 
+    /**Method to return the current state of the RegisterFile.
+     *
+     * @return - the status of the RegisterFile as String
+     */
     public String requestStatus() {
         String status = "Register File (" + this.name + ")\n";
         status += "RFOut: " + this.RFOut.getData()[0] + "\t";

@@ -49,6 +49,10 @@ public class IAG implements Circuit {
         this(input, output, PCIn, PCOut, "IAG", false, 0);
     }
 
+    /**Method to return the current state of the IAG.
+     *
+     * @return - the status of the IAG as String
+     */
     public String requestStatus() {
         String status = "IAG (" + this.name + ")\n";
         status += "PCIn: " + this.PCIn.getData()[0] + "\tPCOut: " + this.PCOut.getData()[0] + "\n";

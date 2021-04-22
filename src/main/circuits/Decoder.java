@@ -51,42 +51,6 @@ public class Decoder implements Circuit {
         this(input, outputs, "Decoder", false, 0);
     }
 
-    /**Getters for all the attributes.
-     */
-    public BitStream getInputs() {
-        return input;
-    }
-
-    public List<BitStream> getOutputs() {
-        return outputs;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public boolean isInDebuggerMode() {
-        return inDebuggerMode;
-    }
-
-    public int getDebugDepth() {
-        return debugDepth;
-    }
-
-    /**Setters for some of the attributes. Setting BitStreams is not possible.
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setInDebuggerMode(boolean inDebuggerMode) {
-        this.inDebuggerMode = inDebuggerMode;
-    }
-
-    public void setDebugDepth(int debugDepth) {
-        this.debugDepth = debugDepth;
-    }
-
     /**Builds the decoder circuit for the given input and the list of outputs.
      * The sizes must match, ie: #outputs = 2^#input, otherwise an error is thrown.
      */

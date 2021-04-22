@@ -61,50 +61,6 @@ public class LogicUnit implements Circuit {
         this(source, destination, output, controls, "Logic Unit", false, 0);
     }
 
-    /**Getters for all the attributes of the class.
-     */
-    public BitStream getSource() {
-        return source;
-    }
-
-    public BitStream getDestination() {
-        return destination;
-    }
-
-    public BitStream getOutput() {
-        return output;
-    }
-
-    public List<BitStream> getcontrols() {
-        return controls;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public boolean isInDebuggerMode() {
-        return inDebuggerMode;
-    }
-
-    public int getDebugDepth() {
-        return debugDepth;
-    }
-
-    /**Setters for some of the attributes. Setting BitStreams is not possible.
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setInDebuggerMode(boolean inDebuggerMode) {
-        this.inDebuggerMode = inDebuggerMode;
-    }
-
-    public void setDebugDepth(int debugDepth) {
-        this.debugDepth = debugDepth;
-    }
-
     /**Build the circuit with logic gates. Exact build is as in documentation/LogicUnit.png.
      */
     @Override

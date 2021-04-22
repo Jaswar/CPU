@@ -52,46 +52,6 @@ public class Multiplexer implements Circuit {
         this(input, select, output, "Multiplexer", false, 0);
     }
 
-    /**Getters for all the attributes.
-     */
-    public List<BitStream> getInput() {
-        return input;
-    }
-
-    public BitStream getOutput() {
-        return output;
-    }
-
-    public BitStream getSelect() {
-        return select;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public boolean isInDebuggerMode() {
-        return inDebuggerMode;
-    }
-
-    public int getDebugDepth() {
-        return debugDepth;
-    }
-
-    /**Setters for some of the attributes. Setting the BitStreams is not possible.
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setInDebuggerMode(boolean inDebuggerMode) {
-        this.inDebuggerMode = inDebuggerMode;
-    }
-
-    public void setDebugDepth(int debugDepth) {
-        this.debugDepth = debugDepth;
-    }
-
     /**Define the build method for the Multiplexer as described in the documentation.
      */
     @Override

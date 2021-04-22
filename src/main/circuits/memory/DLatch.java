@@ -54,51 +54,6 @@ public class DLatch implements Circuit {
         this(D, enable, Q, notQ, "DLatch", false, 0);
     }
 
-    /**Getters for all the attributes.
-     */
-    public BitStream getD() {
-        return D;
-    }
-
-    public BitStream getEnable() {
-        return enable;
-    }
-
-    public BitStream getQ() {
-        return Q;
-    }
-
-    public BitStream getNotQ() {
-        return notQ;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public boolean isInDebuggerMode() {
-        return inDebuggerMode;
-    }
-
-    public int getDebugDepth() {
-        return debugDepth;
-    }
-
-    /**Setters for some of the attributes.
-     * Setting BitStreams is not possible.
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setInDebuggerMode(boolean inDebuggerMode) {
-        this.inDebuggerMode = inDebuggerMode;
-    }
-
-    public void setDebugDepth(int debugDepth) {
-        this.debugDepth = debugDepth;
-    }
-
     /**Build the DLatch circuit as defined in the documentation.
      */
     @Override

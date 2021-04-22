@@ -55,10 +55,18 @@ public class CPU implements Circuit {
         this(clock, memRead, memWrite, memoryDataOut, memoryDataIn, memoryAddress, "CPU", false, 0);
     }
 
+    /**Getter for the bus of the CPU.
+     *
+     * @return - the bus
+     */
     public BitStream getBus() {
         return bus;
     }
 
+    /**Method to return the current state of the CPU.
+     *
+     * @return - the status of the CPU as String
+     */
     public String requestStatus() {
         String status = "CPU (" + this.name + ")\n";
         status += "BUS: " + DataConverter.convertBoolToBin(this.bus.getData()) +

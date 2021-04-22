@@ -67,6 +67,10 @@ public class ALU implements Circuit {
         this(source, destination, out, opCode, aluIn, overflow, "ALU", false, 0);
     }
 
+    /**Method to return the current state of the ALU.
+     *
+     * @return - the status of the ALU as String
+     */
     public String requestStatus() {
         String status = "ALU (" + this.name + ")\n";
         status += "OPCode: " + DataConverter.convertBoolToBin(this.opCode.getData()) +

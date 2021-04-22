@@ -55,6 +55,10 @@ public class Register implements Circuit {
         this(input, output, regIn, regOut, enable, "Register", false, 0);
     }
 
+    /**Method to return the current state of the Register.
+     *
+     * @return - the status of the Register as String
+     */
     public String requestStatus() {
         String status = this.name + ": " + DataConverter.convertBoolToBin(this.dFlipFlopQ.getData()) +
                 " (" + DataConverter.convertBoolToUnsignedDec(this.dFlipFlopQ.getData()) + ", " +
