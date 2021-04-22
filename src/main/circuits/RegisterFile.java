@@ -62,6 +62,10 @@ public class RegisterFile implements Circuit {
         this(input, output, RFIn, RFOut, addressWrite, addressRead, "RegisterFile", false, 0);
     }
 
+    /**Getter for the list of registers from this RegisterFile.
+     *
+     * @return - the list of the registers
+     */
     public List<Register> getRegisters() {
         return registers;
     }
@@ -71,7 +75,7 @@ public class RegisterFile implements Circuit {
      * @return - the status of the RegisterFile as String
      */
     public String requestStatus() {
-        String status = "Register File (" + this.name + ")\n";
+        String status = "Register File (" + this.name + "):\n";
         status += "RFOut: " + this.RFOut.getData()[0] + "\t";
         status += "RFIn: " + this.RFIn.getData()[0] + "\n";
         status += "Address Read: " + DataConverter.convertBoolToBin(this.addressRead.getData()) +

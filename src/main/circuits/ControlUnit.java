@@ -111,8 +111,20 @@ public class ControlUnit implements Circuit {
                 "ControlUnit", false, 0);
     }
 
+    /**Getter for the microprocessor from the Control Unit.
+     *
+     * @return - the microprocessor
+     */
+    public Microprocessor getMicroprocessor() {
+        return microprocessor;
+    }
+
+    /**Method to return the current state of the Control Unit.
+     *
+     * @return - the status of the Control Unit as String
+     */
     public String requestStatus() {
-        String status = "Control Unit (" + this.name + ")\n";
+        String status = "Control Unit (" + this.name + "):\n";
         status += this.microprocessor.getIR1().requestStatus() + "\n";
         status += this.microprocessor.getIR2().requestStatus() + "\n";
         status += "Micro Instruction: " + DataConverter.convertBoolToBin(this.microinstruction.getData());

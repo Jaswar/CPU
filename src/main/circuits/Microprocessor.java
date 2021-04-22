@@ -79,10 +79,18 @@ public class Microprocessor implements Circuit {
                 "Microprocessor", false, 0);
     }
 
+    /**Getter for the first instruction register of the microprocessor.
+     *
+     * @return - the first instruction register
+     */
     public Register getIR1() {
         return IR1;
     }
 
+    /**Getter for the second instruction register of the microprocessor.
+     *
+     * @return - the second instruction register
+     */
     public Register getIR2() {
         return IR2;
     }

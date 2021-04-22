@@ -72,7 +72,7 @@ public class ALU implements Circuit {
      * @return - the status of the ALU as String
      */
     public String requestStatus() {
-        String status = "ALU (" + this.name + ")\n";
+        String status = "ALU (" + this.name + "):\n";
         status += "OPCode: " + DataConverter.convertBoolToBin(this.opCode.getData()) +
                 " (" + DataConverter.convertBoolToUnsignedDec(this.opCode.getData()) + ")\t" +
                 "Overflow: " + this.overflow.getData()[0] + "\n";

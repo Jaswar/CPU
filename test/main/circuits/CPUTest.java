@@ -59,6 +59,12 @@ class CPUTest {
         assertArrayEquals(new boolean[]{false, false, false, false, false, false, false, false,
                 false, false, false, false, false, true, false, true},
                 cpu.getRegisterFile().getRegisters().get(2).getDataBitStream().getData());
+        assertArrayEquals(new boolean[]{false, false, false, true, false, false, false, false,
+                false, false, false, false, false, false, false, true},
+                cpu.getControlUnit().getMicroprocessor().getIR1().getDataBitStream().getData());
+        assertArrayEquals(new boolean[]{false, false, false, false, false, false, false, false,
+                false, false, false, false, false, true, false, true},
+                cpu.getControlUnit().getMicroprocessor().getIR2().getDataBitStream().getData());
     }
 
     @Test
@@ -84,6 +90,9 @@ class CPUTest {
         assertArrayEquals(new boolean[]{false, false, false, false, false, false, false, false,
                         false, false, false, false, false, true, false, true},
                 cpu.getRegisterFile().getRegisters().get(1).getDataBitStream().getData());
+        assertArrayEquals(new boolean[]{false, false, false, false, true, false, true, false,
+                        false, false, false, false, false, false, false, false},
+                cpu.getControlUnit().getMicroprocessor().getIR1().getDataBitStream().getData());
     }
 
     @Test
@@ -110,6 +119,9 @@ class CPUTest {
         assertArrayEquals(new boolean[]{false, false, false, false, false, false, false, false,
                         false, false, false, false, true, false, true, false},
                 cpu.getRegisterFile().getRegisters().get(1).getDataBitStream().getData());
+        assertArrayEquals(new boolean[]{false, false, false, false, true, false, true, false,
+                        false, false, false, false, false, false, true, false},
+                cpu.getControlUnit().getMicroprocessor().getIR1().getDataBitStream().getData());
     }
 
 }

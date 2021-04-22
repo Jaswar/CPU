@@ -29,6 +29,18 @@ public class CPU implements Circuit {
     private BitStream ZOut;
     private ControlUnit controlUnit;
 
+    /**Constructors for the CPU class.
+     *
+     * @param clock - the clock input to the CPU
+     * @param memRead - the BitStream to send a read signal to the memory
+     * @param memWrite - the BitStream to send a write signal to the memory
+     * @param memoryDataOut - the BitStream with the data from the memory
+     * @param memoryDataIn - the BitStream with the data coming from the CPU to the memory
+     * @param memoryAddress - the address BitStream for the memory
+     * @param name - the name of the circuit
+     * @param inDebuggerMode - boolean to specify if the circuit is in debug mode
+     * @param debugDepth - how deep should debugging go
+     */
     public CPU(BitStream clock, BitStream memRead, BitStream memWrite,
                BitStream memoryDataOut, BitStream memoryDataIn, BitStream memoryAddress,
                String name, boolean inDebuggerMode, int debugDepth) {
@@ -70,8 +82,20 @@ public class CPU implements Circuit {
         return bus;
     }
 
+    /**Getter for the register file of the CPU.
+     *
+     * @return - the register file that is a part of this CPU
+     */
     public RegisterFile getRegisterFile() {
         return registerFile;
+    }
+
+    /**Getter for the control unit of the CPU
+     *
+     * @return - the control unit
+     */
+    public ControlUnit getControlUnit() {
+        return controlUnit;
     }
 
     /**Method to return the current state of the CPU.
@@ -79,7 +103,7 @@ public class CPU implements Circuit {
      * @return - the status of the CPU as String
      */
     public String requestStatus() {
-        String status = "CPU (" + this.name + ")\n";
+        String status = "CPU (" + this.name + "):\n";
         status += "BUS: " + DataConverter.convertBoolToBin(this.bus.getData()) +
                 " (" + DataConverter.convertBoolToUnsignedDec(this.bus.getData()) + ", " +
                 DataConverter.convertBoolToSignedDec(this.bus.getData(), this.bus.getSize()) + ")\n";
@@ -93,13 +117,20 @@ public class CPU implements Circuit {
         status += "Z Register:\n";
         status += "ZIn: " + this.ZIn.getData()[0] + "\tZOut: " + this.ZOut.getData()[0] + "\n";
         status += this.Z.requestStatus() + "\n";
-        status += "Memory Interface\n";
-        status += "MA: " + DataConverter.convertBoolToBin(this.memoryAddress.getData()) + "\n";
-        status += "MDI: " + DataConverter.convertBoolToBin(this.memoryDataIn.getData()) + "\n";
-        status += "MDO: " + DataConverter.convertBoolToBin(this.memoryDataOut.getData());
+        status += "Memory Interface:\n";
+        status += "MA: " + DataConverter.convertBoolToBin(this.memoryAddress.getData()) +
+                " (" + DataConverter.convertBoolToUnsignedDec(this.memoryAddress.getData()) + ")\n";
+        status += "MDI: " + DataConverter.convertBoolToBin(this.memoryDataIn.getData()) +
+                " (" + DataConverter.convertBoolToUnsignedDec(this.memoryDataIn.getData()) + ", " +
+                DataConverter.convertBoolToSignedDec(this.memoryDataIn.getData(), this.memoryDataIn.getSize()) + ")\n";
+        status += "MDO: " + DataConverter.convertBoolToBin(this.memoryDataOut.getData()) +
+                " (" + DataConverter.convertBoolToUnsignedDec(this.memoryDataOut.getData()) + ", " +
+                DataConverter.convertBoolToSignedDec(this.memoryDataOut.getData(), this.memoryDataOut.getSize()) + ")\n";
         return status;
     }
 
+    /**Build the circuit as defined in the documentation.
+     */
     @Override
     public void build() {
         boolean debugGates = this.debugDepth > 0 ? this.inDebuggerMode : false;

@@ -54,7 +54,7 @@ public class IAG implements Circuit {
      * @return - the status of the IAG as String
      */
     public String requestStatus() {
-        String status = "IAG (" + this.name + ")\n";
+        String status = "IAG (" + this.name + "):\n";
         status += "PCIn: " + this.PCIn.getData()[0] + "\tPCOut: " + this.PCOut.getData()[0] + "\n";
         status += this.programCounter.requestStatus();
         return status;
