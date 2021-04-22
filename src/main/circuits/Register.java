@@ -55,6 +55,10 @@ public class Register implements Circuit {
         this(input, output, regIn, regOut, enable, "Register", false, 0);
     }
 
+    public BitStream getDataBitStream() {
+        return dFlipFlopQ;
+    }
+
     /**Method to return the current state of the Register.
      *
      * @return - the status of the Register as String

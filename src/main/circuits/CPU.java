@@ -69,6 +69,10 @@ public class CPU implements Circuit {
         return bus;
     }
 
+    public RegisterFile getRegisterFile() {
+        return registerFile;
+    }
+
     /**Method to return the current state of the CPU.
      *
      * @return - the status of the CPU as String

@@ -62,6 +62,10 @@ public class RegisterFile implements Circuit {
         this(input, output, RFIn, RFOut, addressWrite, addressRead, "RegisterFile", false, 0);
     }
 
+    public List<Register> getRegisters() {
+        return registers;
+    }
+
     /**Method to return the current state of the RegisterFile.
      *
      * @return - the status of the RegisterFile as String
