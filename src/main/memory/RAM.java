@@ -114,6 +114,10 @@ public class RAM implements Node {
         this.inDebuggerMode = inDebuggerMode;
     }
 
+    public void putData(int address, boolean[] data) {
+        this.data[address] = data;
+    }
+
     /**Setup the Node, i.e: check if all the sizes match and
      * run the circuit starting from this.
      */

@@ -65,6 +65,7 @@ class ControlUnitTest {
         clock.setData(new boolean[]{false});
         ProcessRunner.run(clock);
 
+        assertTrue(memRead.getData()[0]);
         assertTrue(memDataOut.getData()[0]);
 
         // common 3
@@ -100,7 +101,7 @@ class ControlUnitTest {
 
         assertTrue(PCIn.getData()[0]);
         assertTrue(ZOut.getData()[0]);
-        assertTrue(memRead.getData()[0]);
+        assertFalse(memRead.getData()[0]);
         assertTrue(memAddress.getData()[0]);
 
         clock.setData(new boolean[]{false});
@@ -108,7 +109,7 @@ class ControlUnitTest {
 
         assertFalse(PCIn.getData()[0]);
         assertTrue(ZOut.getData()[0]);
-        assertTrue(memRead.getData()[0]);
+        assertFalse(memRead.getData()[0]);
         assertFalse(memAddress.getData()[0]);
 
         // common 5
@@ -119,12 +120,14 @@ class ControlUnitTest {
         clock.setData(new boolean[]{true});
         ProcessRunner.run(clock);
 
+        assertTrue(memRead.getData()[0]);
         assertTrue(memDataOut.getData()[0]);
 
         clock.setData(new boolean[]{false});
         ProcessRunner.run(clock);
 
         assertTrue(memDataOut.getData()[0]);
+        assertTrue(memRead.getData()[0]);
 
         // common 6
         clock.setData(new boolean[]{true});
@@ -201,14 +204,14 @@ class ControlUnitTest {
         ProcessRunner.run(clock);
 
         assertTrue(PCOut.getData()[0]);
-        assertTrue(memRead.getData()[0]);
+        assertFalse(memRead.getData()[0]);
         assertTrue(memAddress.getData()[0]);
 
         clock.setData(new boolean[]{false});
         ProcessRunner.run(clock);
 
         assertTrue(PCOut.getData()[0]);
-        assertTrue(memRead.getData()[0]);
+        assertFalse(memRead.getData()[0]);
         assertFalse(memAddress.getData()[0]);
 
         mainInput.setData(new boolean[]{false, false, false, true, true, false, false, true,
@@ -389,6 +392,10 @@ class ControlUnitTest {
         clock.setData(new boolean[]{false});
         ProcessRunner.run(clock);
 
+        assertTrue(RFOut.getData()[0]);
+        assertEquals("011", DataConverter.convertBoolToBin(RFAddrRead.getData()));
+        assertFalse(XIn.getData()[0]);
+
         clock.setData(new boolean[]{true});
         ProcessRunner.run(clock);
         clock.setData(new boolean[]{false});
@@ -427,6 +434,7 @@ class ControlUnitTest {
         assertEquals("011", DataConverter.convertBoolToBin(RFAddrWrite.getData()));
         assertTrue(ZOut.getData()[0]);
 
+        //common 1
         clock.setData(new boolean[]{true});
         ProcessRunner.run(clock);
         clock.setData(new boolean[]{false});
@@ -435,14 +443,14 @@ class ControlUnitTest {
         ProcessRunner.run(clock);
 
         assertTrue(PCOut.getData()[0]);
-        assertTrue(memRead.getData()[0]);
+        assertFalse(memRead.getData()[0]);
         assertTrue(memAddress.getData()[0]);
 
         clock.setData(new boolean[]{false});
         ProcessRunner.run(clock);
 
         assertTrue(PCOut.getData()[0]);
-        assertTrue(memRead.getData()[0]);
+        assertFalse(memRead.getData()[0]);
         assertFalse(memAddress.getData()[0]);
     }
 }

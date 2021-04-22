@@ -116,11 +116,11 @@ public class ControlUnit implements Circuit {
         BitStream common0 = new BitStream(NUM_MICROINSTRUCTIONS);
         common0.setData(new boolean[]{false, false, false, false, false, false, false, false,
                 false, false, false, false, false, false, false, true,
-                false, false, true, false, true, false, false, false});
+                false, false, false, false, true, false, false, false});
         BitStream common1 = new BitStream(NUM_MICROINSTRUCTIONS);
         common1.setData(new boolean[]{false, false, false, false, false, false, false, false,
                 false, false, false, false, false, false, false, false,
-                true, false, false, false, false, false, true, false});
+                true, false, true, false, false, false, true, false});
         BitStream common2 = new BitStream(NUM_MICROINSTRUCTIONS);
         common2.setData(new boolean[]{false, false, false, false, false, false, true, false,
                 false, false, false, true, true, false, false, true,
@@ -128,11 +128,11 @@ public class ControlUnit implements Circuit {
         BitStream common3 = new BitStream(NUM_MICROINSTRUCTIONS);
         common3.setData(new boolean[]{false, false, false, false, false, false, false, false,
                 false, false, false, false, false, true, true, false,
-                false, false, true, false, true, false, false, false});
+                false, false, false, false, true, false, false, false});
         BitStream common4 = new BitStream(NUM_MICROINSTRUCTIONS);
         common4.setData(new boolean[]{false, false, false, false, false, false, false, false,
                 false, false, false, false, false, false, false, false,
-                false, true, false, false, false, false, true, false});
+                false, true, true, false, false, false, true, false});
         BitStream common5 = new BitStream(NUM_MICROINSTRUCTIONS);
         common5.setData(new boolean[]{false, false, false, false, false, false, true, false,
                 false, false, false, true, true, false, false, true,

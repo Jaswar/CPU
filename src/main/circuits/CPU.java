@@ -113,7 +113,7 @@ public class CPU implements Circuit {
                 false, false, false, false, false, false, false, true});
 
         List<BitStream> aluMuxInputList = new ArrayList<>();
-        aluMuxInputList.addAll(List.of(xOut, constant));
+        aluMuxInputList.addAll(List.of(xOutput, constant));
         BitStream aluMuxOut = new BitStream(size);
         Multiplexer ALUMux = new Multiplexer(aluMuxInputList, MUXConst, aluMuxOut,
                 "ALUMux", debugGates, this.debugDepth - 1);
