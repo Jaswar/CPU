@@ -5,11 +5,11 @@ import main.circuits.Circuit;
 
 public abstract class FlipFlop implements Circuit {
 
-    private BitStream input, clock, enable, preset, clear, Q, notQ;
-    private boolean risingEdge;
-    private String name;
-    private boolean inDebuggerMode;
-    private int debugDepth;
+    private final BitStream input, clock, enable, preset, clear, Q, notQ;
+    private final boolean risingEdge;
+    private final String name;
+    private final boolean inDebuggerMode;
+    private final int debugDepth;
 
     /**Constructor for the abstract FlipFlop class, used to represent flip-flops.
      *
@@ -86,19 +86,5 @@ public abstract class FlipFlop implements Circuit {
 
     public int getDebugDepth() {
         return debugDepth;
-    }
-
-    /**Setters for some of the attributes. Setting BitStreams is not allowed.
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setInDebuggerMode(boolean inDebuggerMode) {
-        this.inDebuggerMode = inDebuggerMode;
-    }
-
-    public void setDebugDepth(int debugDepth) {
-        this.debugDepth = debugDepth;
     }
 }

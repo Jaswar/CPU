@@ -14,12 +14,12 @@ import java.util.List;
 
 public class ControlUnit implements Circuit {
 
-    private BitStream input, clock, intermediate, RFIn, RFOut, RFAddrWrite, RFAddrRead,
+    private final BitStream input, clock, intermediate, RFIn, RFOut, RFAddrWrite, RFAddrRead,
             XIn, MUXConst, ALUOpcode, ZIn, ZOut, PCIn, PCOut, memRead, memWrite, memAddress,
             memDataIn, memDataOut;
-    private String name;
-    private boolean inDebuggerMode;
-    private int debugDepth;
+    private final String name;
+    private final boolean inDebuggerMode;
+    private final int debugDepth;
 
     private final static int NUM_MICROINSTRUCTIONS = 24;
 

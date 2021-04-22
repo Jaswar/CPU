@@ -10,11 +10,11 @@ import java.util.List;
 
 public class Microprocessor implements Circuit {
 
-    private BitStream input, clock, reset,  IR1In, IR2In,
+    private final BitStream input, clock, reset,  IR1In, IR2In,
             microinstruction, intermediate, source, destination;
-    private String name;
-    private boolean inDebuggerMode;
-    private int debugDepth;
+    private final String name;
+    private final boolean inDebuggerMode;
+    private final int debugDepth;
 
     public static final int WORD_SIZE = 16;
     public static final int INSTRUCTION_SIZE = 8;

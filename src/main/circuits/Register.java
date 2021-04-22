@@ -8,10 +8,10 @@ import main.utils.DataConverter;
 
 public class Register implements Circuit {
 
-    private BitStream input, output, regIn, regOut, enable;
-    private String name;
-    private boolean inDebuggerMode;
-    private int debugDepth;
+    private final BitStream input, output, regIn, regOut, enable;
+    private final String name;
+    private final boolean inDebuggerMode;
+    private final int debugDepth;
 
     private BitStream dFlipFlopQ;
 

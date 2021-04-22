@@ -15,10 +15,10 @@ import java.util.List;
 
 public class ALU implements Circuit {
 
-    private BitStream source, destination, out, opCode, aluIn, overflow;
-    private String name;
-    private boolean inDebuggerMode;
-    private int debugDepth;
+    private final BitStream source, destination, out, opCode, aluIn, overflow;
+    private final String name;
+    private final boolean inDebuggerMode;
+    private final int debugDepth;
 
     /**Constructors for the ALU class.
      *

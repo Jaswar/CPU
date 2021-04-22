@@ -10,11 +10,11 @@ import java.util.List;
 
 public class Multiplexer implements Circuit {
 
-    private List<BitStream> input;
-    private BitStream output, select;
-    private String name;
-    private boolean inDebuggerMode;
-    private int debugDepth;
+    private final List<BitStream> input;
+    private final BitStream output, select;
+    private final String name;
+    private final boolean inDebuggerMode;
+    private final int debugDepth;
 
     /**Constructors for the Multiplexer class.
      *

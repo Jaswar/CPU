@@ -12,10 +12,10 @@ import java.util.List;
 
 public class DLatch implements Circuit {
 
-    private BitStream D, enable, Q, notQ;
-    private String name;
-    private boolean inDebuggerMode;
-    private int debugDepth;
+    private final BitStream D, enable, Q, notQ;
+    private final String name;
+    private final boolean inDebuggerMode;
+    private final int debugDepth;
 
     /**Constructors for the DLatch class.
      *

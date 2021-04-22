@@ -10,10 +10,10 @@ import java.util.List;
 
 public class RegisterFile implements Circuit {
 
-    private BitStream input, output, RFIn, RFOut, addressWrite, addressRead;
-    private String name;
-    private boolean inDebuggerMode;
-    private int debugDepth;
+    private final BitStream input, output, RFIn, RFOut, addressWrite, addressRead;
+    private final String name;
+    private final boolean inDebuggerMode;
+    private final int debugDepth;
 
     private List<Register> registers;
 

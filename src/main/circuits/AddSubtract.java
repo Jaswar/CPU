@@ -11,10 +11,10 @@ import java.util.List;
 
 public class AddSubtract implements Circuit {
 
-    private BitStream source, destination, out, control, overflow;
-    private String name;
-    private boolean inDebuggerMode;
-    private int debugDepth;
+    private final BitStream source, destination, out, control, overflow;
+    private final String name;
+    private final boolean inDebuggerMode;
+    private final int debugDepth;
 
     /**Constructors for the AddSubtract circuit.
      *

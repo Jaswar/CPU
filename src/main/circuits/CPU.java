@@ -12,10 +12,10 @@ import java.util.List;
 
 public class CPU implements Circuit {
 
-    private BitStream clock, memRead, memWrite, memoryDataOut, memoryDataIn, memoryAddress;
-    private String name;
-    private boolean inDebuggerMode;
-    private int debugDepth;
+    private final BitStream clock, memRead, memWrite, memoryDataOut, memoryDataIn, memoryAddress;
+    private final String name;
+    private final boolean inDebuggerMode;
+    private final int debugDepth;
 
     private BitStream bus;
     private RegisterFile registerFile;

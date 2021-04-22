@@ -12,11 +12,11 @@ import java.util.List;
 
 public class Decoder implements Circuit {
 
-    private BitStream input;
-    private List<BitStream> outputs;
-    private String name;
-    private boolean inDebuggerMode;
-    private int debugDepth;
+    private final BitStream input;
+    private final List<BitStream> outputs;
+    private final String name;
+    private final boolean inDebuggerMode;
+    private final int debugDepth;
 
     /**Constructors for the Decoder class. See documentation/Decoder.png for the build.
      *

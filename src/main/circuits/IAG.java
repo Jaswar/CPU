@@ -4,10 +4,10 @@ import main.BitStream;
 
 public class IAG implements Circuit {
 
-    private BitStream input, output, PCIn, PCOut;
-    private String name;
-    private boolean inDebuggerMode;
-    private int debugDepth;
+    private final BitStream input, output, PCIn, PCOut;
+    private final String name;
+    private final boolean inDebuggerMode;
+    private final int debugDepth;
 
     private Register programCounter;
 
