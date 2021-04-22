@@ -4,6 +4,7 @@ import main.BitStream;
 import main.circuits.memory.DFlipFlop;
 import main.circuits.memory.DLatch;
 import main.gates.TriState;
+import main.utils.DataConverter;
 
 public class Register implements Circuit {
 
@@ -11,6 +12,8 @@ public class Register implements Circuit {
     private String name;
     private boolean inDebuggerMode;
     private int debugDepth;
+
+    private BitStream dFlipFlopQ;
 
     /**Constructors for the Register class.
      *
@@ -52,48 +55,11 @@ public class Register implements Circuit {
         this(input, output, regIn, regOut, enable, "Register", false, 0);
     }
 
-    public BitStream getinput() {
-        return input;
-    }
-
-    /**Getters for all the attributes of the class.
-     */
-    public BitStream getOutput() {
-        return output;
-    }
-
-    public BitStream getRegIn() {
-        return regIn;
-    }
-
-    public BitStream getRegOut() {
-        return regOut;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public boolean isInDebuggerMode() {
-        return inDebuggerMode;
-    }
-
-    public int getDebugDepth() {
-        return debugDepth;
-    }
-
-    /**Setters for some of the attributes. Setting BitStreams is not possible.
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setInDebuggerMode(boolean inDebuggerMode) {
-        this.inDebuggerMode = inDebuggerMode;
-    }
-
-    public void setDebugDepth(int debugDepth) {
-        this.debugDepth = debugDepth;
+    public String requestStatus() {
+        String status = this.name + ": " + DataConverter.convertBoolToBin(this.dFlipFlopQ.getData()) +
+                " (" + DataConverter.convertBoolToUnsignedDec(this.dFlipFlopQ.getData()) + ", " +
+                DataConverter.convertBoolToSignedDec(this.dFlipFlopQ.getData(), this.dFlipFlopQ.getSize()) + ")";
+        return status;
     }
 
     /**Define the build method to construct the register as described in the documentation.
@@ -103,7 +69,7 @@ public class Register implements Circuit {
         boolean debugGates = this.debugDepth > 0 ? this.inDebuggerMode : false;
         int size = this.input.getSize();
 
-        BitStream dFlipFlopQ = new BitStream(size);
+        dFlipFlopQ = new BitStream(size);
         BitStream dFlipFlopNotQ = new BitStream(size);
 
         DFlipFlop mainDFlipFlop = new DFlipFlop(this.input, this.regIn, this.enable, new BitStream(size), new BitStream(1),

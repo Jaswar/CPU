@@ -16,6 +16,7 @@ class CPUTest {
 
     Input clock;
     BitStream bus;
+    CPU cpu;
 
     @BeforeEach
     void setup() {
@@ -27,7 +28,7 @@ class CPUTest {
         BitStream memWrite = new BitStream(1);
 
         clock = new Input(new boolean[]{false}, clk);
-        CPU cpu = new CPU(clk, memRead, memWrite, memoryDataOut, memoryDataIn, memoryAddress);
+        cpu = new CPU(clk, memRead, memWrite, memoryDataOut, memoryDataIn, memoryAddress);
         bus = cpu.getBus();
 
         RAM ram = new RAM(memoryAddress, memoryDataIn, memoryDataOut, memWrite, memRead);
@@ -50,6 +51,8 @@ class CPUTest {
             ProcessRunner.run(clock);
             clock.setData(new boolean[]{false});
             ProcessRunner.run(clock);
+            System.out.println(cpu.requestStatus());
+            System.out.println();
         }
         assertArrayEquals(new boolean[]{true, false, false, false, false, false, false, false,
                 false, false, false, false, false, false, false, false}, bus.getData());

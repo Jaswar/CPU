@@ -8,6 +8,7 @@ import main.gates.binary.AND;
 import main.gates.binary.OR;
 import main.gates.multi.MultiOR;
 import main.gates.unary.NOT;
+import main.utils.DataConverter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,56 +67,18 @@ public class ALU implements Circuit {
         this(source, destination, out, opCode, aluIn, overflow, "ALU", false, 0);
     }
 
-    /**Getters for all the attributes.
-     */
-    public BitStream getSource() {
-        return source;
-    }
-
-    public BitStream getDestination() {
-        return destination;
-    }
-
-    public BitStream getOut() {
-        return out;
-    }
-
-    public BitStream getOpCode() {
-        return opCode;
-    }
-
-    public BitStream getAluIn() {
-        return aluIn;
-    }
-
-    public BitStream getOverflow() {
-        return overflow;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public boolean isInDebuggerMode() {
-        return inDebuggerMode;
-    }
-
-    public int getDebugDepth() {
-        return debugDepth;
-    }
-
-    /**Setters for some of the attributes. Setting BitStreams is not possible.
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setInDebuggerMode(boolean inDebuggerMode) {
-        this.inDebuggerMode = inDebuggerMode;
-    }
-
-    public void setDebugDepth(int debugDepth) {
-        this.debugDepth = debugDepth;
+    public String requestStatus() {
+        String status = "ALU (" + this.name + ")\n";
+        status += "OPCode: " + DataConverter.convertBoolToBin(this.opCode.getData()) +
+                " (" + DataConverter.convertBoolToUnsignedDec(this.opCode.getData()) + ")\t" +
+                "Overflow: " + this.overflow.getData()[0] + "\n";
+        status += "SRC: " + DataConverter.convertBoolToBin(this.source.getData()) +
+                " (" + DataConverter.convertBoolToUnsignedDec(this.source.getData()) + ", " +
+                DataConverter.convertBoolToSignedDec(this.source.getData(), this.source.getSize()) + ")\n";
+        status += "DEST: " + DataConverter.convertBoolToBin(this.destination.getData()) +
+                " (" + DataConverter.convertBoolToUnsignedDec(this.destination.getData()) + ", " +
+                DataConverter.convertBoolToSignedDec(this.destination.getData(), this.destination.getSize()) + ")";
+        return status;
     }
 
     /**Define the build method to construct the ALU as described in documentation.

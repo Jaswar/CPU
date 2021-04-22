@@ -9,6 +9,8 @@ public class IAG implements Circuit {
     private boolean inDebuggerMode;
     private int debugDepth;
 
+    private Register programCounter;
+
     /**Constructors for the Instruction Address Generator class.
      *
      * @param input - the input to the IAG (most likely the bus)
@@ -47,48 +49,11 @@ public class IAG implements Circuit {
         this(input, output, PCIn, PCOut, "IAG", false, 0);
     }
 
-    /**Getters for all of the attributes.
-     */
-    public BitStream getInput() {
-        return input;
-    }
-
-    public BitStream getOutput() {
-        return output;
-    }
-
-    public BitStream getPCIn() {
-        return PCIn;
-    }
-
-    public BitStream getPCOut() {
-        return PCOut;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public boolean isInDebuggerMode() {
-        return inDebuggerMode;
-    }
-
-    public int getDebugDepth() {
-        return debugDepth;
-    }
-
-    /**Setters for some of the attributes. Setting BitStreams is not possible.
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setInDebuggerMode(boolean inDebuggerMode) {
-        this.inDebuggerMode = inDebuggerMode;
-    }
-
-    public void setDebugDepth(int debugDepth) {
-        this.debugDepth = debugDepth;
+    public String requestStatus() {
+        String status = "IAG (" + this.name + ")\n";
+        status += "PCIn: " + this.PCIn.getData()[0] + "\tPCOut: " + this.PCOut.getData()[0] + "\n";
+        status += this.programCounter.requestStatus();
+        return status;
     }
 
     /**Build the circuit as defined in the documentation.
@@ -100,7 +65,7 @@ public class IAG implements Circuit {
 
         BitStream enable = new BitStream(1);
         enable.setData(new boolean[]{true});
-        Register programCounter = new Register(this.input, this.output, this.PCIn, this.PCOut, enable,
+        this.programCounter = new Register(this.input, this.output, this.PCIn, this.PCOut, enable,
                 "PC", debugGates, this.debugDepth - 1);
     }
 }

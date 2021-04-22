@@ -3,6 +3,7 @@ package main.circuits;
 import main.BitStream;
 import main.circuits.memory.DFlipFlop;
 import main.gates.TriState;
+import main.utils.DataConverter;
 
 import java.beans.BeanInfo;
 import java.net.http.HttpRequest;
@@ -17,6 +18,9 @@ public class CPU implements Circuit {
     private int debugDepth;
 
     private BitStream bus;
+    private RegisterFile registerFile;
+    private IAG iag;
+    private ALU alu;
 
     public CPU(BitStream clock, BitStream memRead, BitStream memWrite,
                BitStream memoryDataOut, BitStream memoryDataIn, BitStream memoryAddress,
@@ -55,6 +59,17 @@ public class CPU implements Circuit {
         return bus;
     }
 
+    public String requestStatus() {
+        String status = "CPU (" + this.name + ")\n";
+        status += "BUS: " + DataConverter.convertBoolToBin(this.bus.getData()) +
+                " (" + DataConverter.convertBoolToUnsignedDec(this.bus.getData()) + ", " +
+                DataConverter.convertBoolToSignedDec(this.bus.getData(), this.bus.getSize()) + ")\n";
+        status += this.iag.requestStatus() + "\n";
+        status += this.registerFile.requestStatus() + "\n";
+        status += this.alu.requestStatus();
+        return status;
+    }
+
     @Override
     public void build() {
         boolean debugGates = this.debugDepth > 0 ? this.inDebuggerMode : false;
@@ -81,10 +96,10 @@ public class CPU implements Circuit {
                 XIn, MUXConst, ALUOpcode, ZIn, ZOut, PCIn, PCOut, memRead, memWrite, memAddress, memDataIn, memDataOut,
                 "controlUnit", debugGates, this.debugDepth - 1);
 
-        RegisterFile registerFile = new RegisterFile(bus, bus, RFIn, RFOut, rfAddrWrite, rfAddrRead,
+        this.registerFile = new RegisterFile(bus, bus, RFIn, RFOut, rfAddrWrite, rfAddrRead,
                 "registerFile", debugGates, this.debugDepth - 1);
 
-        IAG iag = new IAG(bus, bus, PCIn, PCOut, "IAG", debugGates, this.debugDepth - 1);
+        this.iag = new IAG(bus, bus, PCIn, PCOut, "IAG", debugGates, this.debugDepth - 1);
 
         BitStream enableMDIR = new BitStream(1);
         enableMDIR.setData(new boolean[]{true});
@@ -119,7 +134,7 @@ public class CPU implements Circuit {
                 "ALUMux", debugGates, this.debugDepth - 1);
 
         BitStream aluOutput = new BitStream(size);
-        ALU alu = new ALU(bus, aluMuxOut, aluOutput, ALUOpcode, new BitStream(1), new BitStream(1),
+        this.alu = new ALU(bus, aluMuxOut, aluOutput, ALUOpcode, new BitStream(1), new BitStream(1),
                 "ALU", debugGates, this.debugDepth - 1);
 
         BitStream zEnable = new BitStream(1);

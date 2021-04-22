@@ -4,5 +4,5 @@ package main.circuits;
  * is that Circuit cannot be evaluated (only the nodes within it can).
  */
 public interface Circuit {
-    public void build();
+    void build();
 }

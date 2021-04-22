@@ -3,6 +3,7 @@ package main.circuits;
 
 import main.BitStream;
 import main.gates.binary.AND;
+import main.utils.DataConverter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,8 @@ public class RegisterFile implements Circuit {
     private String name;
     private boolean inDebuggerMode;
     private int debugDepth;
+
+    private List<Register> registers;
 
     /**Constructors for the RegisterFile class.
      *
@@ -59,56 +62,23 @@ public class RegisterFile implements Circuit {
         this(input, output, RFIn, RFOut, addressWrite, addressRead, "RegisterFile", false, 0);
     }
 
-    /**Getters for all the attributes.
-     */
-    public BitStream getInput() {
-        return input;
-    }
-
-    public BitStream getOutput() {
-        return output;
-    }
-
-    public BitStream getRFIn() {
-        return RFIn;
-    }
-
-    public BitStream getRFOut() {
-        return RFOut;
-    }
-
-    public BitStream getAddressWrite() {
-        return addressWrite;
-    }
-
-    public BitStream getAddressRead() {
-        return addressRead;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public boolean isInDebuggerMode() {
-        return inDebuggerMode;
-    }
-
-    public int getDebugDepth() {
-        return debugDepth;
-    }
-
-    /**Setters for some of the attributes. Setting BitStreams is not possible.
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setInDebuggerMode(boolean inDebuggerMode) {
-        this.inDebuggerMode = inDebuggerMode;
-    }
-
-    public void setDebugDepth(int debugDepth) {
-        this.debugDepth = debugDepth;
+    public String requestStatus() {
+        String status = "Register File (" + this.name + ")\n";
+        status += "RFOut: " + this.RFOut.getData()[0] + "\t";
+        status += "RFIn: " + this.RFIn.getData()[0] + "\n";
+        status += "Address Read: " + DataConverter.convertBoolToBin(this.addressRead.getData()) +
+                " (" + DataConverter.convertBoolToUnsignedDec(this.addressRead.getData()) + ") ";
+        status += "Address Write: " + DataConverter.convertBoolToBin(this.addressWrite.getData()) +
+                " (" + DataConverter.convertBoolToUnsignedDec(this.addressWrite.getData()) + ")\n";
+        for (int i = 0; i < this.registers.size(); i++) {
+            status += this.registers.get(i).requestStatus();
+            if (i % 2 == 1 && i != this.registers.size() - 1) {
+                status += "\n";
+            } else if (i % 2 == 0){
+                status += "\t";
+            }
+        }
+        return status;
     }
 
     /**Define the build method to construct the circuit as described in the documentation.
@@ -134,6 +104,7 @@ public class RegisterFile implements Circuit {
         Decoder addrReadDecoder = new Decoder(this.addressRead, addrReadDecoderOutList,
                 "addrReadDecoder", debugGates, this.debugDepth - 1);
 
+        this.registers = new ArrayList<>();
         for (int i = 0; i < registerCount; i++) {
             BitStream regOut = new BitStream(1);
 
@@ -141,6 +112,7 @@ public class RegisterFile implements Circuit {
 
             Register register = new Register(this.input, this.output, this.RFIn, regOut, addrWriteDecoderOutList.get(i),
                     "reg" + i, debugGates, this.debugDepth - 1);
+            this.registers.add(register);
         }
     }
 }
