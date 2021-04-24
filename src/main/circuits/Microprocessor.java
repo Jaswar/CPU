@@ -25,6 +25,7 @@ public class Microprocessor implements Circuit {
 
     private Register IR1;
     private Register IR2;
+    private BitStream statusBitStream;
 
     public static final int WORD_SIZE = 16;
     public static final int INSTRUCTION_SIZE = 8;
@@ -103,6 +104,14 @@ public class Microprocessor implements Circuit {
      */
     public Register getIR2() {
         return IR2;
+    }
+
+    /**Getter for the BitStream that contains the current status flags.
+     *
+     * @return - the BitStream containing the flags
+     */
+    public BitStream getStatus() {
+        return this.statusBitStream;
     }
 
     /**Build the circuit as is defined in the documentation.
@@ -191,7 +200,7 @@ public class Microprocessor implements Circuit {
         List<BitStream> microSplitterInputList = new ArrayList<>();
         microSplitterInputList.add(microInstructionROMOut);
         List<BitStream> microSplitterOutList = new ArrayList<>();
-        microSplitterOutList.addAll(List.of(tempMicroinstruction, setFlag, clrFlags, jmpCond, jmpInterest, isJump));
+        microSplitterOutList.addAll(List.of(tempMicroinstruction, isJump, jmpInterest, jmpCond, clrFlags, setFlag));
 
         Splitter microSplitter = new Splitter(microSplitterInputList, microSplitterOutList, "microSplitter", debugGates);
 
@@ -219,43 +228,46 @@ public class Microprocessor implements Circuit {
 
         Splitter setFlagsSplitter = new Splitter(setFlagsSplitterInputList, setFlagsSplitterOutList, "setFlagsSplitter", debugGates);
 
-        BitStream setNegAndOut = new BitStream(1);
-        BitStream setZeroAndOut = new BitStream(1);
-        BitStream setPosAndOut = new BitStream(1);
-        BitStream setOverAndOut = new BitStream(1);
-
-        AND setNegAnd = new AND(this.clock, setNeg, setNegAndOut, "setNegAnd", debugGates);
-        AND setZeroAnd = new AND(this.clock, setZero, setZeroAndOut, "setZeroAnd", debugGates);
-        AND setPosAnd = new AND(this.clock, setPos, setZeroAndOut, "setPosAnd", debugGates);
-        AND setOverAnd = new AND(this.clock, setOver, setOverAndOut, "setOverAnd", debugGates);
-
         BitStream negFlag = new BitStream(1);
         BitStream zeroFlag = new BitStream(1);
         BitStream posFlag = new BitStream(1);
         BitStream overFlag = new BitStream(1);
 
+        BitStream clockNotOut = new BitStream(1);
+        NOT clockNot = new NOT(this.clock, clockNotOut, "clockNot", debugGates);
+
+        BitStream setNegAndOut = new BitStream(1);
+        BitStream setZeroAndOut = new BitStream(1);
+        BitStream setPosAndOut = new BitStream(1);
+        BitStream setOverAndOut = new BitStream(1);
+
+        AND setNegAnd = new AND(clockNotOut, setNeg, setNegAndOut, "setNegAnd", debugGates);
+        AND setZeroAnd = new AND(clockNotOut, setZero, setZeroAndOut, "setZeroAnd", debugGates);
+        AND setPosAnd = new AND(clockNotOut, setPos, setPosAndOut, "setPosAnd", debugGates);
+        AND setOverAnd = new AND(clockNotOut, setOver, setOverAndOut, "setOverAnd", debugGates);
+
         BitStream enableStatus = new BitStream(1);
         enableStatus.setData(new boolean[]{true});
         DFlipFlop negFlipFlop = new DFlipFlop(statusNeg, setNegAndOut, enableStatus, new BitStream(1), clrFlags,
-                negFlag, new BitStream(1), false, "negFlipFlop", debugGates, this.debugDepth - 1);
+                negFlag, new BitStream(1), true, "negFlipFlop", debugGates, this.debugDepth - 1);
         DFlipFlop zeroFlipFlop = new DFlipFlop(statusZero, setZeroAndOut, enableStatus, new BitStream(1), clrFlags,
-                zeroFlag, new BitStream(1), false, "zeroFlipFlop", debugGates, this.debugDepth - 1);
+                zeroFlag, new BitStream(1), true, "zeroFlipFlop", debugGates, this.debugDepth - 1);
         DFlipFlop posFlipFlop = new DFlipFlop(statusPos, setPosAndOut, enableStatus, new BitStream(1), clrFlags,
-                posFlag, new BitStream(1), false, "posFlipFlop", debugGates, this.debugDepth - 1);
+                posFlag, new BitStream(1), true, "posFlipFlop", debugGates, this.debugDepth - 1);
         DFlipFlop overFlipFlop = new DFlipFlop(statusOver, setOverAndOut, enableStatus, new BitStream(1), clrFlags,
-                overFlag, new BitStream(1), false, "overFlipFlop", debugGates, this.debugDepth - 1);
+                overFlag, new BitStream(1), true, "overFlipFlop", debugGates, this.debugDepth - 1);
 
-        BitStream statusFlipFlopSplitterOut = new BitStream(4);
+        this.statusBitStream = new BitStream(4);
         List<BitStream> statusFlipFlopSplitterInputList = new ArrayList<>();
         statusFlipFlopSplitterInputList.addAll(List.of(overFlag, posFlag, zeroFlag, negFlag));
         List<BitStream> statusFlipFlopSplitterOutList = new ArrayList<>();
-        statusFlipFlopSplitterOutList.add(statusFlipFlopSplitterOut);
+        statusFlipFlopSplitterOutList.add(this.statusBitStream);
 
         Splitter statusFlipFlopSplitter = new Splitter(statusFlipFlopSplitterInputList, statusFlipFlopSplitterOutList,
                 "statusFlipFlopSplitter", debugGates);
 
         BitStream goodStatusXorOut = new BitStream(4);
-        XOR goodStatusXor = new XOR(statusFlipFlopSplitterOut, jmpCond, goodStatusXorOut,
+        XOR goodStatusXor = new XOR(this.statusBitStream, jmpCond, goodStatusXorOut,
                 "goodStatusXor", debugGates);
 
         BitStream interestNandOut = new BitStream(4);

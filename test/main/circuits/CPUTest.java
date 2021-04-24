@@ -108,6 +108,7 @@ class CPUTest {
             ProcessRunner.run(clock);
             clock.setData(new boolean[]{false});
             ProcessRunner.run(clock);
+
         }
 
         assertArrayEquals(new boolean[]{false, false, false, false, false, false, false, false,
@@ -139,6 +140,7 @@ class CPUTest {
             ProcessRunner.run(clock);
             clock.setData(new boolean[]{false});
             ProcessRunner.run(clock);
+
         }
 
         assertArrayEquals(new boolean[]{false, false, false, false, false, false, false, false,
@@ -207,8 +209,6 @@ class CPUTest {
             int temp = a;
             a = a + b;
             b = temp;
-
-            //System.out.println(cpu.requestStatus());
         }
     }
 

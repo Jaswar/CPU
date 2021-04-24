@@ -31,7 +31,7 @@ public class Main {
                 false, false, false, true, true, false, false, false,
                 false, false, false, false, false, false, false, false,
                 false, false, false, false, false, false, false, false,
-                false, false, false, false, false, false});
+                false, false, true, true, true, true});
         microinstructions.putData(4, new boolean[]{true, true, false, false, false, false, false, false,
                 false, false, false, false, false, true, false, false,
                 false, false, false, false, false, false, false, false,

@@ -126,6 +126,7 @@ public class ControlUnit implements Circuit {
      */
     public String requestStatus() {
         String status = "Control Unit (" + this.name + "):\n";
+        status += "Status Flags: " + DataConverter.convertBoolToBin(this.microprocessor.getStatus().getData()) + "\n";
         status += this.microprocessor.getIR1().requestStatus() + "\n";
         status += this.microprocessor.getIR2().requestStatus() + "\n";
         status += "Micro Instruction: " + DataConverter.convertBoolToBin(this.microinstruction.getData());
