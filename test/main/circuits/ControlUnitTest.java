@@ -41,8 +41,9 @@ class ControlUnitTest {
         memAddress = new BitStream(1);
         memDataIn = new BitStream(1);
         memDataOut = new BitStream(1);
+        BitStream status = new BitStream(4);
 
-        ControlUnit controlUnit = new ControlUnit(input, clk, intermediate, RFIn, RFOut, RFAddrWrite, RFAddrRead,
+        ControlUnit controlUnit = new ControlUnit(input, clk, status, intermediate, RFIn, RFOut, RFAddrWrite, RFAddrRead,
                 XIn, MUXConst, ALUOpcode, ZIn, ZOut, PCIn, PCOut, memRead, memWrite, memAddress, memDataIn, memDataOut,
                 false, 1);
 
@@ -384,6 +385,7 @@ class ControlUnitTest {
         ProcessRunner.run(clock);
         clock.setData(new boolean[]{true});
         ProcessRunner.run(clock);
+
 
         assertTrue(RFOut.getData()[0]);
         assertEquals("011", DataConverter.convertBoolToBin(RFAddrRead.getData()));

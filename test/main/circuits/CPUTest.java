@@ -53,6 +53,7 @@ class CPUTest {
             clock.setData(new boolean[]{false});
             ProcessRunner.run(clock);
         }
+        System.out.println(cpu.requestStatus());
         assertArrayEquals(new boolean[]{false, false, false, false, false, false, false, false,
                 false, false, false, false, false, true, false, true},
                 cpu.getRegisterFile().getRegisters().get(2).getDataBitStream().getData());

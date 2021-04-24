@@ -17,7 +17,7 @@ public class ControlUnit implements Circuit {
 
     private final BitStream input, clock, intermediate, RFIn, RFOut, RFAddrWrite, RFAddrRead,
             XIn, MUXConst, ALUOpcode, ZIn, ZOut, PCIn, PCOut, memRead, memWrite, memAddress,
-            memDataIn, memDataOut;
+            memDataIn, memDataOut, status;
     private final String name;
     private final boolean inDebuggerMode;
     private final int debugDepth;
@@ -25,7 +25,7 @@ public class ControlUnit implements Circuit {
     private Microprocessor microprocessor;
     private BitStream microinstruction;
 
-    private final static int NUM_MICROINSTRUCTIONS = 24;
+    public final static int NUM_MICROINSTRUCTIONS = 24;
 
     /**Constructors for the ControlUnit circuit. It controls what the components of the CPU should do.
      *
@@ -52,13 +52,14 @@ public class ControlUnit implements Circuit {
      * @param inDebuggerMode - boolean to specify if the circuit is in debug mode
      * @param debugDepth - how deep should debugging go
      */
-    public ControlUnit(BitStream input, BitStream clock, BitStream intermediate, BitStream RFIn, BitStream RFOut,
+    public ControlUnit(BitStream input, BitStream clock, BitStream status, BitStream intermediate, BitStream RFIn, BitStream RFOut,
                        BitStream RFAddrWrite, BitStream RFAddrRead, BitStream XIn, BitStream MUXConst, BitStream ALUOpcode,
                        BitStream ZIn, BitStream ZOut, BitStream PCIn, BitStream PCOut, BitStream memRead,
                        BitStream memWrite, BitStream memAddress, BitStream memDataIn, BitStream memDataOut,
                        String name, boolean inDebuggerMode, int debugDepth) {
         this.input = input;
         this.clock = clock;
+        this.status = status;
         this.intermediate = intermediate;
         this.RFIn = RFIn;
         this.RFOut = RFOut;
@@ -83,30 +84,30 @@ public class ControlUnit implements Circuit {
         this.build();
     }
 
-    public ControlUnit(BitStream input, BitStream clock, BitStream intermediate, BitStream RFIn, BitStream RFOut,
+    public ControlUnit(BitStream input, BitStream clock, BitStream status, BitStream intermediate, BitStream RFIn, BitStream RFOut,
                        BitStream RFAddrWrite, BitStream RFAddrRead, BitStream XIn, BitStream MUXConst, BitStream ALUOpcode,
                        BitStream ZIn, BitStream ZOut, BitStream PCIn, BitStream PCOut, BitStream memRead,
                        BitStream memWrite, BitStream memAddress, BitStream memDataIn, BitStream memDataOut,
                        String name) {
-        this(input, clock, intermediate, RFIn, RFOut, RFAddrWrite, RFAddrRead, XIn, MUXConst, ALUOpcode,
+        this(input, clock, status, intermediate, RFIn, RFOut, RFAddrWrite, RFAddrRead, XIn, MUXConst, ALUOpcode,
                 ZIn, ZOut, PCIn, PCOut, memRead, memWrite, memAddress, memDataIn, memDataOut, name, false, 0);
     }
 
-    public ControlUnit(BitStream input, BitStream clock, BitStream intermediate, BitStream RFIn, BitStream RFOut,
+    public ControlUnit(BitStream input, BitStream clock, BitStream status, BitStream intermediate, BitStream RFIn, BitStream RFOut,
                        BitStream RFAddrWrite, BitStream RFAddrRead, BitStream XIn, BitStream MUXConst, BitStream ALUOpcode,
                        BitStream ZIn, BitStream ZOut, BitStream PCIn, BitStream PCOut, BitStream memRead,
                        BitStream memWrite, BitStream memAddress, BitStream memDataIn, BitStream memDataOut,
                        boolean inDebuggerMode, int debugDepth) {
-        this(input, clock, intermediate, RFIn, RFOut, RFAddrWrite, RFAddrRead, XIn, MUXConst, ALUOpcode,
+        this(input, clock, status, intermediate, RFIn, RFOut, RFAddrWrite, RFAddrRead, XIn, MUXConst, ALUOpcode,
                 ZIn, ZOut, PCIn, PCOut, memRead, memWrite, memAddress, memDataIn, memDataOut,
                 "ControlUnit", inDebuggerMode, debugDepth);
     }
 
-    public ControlUnit(BitStream input, BitStream clock, BitStream intermediate, BitStream RFIn, BitStream RFOut,
+    public ControlUnit(BitStream input, BitStream clock, BitStream status, BitStream intermediate, BitStream RFIn, BitStream RFOut,
                        BitStream RFAddrWrite, BitStream RFAddrRead, BitStream XIn, BitStream MUXConst, BitStream ALUOpcode,
                        BitStream ZIn, BitStream ZOut, BitStream PCIn, BitStream PCOut, BitStream memRead,
                        BitStream memWrite, BitStream memAddress, BitStream memDataIn, BitStream memDataOut) {
-        this(input, clock, intermediate, RFIn, RFOut, RFAddrWrite, RFAddrRead, XIn, MUXConst, ALUOpcode,
+        this(input, clock, status, intermediate, RFIn, RFOut, RFAddrWrite, RFAddrRead, XIn, MUXConst, ALUOpcode,
                 ZIn, ZOut, PCIn, PCOut, memRead, memWrite, memAddress, memDataIn, memDataOut,
                 "ControlUnit", false, 0);
     }
@@ -241,7 +242,7 @@ public class ControlUnit implements Circuit {
         BitStream destination = new BitStream(3);
         BitStream microprocessorInter = new BitStream(this.input.getSize());
         this.microprocessor = new Microprocessor(this.input, clockTFlipFlopOut, state6Out, IR1In, IR2In,
-                microprocessorOut, microprocessorInter, source, destination,
+                microprocessorOut, microprocessorInter, source, destination, this.status,
                 "microprocessor", debugGates, this.debugDepth - 1);
 
         BitStream enable = new BitStream(1);
@@ -265,6 +266,7 @@ public class ControlUnit implements Circuit {
         BitStream memAddressControl = new BitStream(1);
         BitStream memDataInControl = new BitStream(1);
         BitStream interOut = new BitStream(1);
+
 
         List<BitStream> mainSplitterInputList = new ArrayList<>();
         mainSplitterInputList.add(microinstruction);

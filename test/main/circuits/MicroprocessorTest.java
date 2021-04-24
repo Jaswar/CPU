@@ -25,7 +25,7 @@ class MicroprocessorTest {
         BitStream rst = new BitStream(1);
         source = new BitStream(3);
         destination = new BitStream(3);
-        microinstruction = new BitStream(24);
+        microinstruction = new BitStream(ControlUnit.NUM_MICROINSTRUCTIONS);
         intermediate = new BitStream(16);
 
         mainInput = new Input(new boolean[]{false, false, false, false, false, false, false, false,
@@ -34,10 +34,10 @@ class MicroprocessorTest {
         IR2InControl = new Input(new boolean[]{false}, IR2In);
         clock = new Input(new boolean[]{false}, clk);
         reset = new Input(new boolean[]{false}, rst);
-
+        BitStream status = new BitStream(4);
 
         Microprocessor microprocessor = new Microprocessor(input, clk, rst, IR1In, IR2In,
-                microinstruction, intermediate, source, destination, false, 1);
+                microinstruction, intermediate, source, destination, status, false, 1);
         ProcessRunner.run(mainInput, IR1InControl, IR2InControl, clock, reset);
     }
 

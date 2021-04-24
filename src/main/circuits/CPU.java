@@ -153,7 +153,9 @@ public class CPU implements Circuit {
         BitStream memDataIn = new BitStream(1);
         BitStream memDataOut = new BitStream(1);
 
-        this.controlUnit = new ControlUnit(bus, this.clock, bus, RFIn, RFOut, rfAddrWrite, rfAddrRead,
+        BitStream status = new BitStream(4);
+
+        this.controlUnit = new ControlUnit(bus, this.clock, status, bus, RFIn, RFOut, rfAddrWrite, rfAddrRead,
                 XIn, MUXConst, ALUOpcode, ZIn, ZOut, PCIn, PCOut, memRead, memWrite, memAddress, memDataIn, memDataOut,
                 "controlUnit", debugGates, this.debugDepth - 1);
 
@@ -195,7 +197,6 @@ public class CPU implements Circuit {
                 "ALUMux", debugGates, this.debugDepth - 1);
 
         BitStream aluOutput = new BitStream(size);
-        BitStream status = new BitStream(4);
         this.alu = new ALU(bus, aluMuxOut, aluOutput, ALUOpcode, status,
                 "ALU", debugGates, this.debugDepth - 1);
 

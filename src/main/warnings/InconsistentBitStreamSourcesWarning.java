@@ -7,7 +7,7 @@ import main.Node;
 public class InconsistentBitStreamSourcesWarning {
 
     public static void show(Node oldSource, Node newSource) {
-        System.err.println("Warning! Possible inconsistency between:\n" + oldSource + " and\n" + newSource);
+        //System.err.println("Warning! Possible inconsistency between:\n" + oldSource + " and\n" + newSource);
     }
 
     public static void show(String message) {
