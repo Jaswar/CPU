@@ -16,7 +16,7 @@ public class ALURFTest {
 
     Input busControl, busInput, opCodeInput, xInInput, aluInInput, zInInput, zOutInput, RFInInput, RFOutInput,
             addressWriteInput, addressReadInput;
-    BitStream bus;
+    BitStream bus, status;
 
     @BeforeEach
     void setup() {
@@ -41,7 +41,7 @@ public class ALURFTest {
         BitStream aluIn = new BitStream(1);
         aluInInput = new Input(new boolean[]{false}, aluIn);
 
-        BitStream overflow = new BitStream(1);
+        status = new BitStream(4);
         BitStream zIn = new BitStream(1);
         zInInput = new Input(new boolean[]{true}, zIn);
 
@@ -63,7 +63,7 @@ public class ALURFTest {
         BitStream XNotQ = new BitStream(4);
         DLatch X = new DLatch(bus, XIn, destination, XNotQ, "X");
 
-        ALU alu = new ALU(bus, destination, aluOut, opCode, aluIn, overflow);
+        ALU alu = new ALU(bus, destination, aluOut, opCode, status);
 
         BitStream zNotQ = new BitStream(4);
         BitStream zQ = new BitStream(4);
@@ -142,6 +142,7 @@ public class ALURFTest {
         ProcessRunner.run(zOutInput);
 
         assertArrayEquals(new boolean[]{true, true, false, true}, bus.getData());
+        assertArrayEquals(new boolean[]{false, false, false, true}, status.getData());
     }
 
     @Test
@@ -214,6 +215,7 @@ public class ALURFTest {
             ProcessRunner.run(aluInInput, zOutInput);
 
             assertArrayEquals(DataConverter.convertSignedDecToBool(a + b, 4), bus.getData());
+            assertArrayEquals(new boolean[]{false, true, false, false}, status.getData());
 
             //Move from bus to reg2
             addressWriteInput.setData(new boolean[]{false, true, false});
@@ -227,6 +229,7 @@ public class ALURFTest {
             ProcessRunner.run(RFInInput);
 
             assertArrayEquals(DataConverter.convertSignedDecToBool(a + b, 4), bus.getData());
+            assertArrayEquals(new boolean[]{false, true, false, false}, status.getData());
 
             //Move reg1 to reg0
             addressWriteInput.setData(new boolean[]{false, false, false});

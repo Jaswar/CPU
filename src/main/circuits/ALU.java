@@ -3,19 +3,23 @@ package main.circuits;
 import main.BitStream;
 import main.circuits.memory.DFlipFlop;
 import main.circuits.memory.DLatch;
+import main.control.Splitter;
 import main.gates.TriState;
 import main.gates.binary.AND;
+import main.gates.binary.NOR;
 import main.gates.binary.OR;
+import main.gates.multi.MultiNOR;
 import main.gates.multi.MultiOR;
 import main.gates.unary.NOT;
 import main.utils.DataConverter;
 
+import java.beans.BeanInfo;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ALU implements Circuit {
 
-    private final BitStream source, destination, out, opCode, aluIn, overflow;
+    private final BitStream source, destination, out, opCode, status;
     private final String name;
     private final boolean inDebuggerMode;
     private final int debugDepth;
@@ -26,21 +30,19 @@ public class ALU implements Circuit {
      * @param destination - the destination BitStream
      * @param out - the output BitStream
      * @param opCode - the BitStream for selecting which operation should be performed
-     * @param aluIn - BitStream to tell if the ALU should read source
-     * @param overflow - BitStream specifying if overflow occurred
+     * @param status - BitStream to specify the status flags
      * @param name - the name of the ALU
      * @param inDebuggerMode - boolean to specify if the unit is in debug mode
      * @param debugDepth - the depth of debugging
      */
     public ALU(BitStream source, BitStream destination, BitStream out,
-               BitStream opCode, BitStream aluIn, BitStream overflow, String name,
+               BitStream opCode, BitStream status, String name,
                boolean inDebuggerMode, int debugDepth) {
         this.source = source;
         this.destination = destination;
         this.out = out;
         this.opCode = opCode;
-        this.aluIn = aluIn;
-        this.overflow = overflow;
+        this.status = status;
 
         this.name = name;
         this.inDebuggerMode = inDebuggerMode;
@@ -50,21 +52,21 @@ public class ALU implements Circuit {
     }
 
     public ALU(BitStream source, BitStream destination, BitStream out,
-               BitStream opCode, BitStream aluIn, BitStream overflow, String name) {
-        this(source, destination, out, opCode, aluIn, overflow, name, false, 0);
+               BitStream opCode, BitStream status, String name) {
+        this(source, destination, out, opCode, status, name, false, 0);
     }
 
 
     public ALU(BitStream source, BitStream destination, BitStream out,
-               BitStream opCode, BitStream aluIn, BitStream overflow,
+               BitStream opCode, BitStream status,
                boolean inDebuggerMode, int debugDepth) {
-        this(source, destination, out, opCode, aluIn, overflow, "ALU", inDebuggerMode, debugDepth);
+        this(source, destination, out, opCode, status, "ALU", inDebuggerMode, debugDepth);
     }
 
 
     public ALU(BitStream source, BitStream destination, BitStream out,
-               BitStream opCode, BitStream aluIn, BitStream overflow) {
-        this(source, destination, out, opCode, aluIn, overflow, "ALU", false, 0);
+               BitStream opCode, BitStream status) {
+        this(source, destination, out, opCode, status, "ALU", false, 0);
     }
 
     /**Method to return the current state of the ALU.
@@ -75,7 +77,7 @@ public class ALU implements Circuit {
         String status = "ALU (" + this.name + "):\n";
         status += "OPCode: " + DataConverter.convertBoolToBin(this.opCode.getData()) +
                 " (" + DataConverter.convertBoolToUnsignedDec(this.opCode.getData()) + ")\t" +
-                "Overflow: " + this.overflow.getData()[0] + "\n";
+                "Status: " + DataConverter.convertBoolToBin(this.status.getData()) + "\n";
         status += "SRC: " + DataConverter.convertBoolToBin(this.source.getData()) +
                 " (" + DataConverter.convertBoolToUnsignedDec(this.source.getData()) + ", " +
                 DataConverter.convertBoolToSignedDec(this.source.getData(), this.source.getSize()) + ")\t";
@@ -131,10 +133,35 @@ public class ALU implements Circuit {
 
         TriState logicTriState = new TriState(logicUnitOut, logicControlOut, this.out, "logicTriState", debugGates);
 
-        AddSubtract addSubtract = new AddSubtract(this.source, this.destination, addSubOut, addSubAndOut, this.overflow,
+        BitStream overflow = new BitStream(1);
+        AddSubtract addSubtract = new AddSubtract(this.source, this.destination, addSubOut, addSubAndOut, overflow,
                 "addSub", debugGates, this.debugDepth - 1);
 
         LogicUnit logicUnit = new LogicUnit(this.source, this.destination, logicUnitOut, logicUnitControls,
                 "logicUnit", debugGates, this.debugDepth - 1);
+
+        List<BitStream> outputSplitterOutList = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            BitStream bit = new BitStream(1);
+            outputSplitterOutList.add(bit);
+        }
+        List<BitStream> outputSplitterInputList = new ArrayList<>();
+        outputSplitterInputList.add(this.out);
+
+        Splitter outputSplitter = new Splitter(outputSplitterInputList, outputSplitterOutList, "outputSplitter", debugGates);
+
+        BitStream isZero = new BitStream(1);
+        MultiNOR isZeroNor = new MultiNOR(outputSplitterOutList, isZero, "isZeroNor", debugGates);
+
+        BitStream isNegative = outputSplitterOutList.get(0);
+        BitStream isPositive = new BitStream(1);
+        NOR isPositiveNor = new NOR(isNegative, isZero, isPositive, "isPositiveNor", debugGates);
+
+        List<BitStream> statusSplitterInputList = new ArrayList<>();
+        statusSplitterInputList.addAll(List.of(overflow, isPositive, isZero, isNegative));
+        List<BitStream> statusSplitterOutList = new ArrayList<>();
+        statusSplitterOutList.add(this.status);
+
+        Splitter statusSplitter = new Splitter(statusSplitterInputList, statusSplitterOutList, "statusSplitter", debugGates);
     }
 }

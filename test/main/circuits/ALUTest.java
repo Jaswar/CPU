@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ALUTest {
 
     Input sourceInput, destinationInput, opCodeInput, aluInInput;
-    Output mainOutput, overflowOutput;
+    Output mainOutput, statusOutput;
 
     @BeforeEach
     void setup() {
@@ -21,7 +21,7 @@ class ALUTest {
         BitStream output = new BitStream(4);
         BitStream opCode = new BitStream(5);
         BitStream aluIn = new BitStream(1);
-        BitStream overflow = new BitStream(1);
+        BitStream status = new BitStream(4);
 
         sourceInput = new Input(new boolean[]{false, false, false, false}, source);
         destinationInput = new Input(new boolean[]{false, false, false, false}, destination);
@@ -29,9 +29,9 @@ class ALUTest {
         aluInInput = new Input(new boolean[]{false}, aluIn);
 
         mainOutput = new Output(output);
-        overflowOutput = new Output(overflow);
+        statusOutput = new Output(status);
 
-        ALU alu = new ALU(source, destination, output, opCode, aluIn, overflow);
+        ALU alu = new ALU(source, destination, output, opCode, status);
     }
 
     @Test
@@ -46,7 +46,7 @@ class ALUTest {
         ProcessRunner.run(aluInInput);
 
         assertArrayEquals(new boolean[]{false, true, false, false}, mainOutput.getData());
-        assertArrayEquals(new boolean[]{false}, overflowOutput.getData());
+        assertArrayEquals(new boolean[]{false, true, false, false}, statusOutput.getData());
     }
 
     @Test
@@ -61,7 +61,7 @@ class ALUTest {
         ProcessRunner.run(aluInInput);
 
         assertArrayEquals(new boolean[]{true, false, true, true}, mainOutput.getData());
-        assertArrayEquals(new boolean[]{true}, overflowOutput.getData());
+        assertArrayEquals(new boolean[]{true, false, false, true}, statusOutput.getData());
     }
 
     @Test
@@ -76,7 +76,7 @@ class ALUTest {
         ProcessRunner.run(aluInInput);
 
         assertArrayEquals(new boolean[]{false, false, true, true}, mainOutput.getData());
-        assertArrayEquals(new boolean[]{false}, overflowOutput.getData());
+        assertArrayEquals(new boolean[]{false, true, false, false}, statusOutput.getData());
     }
 
     @Test
@@ -91,7 +91,7 @@ class ALUTest {
         ProcessRunner.run(aluInInput);
 
         assertArrayEquals(new boolean[]{false, true, true, true}, mainOutput.getData());
-        assertArrayEquals(new boolean[]{true}, overflowOutput.getData());
+        assertArrayEquals(new boolean[]{true, true, false, false}, statusOutput.getData());
     }
 
     @Test
@@ -106,6 +106,7 @@ class ALUTest {
         ProcessRunner.run(aluInInput);
 
         assertArrayEquals(new boolean[]{false, true, false, true}, mainOutput.getData());
+        assertArrayEquals(new boolean[]{false, true, false, false}, statusOutput.getData());
     }
 
     @Test
@@ -120,6 +121,7 @@ class ALUTest {
         ProcessRunner.run(aluInInput);
 
         assertArrayEquals(new boolean[]{true, false, true, true}, mainOutput.getData());
+        assertArrayEquals(new boolean[]{false, false, false, true}, statusOutput.getData());
     }
 
     @Test
@@ -134,6 +136,7 @@ class ALUTest {
         ProcessRunner.run(aluInInput);
 
         assertArrayEquals(new boolean[]{false, false, true, false}, mainOutput.getData());
+        assertArrayEquals(new boolean[]{false, true, false, false}, statusOutput.getData());
     }
 
     @Test
@@ -148,6 +151,7 @@ class ALUTest {
         ProcessRunner.run(aluInInput);
 
         assertArrayEquals(new boolean[]{true, false, false, true}, mainOutput.getData());
+        assertArrayEquals(new boolean[]{false, false, false, true}, statusOutput.getData());
     }
 
     @Test
@@ -162,6 +166,7 @@ class ALUTest {
         ProcessRunner.run(aluInInput);
 
         assertArrayEquals(new boolean[]{true, true, false, true}, mainOutput.getData());
+        assertArrayEquals(new boolean[]{false, false, false, true}, statusOutput.getData());
     }
 
     @Test
@@ -176,6 +181,18 @@ class ALUTest {
         ProcessRunner.run(aluInInput);
 
         assertArrayEquals(new boolean[]{false, true, false, false}, mainOutput.getData());
+        assertArrayEquals(new boolean[]{false, true, false, false}, statusOutput.getData());
+    }
+
+    @Test
+    void testZeroFlag() {
+        sourceInput.setData(new boolean[]{true, false, true, false});
+        destinationInput.setData(new boolean[]{true, false, true, false});
+        opCodeInput.setData(new boolean[]{false, false, false, true, false});
+        ProcessRunner.run(sourceInput, destinationInput, opCodeInput, aluInInput);
+
+        assertArrayEquals(new boolean[]{false, false, false, false}, mainOutput.getData());
+        assertArrayEquals(new boolean[]{false, false, true, false}, statusOutput.getData());
     }
 
 }

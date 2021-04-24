@@ -195,7 +195,8 @@ public class CPU implements Circuit {
                 "ALUMux", debugGates, this.debugDepth - 1);
 
         BitStream aluOutput = new BitStream(size);
-        this.alu = new ALU(bus, aluMuxOut, aluOutput, ALUOpcode, new BitStream(1), new BitStream(1),
+        BitStream status = new BitStream(4);
+        this.alu = new ALU(bus, aluMuxOut, aluOutput, ALUOpcode, status,
                 "ALU", debugGates, this.debugDepth - 1);
 
         BitStream zEnable = new BitStream(1);
