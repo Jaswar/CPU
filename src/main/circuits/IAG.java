@@ -60,6 +60,10 @@ public class IAG implements Circuit {
         return status;
     }
 
+    public Register getPC() {
+        return this.programCounter;
+    }
+
     /**Build the circuit as defined in the documentation.
      */
     @Override

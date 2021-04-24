@@ -53,7 +53,6 @@ class CPUTest {
             clock.setData(new boolean[]{false});
             ProcessRunner.run(clock);
         }
-        System.out.println(cpu.requestStatus());
         assertArrayEquals(new boolean[]{false, false, false, false, false, false, false, false,
                 false, false, false, false, false, true, false, true},
                 cpu.getRegisterFile().getRegisters().get(2).getDataBitStream().getData());
@@ -120,6 +119,97 @@ class CPUTest {
         assertArrayEquals(new boolean[]{false, false, false, false, true, false, true, false,
                         false, false, false, false, false, false, true, false},
                 cpu.getControlUnit().getMicroprocessor().getIR1().getDataBitStream().getData());
+    }
+
+    @Test
+    void testUnconditionalJumps() {
+        ram.putData(6, new boolean[]{false, false, false, false, false, false, false, false,
+                false, false, false, false, false, false, true, true});
+        ram.putData(7, new boolean[]{false, false, false, false, false, false, false, false,
+                false, false, false, false, false, false, true, true});
+
+        testRegisterAddition();
+
+        for (int i = 0; i < 10; i++) {
+            clock.setData(new boolean[]{true});
+            ProcessRunner.run(clock);
+            clock.setData(new boolean[]{false});
+            ProcessRunner.run(clock);
+            clock.setData(new boolean[]{true});
+            ProcessRunner.run(clock);
+            clock.setData(new boolean[]{false});
+            ProcessRunner.run(clock);
+        }
+
+        assertArrayEquals(new boolean[]{false, false, false, false, false, false, false, false,
+                false, false, false, false, true, false, true, true}, cpu.getIag().getPC().getDataBitStream().getData());
+        assertArrayEquals(new boolean[]{false, false, false, false, false, false, false, false,
+                        false, false, false, false, false, true, false, true},
+                cpu.getRegisterFile().getRegisters().get(2).getDataBitStream().getData());
+        assertArrayEquals(new boolean[]{false, false, false, false, false, false, false, false,
+                        false, false, false, false, true, false, true, false},
+                cpu.getRegisterFile().getRegisters().get(1).getDataBitStream().getData());
+    }
+
+    @Test
+    void testFibonacci() {
+        //mov 1, ax
+        ram.putData(0, new boolean[]{false, false, false, false, false, false, false, false,
+                false, false, false, false, false, false, false, true});
+        ram.putData(1, new boolean[]{false, false, false, false, false, false, false, false,
+                false, false, false, false, false, false, false, true});
+        //loop:
+        //mov ax, cx
+        ram.putData(2, new boolean[]{false, false, false, true, false, false, false, false,
+                false, false, false, false, false, false, false, false});
+
+        //add bx, ax
+        ram.putData(4, new boolean[]{false, false, false, false, false, false, false, true,
+                false, false, false, false, false, false, true, false});
+
+        //mov cx, bx
+        ram.putData(6, new boolean[]{false, false, false, false, true, false, true, false,
+                false, false, false, false, false, false, false, false});
+
+        //jmp loop
+        ram.putData(8, new boolean[]{false, false, false, false, false, false, false, false,
+                false, false, false, false, false, false, true, true});
+        ram.putData(9, DataConverter.convertSignedDecToBool(-8, 16));
+
+        for (int i = 0; i < 8; i++) {
+            clock.setData(new boolean[]{true});
+            ProcessRunner.run(clock);
+            clock.setData(new boolean[]{false});
+            ProcessRunner.run(clock);
+            clock.setData(new boolean[]{true});
+            ProcessRunner.run(clock);
+            clock.setData(new boolean[]{false});
+            ProcessRunner.run(clock);
+        }
+        int b = 0; int a = 1;
+        for (int j = 0; j < 23; j++) {
+            for (int i = 0; i < 36; i++) {
+                clock.setData(new boolean[]{true});
+                ProcessRunner.run(clock);
+                clock.setData(new boolean[]{false});
+                ProcessRunner.run(clock);
+                clock.setData(new boolean[]{true});
+                ProcessRunner.run(clock);
+                clock.setData(new boolean[]{false});
+                ProcessRunner.run(clock);
+            }
+
+            assertEquals(a + b, DataConverter.convertBoolToUnsignedDec(
+                    cpu.getRegisterFile().getRegisters().get(0).getDataBitStream().getData()));
+            assertEquals(a, DataConverter.convertBoolToUnsignedDec(
+                    cpu.getRegisterFile().getRegisters().get(1).getDataBitStream().getData()));
+
+            int temp = a;
+            a = a + b;
+            b = temp;
+
+            //System.out.println(cpu.requestStatus());
+        }
     }
 
 }

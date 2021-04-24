@@ -98,6 +98,14 @@ public class CPU implements Circuit {
         return controlUnit;
     }
 
+    /**Getter for the IAG of the CPU
+     *
+     * @return - the control unit
+     */
+    public IAG getIag() {
+        return this.iag;
+    }
+
     /**Method to return the current state of the CPU.
      *
      * @return - the status of the CPU as String
