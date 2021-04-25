@@ -174,10 +174,16 @@ class CPUTest {
         ram.putData(6, new boolean[]{false, false, false, false, true, false, true, false,
                 false, false, false, false, false, false, false, true});
 
-        //jmp loop
+        //jno loop
         ram.putData(8, new boolean[]{false, false, false, false, false, false, false, false,
-                false, false, false, true, true, false, true, false});
+                false, false, true, false, false, false, true, false});
         ram.putData(9, DataConverter.convertSignedDecToBool(-8, 16));
+
+        //jmp $
+        ram.putData(10, new boolean[]{false, false, false, false, false, false, false, false,
+                false, false, false, true, true, false, true, false});
+        ram.putData(11, DataConverter.convertSignedDecToBool(-2, 16));
+
 
         for (int i = 0; i < 8; i++) {
             clock.setData(new boolean[]{true});
@@ -190,7 +196,7 @@ class CPUTest {
             ProcessRunner.run(clock);
         }
         int b = 0; int a = 1;
-        for (int j = 0; j < 23; j++) {
+        for (int j = 0; j < 30; j++) {
             for (int i = 0; i < 36; i++) {
                 clock.setData(new boolean[]{true});
                 ProcessRunner.run(clock);
@@ -206,10 +212,13 @@ class CPUTest {
                     cpu.getRegisterFile().getRegisters().get(0).getDataBitStream().getData()));
             assertEquals(a, DataConverter.convertBoolToUnsignedDec(
                     cpu.getRegisterFile().getRegisters().get(1).getDataBitStream().getData()));
+            if (j < 22) {
+                int temp = a;
+                a = a + b;
+                b = temp;
+            }
 
-            int temp = a;
-            a = a + b;
-            b = temp;
+            System.out.println(cpu.requestStatus());
         }
     }
 

@@ -36,7 +36,7 @@ class MicroprocessorTest {
         reset = new Input(new boolean[]{false}, rst);
         BitStream status = new BitStream(4);
 
-        Microprocessor microprocessor = new Microprocessor(input, clk, rst, IR1In, IR2In,
+        Microprocessor microprocessor = new Microprocessor(input, new BitStream(1), clk, new BitStream(1), rst, IR1In, IR2In,
                 microinstruction, intermediate, source, destination, status, false, 1);
         ProcessRunner.run(mainInput, IR1InControl, IR2InControl, clock, reset);
     }

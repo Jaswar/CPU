@@ -17,7 +17,7 @@ import java.util.spi.AbstractResourceBundleProvider;
 
 public class Microprocessor implements Circuit {
 
-    private final BitStream input, clock, reset,  IR1In, IR2In,
+    private final BitStream input, clock, isInMI, next, reset,  IR1In, IR2In,
             microinstruction, intermediate, source, destination, status;
     private final String name;
     private final boolean inDebuggerMode;
@@ -35,7 +35,7 @@ public class Microprocessor implements Circuit {
     /**Constructors for the Microprocessor class. This component is a part of the Control Unit.
      *
      * @param input - the main input to the circuit
-     * @param clock - the clock input
+     * @param next - the next input
      * @param reset - BitStream used to reset the microinstruction counter
      * @param IR1In - specify if IR1 should read data
      * @param IR2In - specify if IR2 should read data
@@ -47,11 +47,13 @@ public class Microprocessor implements Circuit {
      * @param inDebuggerMode - boolean to specify if the circuit is in debug mode
      * @param debugDepth - how deep should debugging go
      */
-    public Microprocessor(BitStream input, BitStream clock, BitStream reset, BitStream IR1In, BitStream IR2In,
+    public Microprocessor(BitStream input, BitStream clock, BitStream next, BitStream isInMI, BitStream reset, BitStream IR1In, BitStream IR2In,
                           BitStream microinstruction, BitStream intermediate, BitStream source, BitStream destination,
                           BitStream status, String name, boolean inDebuggerMode, int debugDepth) {
         this.input = input;
         this.clock = clock;
+        this.next = next;
+        this.isInMI = isInMI;
         this.reset = reset;
         this.IR1In = IR1In;
         this.IR2In = IR2In;
@@ -69,24 +71,24 @@ public class Microprocessor implements Circuit {
         this.build();
     }
 
-    public Microprocessor(BitStream input, BitStream clock, BitStream reset, BitStream IR1In, BitStream IR2In,
+    public Microprocessor(BitStream input, BitStream clock, BitStream next, BitStream isInMI, BitStream reset, BitStream IR1In, BitStream IR2In,
                           BitStream microinstruction, BitStream intermediate, BitStream source, BitStream destination,
                           BitStream status, String name) {
-        this(input, clock, reset, IR1In, IR2In, microinstruction, intermediate, source, destination, status,
+        this(input, clock, next, isInMI, reset, IR1In, IR2In, microinstruction, intermediate, source, destination, status,
                 name, false, 0);
     }
 
-    public Microprocessor(BitStream input, BitStream clock, BitStream reset, BitStream IR1In, BitStream IR2In,
+    public Microprocessor(BitStream input, BitStream clock, BitStream next, BitStream isInMI, BitStream reset, BitStream IR1In, BitStream IR2In,
                           BitStream microinstruction, BitStream intermediate, BitStream source, BitStream destination,
                           BitStream status, boolean inDebuggerMode, int debugDepth) {
-        this(input, clock, reset, IR1In, IR2In, microinstruction, intermediate, source, destination, status,
+        this(input, clock, next, isInMI, reset, IR1In, IR2In, microinstruction, intermediate, source, destination, status,
                 "Microprocessor", inDebuggerMode, debugDepth);
     }
 
-    public Microprocessor(BitStream input, BitStream clock, BitStream reset, BitStream IR1In, BitStream IR2In,
+    public Microprocessor(BitStream input, BitStream clock, BitStream next, BitStream isInMI, BitStream reset, BitStream IR1In, BitStream IR2In,
                           BitStream microinstruction, BitStream intermediate, BitStream source, BitStream destination,
                           BitStream status) {
-        this(input, clock, reset, IR1In, IR2In, microinstruction, intermediate, source, destination, status,
+        this(input, clock, next, isInMI, reset, IR1In, IR2In, microinstruction, intermediate, source, destination, status,
                 "Microprocessor", false, 0);
     }
 
@@ -157,7 +159,7 @@ public class Microprocessor implements Circuit {
 
         BitStream tFlipFlop0Q = new BitStream(1);
         BitStream tFlipFlop0NotQ = new BitStream(1);
-        TFlipFlop tFlipFlop0 = new TFlipFlop(constant, this.clock, enable, new BitStream(1), this.reset,
+        TFlipFlop tFlipFlop0 = new TFlipFlop(constant, this.next, enable, new BitStream(1), this.reset,
                 tFlipFlop0Q, tFlipFlop0NotQ, true, "tFlipFlop0", debugGates, debugDepth - 1);
 
         BitStream tFlipFlop1Q = new BitStream(1);
@@ -238,10 +240,16 @@ public class Microprocessor implements Circuit {
         BitStream setPosAndOut = new BitStream(1);
         BitStream setOverAndOut = new BitStream(1);
 
-        AND setNegAnd = new AND(this.clock, setNeg, setNegAndOut, "setNegAnd", debugGates);
-        AND setZeroAnd = new AND(this.clock, setZero, setZeroAndOut, "setZeroAnd", debugGates);
-        AND setPosAnd = new AND(this.clock, setPos, setPosAndOut, "setPosAnd", debugGates);
-        AND setOverAnd = new AND(this.clock, setOver, setOverAndOut, "setOverAnd", debugGates);
+        BitStream updateStatusNorOut = new BitStream(1);
+        NOR updateStatusNor = new NOR(this.next, this.clock, updateStatusNorOut, "updateStatusNor", debugGates);
+
+        BitStream updateStatusAndOut = new BitStream(1);
+        AND updateStatusAnd = new AND(updateStatusNorOut, this.isInMI, updateStatusAndOut, "updateStatusAnd", debugGates);
+
+        AND setNegAnd = new AND(updateStatusAndOut, setNeg, setNegAndOut, "setNegAnd", debugGates);
+        AND setZeroAnd = new AND(updateStatusAndOut, setZero, setZeroAndOut, "setZeroAnd", debugGates);
+        AND setPosAnd = new AND(updateStatusAndOut, setPos, setPosAndOut, "setPosAnd", debugGates);
+        AND setOverAnd = new AND(updateStatusAndOut, setOver, setOverAndOut, "setOverAnd", debugGates);
 
         BitStream enableStatus = new BitStream(1);
         enableStatus.setData(new boolean[]{true});

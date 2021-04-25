@@ -242,7 +242,7 @@ public class ControlUnit implements Circuit {
         BitStream source = new BitStream(3);
         BitStream destination = new BitStream(3);
         BitStream microprocessorInter = new BitStream(this.input.getSize());
-        this.microprocessor = new Microprocessor(this.input, clockTFlipFlopOut, state6Out, IR1In, IR2In,
+        this.microprocessor = new Microprocessor(this.input, this.clock, clockTFlipFlopOut, state7Out, state6Out, IR1In, IR2In,
                 microprocessorOut, microprocessorInter, source, destination, this.status,
                 "microprocessor", debugGates, this.debugDepth - 1);
 
