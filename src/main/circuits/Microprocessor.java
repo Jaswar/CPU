@@ -246,6 +246,9 @@ public class Microprocessor implements Circuit {
         BitStream updateStatusAndOut = new BitStream(1);
         AND updateStatusAnd = new AND(updateStatusNorOut, this.isInMI, updateStatusAndOut, "updateStatusAnd", debugGates);
 
+        BitStream clearAndOut = new BitStream(1);
+        AND clearAnd = new AND(updateStatusAndOut, clrFlags, clearAndOut, "clearAnd", debugGates);
+
         AND setNegAnd = new AND(updateStatusAndOut, setNeg, setNegAndOut, "setNegAnd", debugGates);
         AND setZeroAnd = new AND(updateStatusAndOut, setZero, setZeroAndOut, "setZeroAnd", debugGates);
         AND setPosAnd = new AND(updateStatusAndOut, setPos, setPosAndOut, "setPosAnd", debugGates);
@@ -253,13 +256,13 @@ public class Microprocessor implements Circuit {
 
         BitStream enableStatus = new BitStream(1);
         enableStatus.setData(new boolean[]{true});
-        DFlipFlop negFlipFlop = new DFlipFlop(statusNeg, setNegAndOut, enableStatus, new BitStream(1), clrFlags,
+        DFlipFlop negFlipFlop = new DFlipFlop(statusNeg, setNegAndOut, enableStatus, new BitStream(1), clearAndOut,
                 negFlag, new BitStream(1), true, "negFlipFlop", debugGates, this.debugDepth - 1);
-        DFlipFlop zeroFlipFlop = new DFlipFlop(statusZero, setZeroAndOut, enableStatus, new BitStream(1), clrFlags,
+        DFlipFlop zeroFlipFlop = new DFlipFlop(statusZero, setZeroAndOut, enableStatus, new BitStream(1), clearAndOut,
                 zeroFlag, new BitStream(1), true, "zeroFlipFlop", debugGates, this.debugDepth - 1);
-        DFlipFlop posFlipFlop = new DFlipFlop(statusPos, setPosAndOut, enableStatus, new BitStream(1), clrFlags,
+        DFlipFlop posFlipFlop = new DFlipFlop(statusPos, setPosAndOut, enableStatus, new BitStream(1), clearAndOut,
                 posFlag, new BitStream(1), true, "posFlipFlop", debugGates, this.debugDepth - 1);
-        DFlipFlop overFlipFlop = new DFlipFlop(statusOver, setOverAndOut, enableStatus, new BitStream(1), clrFlags,
+        DFlipFlop overFlipFlop = new DFlipFlop(statusOver, setOverAndOut, enableStatus, new BitStream(1), clearAndOut,
                 overFlag, new BitStream(1), true, "overFlipFlop", debugGates, this.debugDepth - 1);
 
         this.statusBitStream = new BitStream(4);

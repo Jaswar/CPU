@@ -217,8 +217,6 @@ class CPUTest {
                 a = a + b;
                 b = temp;
             }
-
-            System.out.println(cpu.requestStatus());
         }
     }
 
