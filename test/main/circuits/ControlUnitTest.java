@@ -172,7 +172,11 @@ class ControlUnitTest {
     }
 
     @Test
-    void testFirstInstruction() {
+    void testRegisterMoving() {
+        mainInput.setData(new boolean[]{false, false, false, false, false, false, false, false,
+                false, false, false, false, false, false, false, true});
+        ProcessRunner.run(mainInput);
+
         testCommonMicroinstructions();
 
         //microinstruction
@@ -216,7 +220,7 @@ class ControlUnitTest {
         assertFalse(memAddress.getData()[0]);
 
         mainInput.setData(new boolean[]{false, false, false, true, true, false, false, true,
-                false, false, false, false, false, false, false, false});
+                false, false, false, false, false, false, false, true});
         ProcessRunner.run(mainInput);
 
         for (int i = 2; i <= 7; i++) {
@@ -253,7 +257,7 @@ class ControlUnitTest {
     }
 
     @Test
-    void testSecondInstruction() {
+    void testMovingIntermediate() {
         testCommonMicroinstructions();
 
         //microinstruction
@@ -277,7 +281,7 @@ class ControlUnitTest {
         ProcessRunner.run(clock);
 
         mainInput.setData(new boolean[]{false, false, true, false, false, false, false, false,
-                false, false, false, false, false, false, false, true});
+                false, false, false, false, false, false, true, false});
         ProcessRunner.run(mainInput);
 
         // common 2
@@ -341,7 +345,6 @@ class ControlUnitTest {
 
     @Test
     void testThirdInstruction() {
-
         testCommonMicroinstructions();
 
         //microinstruction
@@ -365,7 +368,7 @@ class ControlUnitTest {
         ProcessRunner.run(clock);
 
         mainInput.setData(new boolean[]{false, false, false, true, true, true, false, true,
-                false, false, false, false, false, false, true, false});
+                false, false, false, false, true, false, false, false});
         ProcessRunner.run(mainInput);
 
         for (int i = 2; i <= 7; i++) {

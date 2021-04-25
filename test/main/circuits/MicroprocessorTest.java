@@ -42,20 +42,20 @@ class MicroprocessorTest {
     }
 
     @Test
-    void testFirstInstruction() {
-        assertArrayEquals(new boolean[]{true, true, true, false, false, false, false, false,
+    void testNoOperation() {
+        assertArrayEquals(new boolean[]{true, false, false, false, false, false, false, false,
                 false, false, false, false, false, false, false, false,
                 false, false, false, false, false, false, false, false}, microinstruction.getData());
     }
 
     @Test
-    void testThirdInstruction() {
+    void testRegisterAddition() {
         mainInput.setData(new boolean[]{false, false, false, false, false, false, false, false,
-                false, false, false, false, false, false, true, false});
+                false, false, false, false, true, false, false, false});
         IR1InControl.setData(new boolean[]{true});
         ProcessRunner.run(mainInput, IR1InControl);
 
-        testFirstInstruction();
+        testNoOperation();
 
         IR1InControl.setData(new boolean[]{false});
         ProcessRunner.run(IR1InControl);
@@ -66,8 +66,8 @@ class MicroprocessorTest {
     }
 
     @Test
-    void testProgressingSecondInstruction() {
-        testThirdInstruction();
+    void testProgressingRegisterAddition() {
+        testRegisterAddition();
 
         clock.setData(new boolean[]{true});
         ProcessRunner.run(clock);
@@ -90,7 +90,7 @@ class MicroprocessorTest {
 
     @Test
     void testReset() {
-        testProgressingSecondInstruction();
+        testProgressingRegisterAddition();
 
         reset.setData(new boolean[]{true});
         ProcessRunner.run(reset);
@@ -137,13 +137,13 @@ class MicroprocessorTest {
 
     @Test
     void testBothInstructions() {
-        testFirstInstruction();
+        testNoOperation();
 
         reset.setData(new boolean[]{true});
         ProcessRunner.run(reset);
         reset.setData(new boolean[]{false});
         ProcessRunner.run(reset);
 
-        testProgressingSecondInstruction();
+        testProgressingRegisterAddition();
     }
 }

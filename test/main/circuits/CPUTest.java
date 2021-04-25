@@ -38,7 +38,7 @@ class CPUTest {
     @Test
     void testMovingIntermediateToRegister() {
         ram.putData(0, new boolean[]{false, false, false, true, false, false, false, false,
-                false, false, false, false, false, false, false, true});
+                false, false, false, false, false, false, true, false});
         ram.putData(1, new boolean[]{false, false, false, false, false, false, false, false,
                 false, false, false, false, false, true, false, true});
 
@@ -57,7 +57,7 @@ class CPUTest {
                 false, false, false, false, false, true, false, true},
                 cpu.getRegisterFile().getRegisters().get(2).getDataBitStream().getData());
         assertArrayEquals(new boolean[]{false, false, false, true, false, false, false, false,
-                false, false, false, false, false, false, false, true},
+                false, false, false, false, false, false, true, false},
                 cpu.getControlUnit().getMicroprocessor().getIR1().getDataBitStream().getData());
         assertArrayEquals(new boolean[]{false, false, false, false, false, false, false, false,
                 false, false, false, false, false, true, false, true},
@@ -67,7 +67,7 @@ class CPUTest {
     @Test
     void testMovingBetweenRegisters() {
         ram.putData(2, new boolean[]{false, false, false, false, true, false, true, false,
-                false, false, false, false, false, false, false, false});
+                false, false, false, false, false, false, false, true});
 
         testMovingIntermediateToRegister();
 
@@ -88,14 +88,14 @@ class CPUTest {
                         false, false, false, false, false, true, false, true},
                 cpu.getRegisterFile().getRegisters().get(1).getDataBitStream().getData());
         assertArrayEquals(new boolean[]{false, false, false, false, true, false, true, false,
-                        false, false, false, false, false, false, false, false},
+                        false, false, false, false, false, false, false, true},
                 cpu.getControlUnit().getMicroprocessor().getIR1().getDataBitStream().getData());
     }
 
     @Test
     void testRegisterAddition() {
         ram.putData(4, new boolean[]{false, false, false, false, true, false, true, false,
-                false, false, false, false, false, false, true, false});
+                false, false, false, false, true, false, false, false});
 
         testMovingBetweenRegisters();
 
@@ -118,14 +118,14 @@ class CPUTest {
                         false, false, false, false, true, false, true, false},
                 cpu.getRegisterFile().getRegisters().get(1).getDataBitStream().getData());
         assertArrayEquals(new boolean[]{false, false, false, false, true, false, true, false,
-                        false, false, false, false, false, false, true, false},
+                        false, false, false, false, true, false, false, false},
                 cpu.getControlUnit().getMicroprocessor().getIR1().getDataBitStream().getData());
     }
 
     @Test
     void testUnconditionalJumps() {
         ram.putData(6, new boolean[]{false, false, false, false, false, false, false, false,
-                false, false, false, false, false, false, true, true});
+                false, false, false, true, true, false, true, false});
         ram.putData(7, new boolean[]{false, false, false, false, false, false, false, false,
                 false, false, false, false, false, false, true, true});
 
@@ -158,25 +158,25 @@ class CPUTest {
     void testFibonacci() {
         //mov 1, ax
         ram.putData(0, new boolean[]{false, false, false, false, false, false, false, false,
-                false, false, false, false, false, false, false, true});
+                false, false, false, false, false, false, true, false});
         ram.putData(1, new boolean[]{false, false, false, false, false, false, false, false,
                 false, false, false, false, false, false, false, true});
         //loop:
         //mov ax, cx
         ram.putData(2, new boolean[]{false, false, false, true, false, false, false, false,
-                false, false, false, false, false, false, false, false});
+                false, false, false, false, false, false, false, true});
 
         //add bx, ax
         ram.putData(4, new boolean[]{false, false, false, false, false, false, false, true,
-                false, false, false, false, false, false, true, false});
+                false, false, false, false, true, false, false, false});
 
         //mov cx, bx
         ram.putData(6, new boolean[]{false, false, false, false, true, false, true, false,
-                false, false, false, false, false, false, false, false});
+                false, false, false, false, false, false, false, true});
 
         //jmp loop
         ram.putData(8, new boolean[]{false, false, false, false, false, false, false, false,
-                false, false, false, false, false, false, true, true});
+                false, false, false, true, true, false, true, false});
         ram.putData(9, DataConverter.convertSignedDecToBool(-8, 16));
 
         for (int i = 0; i < 8; i++) {
