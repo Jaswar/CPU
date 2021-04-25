@@ -103,6 +103,10 @@ public class RAM implements Node {
         return inDebuggerMode;
     }
 
+    public boolean[][] getData() {
+        return data;
+    }
+
     /**Setters for some of the attributes of the class.
      * Setting BitStreams is not possible.
      */
