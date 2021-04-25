@@ -151,6 +151,7 @@ class CPUTest {
         assertArrayEquals(new boolean[]{false, false, false, false, false, false, false, false,
                         false, false, false, false, true, false, true, false},
                 cpu.getRegisterFile().getRegisters().get(1).getDataBitStream().getData());
+
     }
 
     @Test

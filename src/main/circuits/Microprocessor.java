@@ -233,18 +233,15 @@ public class Microprocessor implements Circuit {
         BitStream posFlag = new BitStream(1);
         BitStream overFlag = new BitStream(1);
 
-        BitStream clockNotOut = new BitStream(1);
-        NOT clockNot = new NOT(this.clock, clockNotOut, "clockNot", debugGates);
-
         BitStream setNegAndOut = new BitStream(1);
         BitStream setZeroAndOut = new BitStream(1);
         BitStream setPosAndOut = new BitStream(1);
         BitStream setOverAndOut = new BitStream(1);
 
-        AND setNegAnd = new AND(clockNotOut, setNeg, setNegAndOut, "setNegAnd", debugGates);
-        AND setZeroAnd = new AND(clockNotOut, setZero, setZeroAndOut, "setZeroAnd", debugGates);
-        AND setPosAnd = new AND(clockNotOut, setPos, setPosAndOut, "setPosAnd", debugGates);
-        AND setOverAnd = new AND(clockNotOut, setOver, setOverAndOut, "setOverAnd", debugGates);
+        AND setNegAnd = new AND(this.clock, setNeg, setNegAndOut, "setNegAnd", debugGates);
+        AND setZeroAnd = new AND(this.clock, setZero, setZeroAndOut, "setZeroAnd", debugGates);
+        AND setPosAnd = new AND(this.clock, setPos, setPosAndOut, "setPosAnd", debugGates);
+        AND setOverAnd = new AND(this.clock, setOver, setOverAndOut, "setOverAnd", debugGates);
 
         BitStream enableStatus = new BitStream(1);
         enableStatus.setData(new boolean[]{true});
