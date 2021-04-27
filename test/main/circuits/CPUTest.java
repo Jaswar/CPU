@@ -10,12 +10,12 @@ import org.junit.jupiter.api.Test;
 
 import javax.naming.ldap.Control;
 
+import java.util.Random;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class CPUTest {
 
-    Input clock;
-    BitStream bus;
     CPU cpu;
     RAM ram;
 
@@ -29,14 +29,34 @@ class CPUTest {
         BitStream memWrite = new BitStream(1);
 
         cpu = new CPU(memRead, memWrite, memoryDataOut, memoryDataIn, memoryAddress);
-        clock = cpu.getClockInput();
-        bus = cpu.getBus();
 
         ram = new RAM(memoryAddress, memoryDataIn, memoryDataOut, memWrite, memRead);
     }
 
     @Test
+    void testMovingBetweenRegisters() {
+
+        ram.putData(2, new boolean[]{false, false, false, false, true, false, true, false,
+                false, false, false, false, false, false, false, true});
+
+        testMovingIntermediateToRegister();
+
+        cpu.run(false, 1);
+
+        assertArrayEquals(new boolean[]{false, false, false, false, false, false, false, false,
+                        false, false, false, false, false, true, false, true},
+                cpu.getRegisterFile().getRegisters().get(2).getDataBitStream().getData());
+        assertArrayEquals(new boolean[]{false, false, false, false, false, false, false, false,
+                        false, false, false, false, false, true, false, true},
+                cpu.getRegisterFile().getRegisters().get(1).getDataBitStream().getData());
+        assertArrayEquals(new boolean[]{false, false, false, false, true, false, true, false,
+                        false, false, false, false, false, false, false, true},
+                cpu.getControlUnit().getMicroprocessor().getIR1().getDataBitStream().getData());
+    }
+
+    @Test
     void testMovingIntermediateToRegister() {
+
         ram.putData(0, new boolean[]{false, false, false, true, false, false, false, false,
                 false, false, false, false, false, false, true, false});
         ram.putData(1, new boolean[]{false, false, false, false, false, false, false, false,
@@ -56,23 +76,66 @@ class CPUTest {
     }
 
     @Test
-    void testMovingBetweenRegisters() {
-        ram.putData(2, new boolean[]{false, false, false, false, true, false, true, false,
-                false, false, false, false, false, false, false, true});
+    void testMovingFromIndirectMemory() {
+        //mv 0x10, ax
+        ram.putData(0, new boolean[]{false, false, false, false, false, false, false, false,
+                false, false, false, false, false, false, true, false});
+        ram.putData(1, new boolean[]{false, false, false, false, false, false, false, false,
+                false, false, false, true, false, false, false, false});
 
-        testMovingIntermediateToRegister();
+        //mv (ax), bx
+        ram.putData(2, new boolean[]{false, false, false, false, true, false, false, false,
+                false, false, false, false, false, false, true, true});
+        ram.putData(16, new boolean[]{false, false, false, false, false, false, false, false,
+                false, false, false, false, false, true, false, true});
+
+        cpu.run(false, 2);
+
+        assertArrayEquals(new boolean[]{false, false, false, false, false, false, false, false,
+                false, false, false, false, false, true, false, true},
+                cpu.getRegisterFile().getRegisters().get(1).getDataBitStream().getData());
+    }
+
+    @Test
+    void testMovingFromIntermediateValueMemory() {
+        ram.putData(16, new boolean[]{false, false, false, false, false, false, false, false,
+                false, false, false, false, false, true, false, true});
+
+        //mv (0x10), dx
+        ram.putData(0, new boolean[]{false, false, false, true, true, false, false, false,
+                false, false, false, false, false, true, false, false});
+        ram.putData(1, new boolean[]{false, false, false, false, false, false, false, false,
+                false, false, false, true, false, false, false, false});
 
         cpu.run(false, 1);
 
         assertArrayEquals(new boolean[]{false, false, false, false, false, false, false, false,
-                        false, false, false, false, false, true, false, true},
-                cpu.getRegisterFile().getRegisters().get(2).getDataBitStream().getData());
-        assertArrayEquals(new boolean[]{false, false, false, false, false, false, false, false,
-                        false, false, false, false, false, true, false, true},
-                cpu.getRegisterFile().getRegisters().get(1).getDataBitStream().getData());
-        assertArrayEquals(new boolean[]{false, false, false, false, true, false, true, false,
-                        false, false, false, false, false, false, false, true},
-                cpu.getControlUnit().getMicroprocessor().getIR1().getDataBitStream().getData());
+                false, false, false, false, false, true, false, true},
+                cpu.getRegisterFile().getRegisters().get(3).getDataBitStream().getData());
+    }
+
+    @Test
+    void testIndirectMemoryWriting() {
+        //mv -1, si
+        ram.putData(0, new boolean[]{false, false, true, false, true, false, false, false,
+                false, false, false, false, false, false, true, false});
+        ram.putData(1, new boolean[]{true, true, true, true, true, true, true, true,
+                true, true, true, true, true, true, true, true});
+
+        //mv 0x20, di
+        ram.putData(2, new boolean[]{false, false, true, false, false, false, false, false,
+                false, false, false, false, false, false, true, false});
+        ram.putData(3, new boolean[]{false, false, false, false, false, false, false, false,
+                false, false, true, false, false, false, false, false});
+
+        //mv si, (di)
+        ram.putData(4, new boolean[]{false, false, true, false, false, true, false, true,
+                false, false, false, false, false, true, false, true});
+
+        cpu.run(false, 3);
+
+        assertArrayEquals(new boolean[]{true, true, true, true, true, true, true, true,
+                true, true, true, true, true, true, true, true}, ram.getData()[32]);
     }
 
     @Test
