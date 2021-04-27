@@ -120,6 +120,14 @@ public class ControlUnit implements Circuit {
         return microprocessor;
     }
 
+    /**Getter for the microinstruction BitStream from the Control Unit.
+     *
+     * @return - the microinstruction BitStream
+     */
+    public BitStream getMicroinstruction() {
+        return microinstruction;
+    }
+
     /**Method to return the current state of the Control Unit.
      *
      * @return - the status of the Control Unit as String

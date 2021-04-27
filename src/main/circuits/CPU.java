@@ -2,8 +2,10 @@ package main.circuits;
 
 import main.BitStream;
 import main.circuits.memory.DFlipFlop;
+import main.control.Input;
 import main.gates.TriState;
 import main.utils.DataConverter;
+import main.utils.ProcessRunner;
 
 import java.beans.BeanInfo;
 import java.net.http.HttpRequest;
@@ -28,10 +30,10 @@ public class CPU implements Circuit {
     private BitStream ZIn;
     private BitStream ZOut;
     private ControlUnit controlUnit;
+    private Input clockInput;
 
     /**Constructors for the CPU class.
      *
-     * @param clock - the clock input to the CPU
      * @param memRead - the BitStream to send a read signal to the memory
      * @param memWrite - the BitStream to send a write signal to the memory
      * @param memoryDataOut - the BitStream with the data from the memory
@@ -41,10 +43,12 @@ public class CPU implements Circuit {
      * @param inDebuggerMode - boolean to specify if the circuit is in debug mode
      * @param debugDepth - how deep should debugging go
      */
-    public CPU(BitStream clock, BitStream memRead, BitStream memWrite,
+    public CPU(BitStream memRead, BitStream memWrite,
                BitStream memoryDataOut, BitStream memoryDataIn, BitStream memoryAddress,
                String name, boolean inDebuggerMode, int debugDepth) {
-        this.clock = clock;
+        this.clock = new BitStream(1);
+        this.clockInput = new Input(new boolean[]{false}, this.clock);
+
         this.memRead = memRead;
         this.memWrite = memWrite;
         this.memoryDataOut = memoryDataOut;
@@ -57,21 +61,21 @@ public class CPU implements Circuit {
         this.build();
     }
 
-    public CPU(BitStream clock, BitStream memRead, BitStream memWrite,
+    public CPU(BitStream memRead, BitStream memWrite,
                BitStream memoryDataOut, BitStream memoryDataIn, BitStream memoryAddress,
                String name) {
-        this(clock, memRead, memWrite, memoryDataOut, memoryDataIn, memoryAddress, name, false, 0);
+        this(memRead, memWrite, memoryDataOut, memoryDataIn, memoryAddress, name, false, 0);
     }
 
-    public CPU(BitStream clock, BitStream memRead, BitStream memWrite,
+    public CPU(BitStream memRead, BitStream memWrite,
                BitStream memoryDataOut, BitStream memoryDataIn, BitStream memoryAddress,
                boolean inDebuggerMode, int debugDepth) {
-        this(clock, memRead, memWrite, memoryDataOut, memoryDataIn, memoryAddress, "CPU", inDebuggerMode, debugDepth);
+        this(memRead, memWrite, memoryDataOut, memoryDataIn, memoryAddress, "CPU", inDebuggerMode, debugDepth);
     }
 
-    public CPU(BitStream clock, BitStream memRead, BitStream memWrite,
+    public CPU(BitStream memRead, BitStream memWrite,
                BitStream memoryDataOut, BitStream memoryDataIn, BitStream memoryAddress) {
-        this(clock, memRead, memWrite, memoryDataOut, memoryDataIn, memoryAddress, "CPU", false, 0);
+        this(memRead, memWrite, memoryDataOut, memoryDataIn, memoryAddress, "CPU", false, 0);
     }
 
     /**Getter for the bus of the CPU.
@@ -106,6 +110,14 @@ public class CPU implements Circuit {
         return this.iag;
     }
 
+    /**Getter for the clock of the CPU
+     *
+     * @return - the clock
+     */
+    public Input getClockInput() {
+        return clockInput;
+    }
+
     /**Method to return the current state of the CPU.
      *
      * @return - the status of the CPU as String
@@ -135,6 +147,43 @@ public class CPU implements Circuit {
                 " (" + DataConverter.convertBoolToUnsignedDec(this.memoryDataOut.getData()) + ", " +
                 DataConverter.convertBoolToSignedDec(this.memoryDataOut.getData(), this.memoryDataOut.getSize()) + ")\n";
         return status;
+    }
+
+    /**Run the CPU. Also enable an option to show additional information or run
+     * a selected number of instructions.
+     *
+     * @param showStatus - boolean to specify if additional information should be shown or not
+     * @param numInstructions - specify the number of instructions that should be ran
+     */
+    public void run(boolean showStatus, int numInstructions) {
+        int currentInstruction = 0;
+        int currentClockCycle = 0;
+        while (currentInstruction < numInstructions
+                || numInstructions == -1) {
+            clockInput.setData(new boolean[]{true});
+            ProcessRunner.run(clockInput);
+            clockInput.setData(new boolean[]{false});
+            ProcessRunner.run(clockInput);
+            currentClockCycle++;
+            clockInput.setData(new boolean[]{true});
+            ProcessRunner.run(clockInput);
+            clockInput.setData(new boolean[]{false});
+            ProcessRunner.run(clockInput);
+            currentClockCycle++;
+
+            if (this.controlUnit.getMicroinstruction().getData()[0]) {
+                if (showStatus) {
+                    System.out.println("Executed clock cycles: " + currentClockCycle);
+                    System.out.println("Executed instructions: " + currentInstruction);
+                    System.out.println(this.requestStatus());
+                }
+                currentInstruction++;
+            }
+        }
+    }
+
+    public void run(boolean showStatus) {
+        this.run(showStatus, -1);
     }
 
     /**Build the circuit as defined in the documentation.
