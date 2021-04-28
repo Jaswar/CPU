@@ -20,6 +20,8 @@ class CPUTest {
     CPU cpu;
     RAM ram;
 
+    public final int NUM_TRIES = 5;
+
     @BeforeEach
     @BeforeTry
     void setup() {
@@ -157,7 +159,7 @@ class CPUTest {
         assertEquals(15, DataConverter.convertBoolToSignedDec(ram.getData()[0x20], 16));
     }
 
-    @Property(tries = 20)
+    @Property(tries = NUM_TRIES)
     void testRegisterAddition(@ForAll @IntRange(min = -32000, max = 32000) int a,
                               @ForAll @IntRange(min = -32000, max = 32000) int b) {
         //mv a, ax
@@ -185,7 +187,7 @@ class CPUTest {
                 cpu.getControlUnit().getMicroprocessor().getIR1().getDataBitStream().getData());
     }
 
-    @Property(tries = 20)
+    @Property(tries = NUM_TRIES)
     void testRegisterIntermediateAddition(@ForAll @IntRange(min = -32000, max = 32000) int reg,
                                           @ForAll @IntRange(min = -32000, max = 32000) int inter) {
         //mv reg, cx
