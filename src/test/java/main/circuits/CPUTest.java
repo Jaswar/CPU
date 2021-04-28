@@ -9,6 +9,7 @@ import net.jqwik.api.ForAll;
 import net.jqwik.api.Property;
 import net.jqwik.api.constraints.IntRange;
 import net.jqwik.api.lifecycle.BeforeProperty;
+import net.jqwik.api.lifecycle.BeforeTry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,6 +21,7 @@ class CPUTest {
     RAM ram;
 
     @BeforeEach
+    @BeforeTry
     void setup() {
         BitStream clk = new BitStream(1);
         BitStream memoryDataOut = new BitStream(Microprocessor.WORD_SIZE);
@@ -143,33 +145,30 @@ class CPUTest {
         //mv 0x20, bp
         ram.putData(0, new boolean[]{false, false, true, true, false, false, false, false,
                 false, false, false, false, false, false, true, false});
-        ram.putData(1, new boolean[]{false, false, false, false, false, false, false, false,
-                false, false, true, false, false, false, false, false});
+        ram.putData(1, DataConverter.convertSignedDecToBool(0x20, Microprocessor.WORD_SIZE));
 
         //mv 15, (bp)
         ram.putData(2, new boolean[]{false, false, true, true, false, false, false, false,
                 false, false, false, false, false, true, true, true});
-        ram.putData(3, DataConverter.convertSignedDecToBool(15, 16));
+        ram.putData(3, DataConverter.convertSignedDecToBool(15, Microprocessor.WORD_SIZE));
 
         cpu.run(false, 2);
 
-        assertEquals(15, DataConverter.convertBoolToUnsignedDec(ram.getData()[0x20]));
+        assertEquals(15, DataConverter.convertBoolToSignedDec(ram.getData()[0x20], 16));
     }
 
-    @Property(tries = 10)
-    void testRegisterAddition(@ForAll @IntRange(min = -16000, max = 16000) int a,
-                              @ForAll @IntRange(min = -16000, max = 16000) int b) {
-        setup();
-
+    @Property(tries = 20)
+    void testRegisterAddition(@ForAll @IntRange(min = -32000, max = 32000) int a,
+                              @ForAll @IntRange(min = -32000, max = 32000) int b) {
         //mv a, ax
         ram.putData(0, new boolean[]{false, false, false, false, false, false, false, false,
                 false, false, false, false, false, false, true, false});
-        ram.putData(1, DataConverter.convertSignedDecToBool(a, 16));
+        ram.putData(1, DataConverter.convertSignedDecToBool(a, Microprocessor.WORD_SIZE));
 
         //mv b, bx
         ram.putData(2, new boolean[]{false, false, false, false, true, false, false, false,
                 false, false, false, false, false, false, true, false});
-        ram.putData(3, DataConverter.convertSignedDecToBool(b, 16));
+        ram.putData(3, DataConverter.convertSignedDecToBool(b, Microprocessor.WORD_SIZE));
 
         //add ax, bx
         ram.putData(4, new boolean[]{false, false, false, false, true, false, false, false,
@@ -177,23 +176,32 @@ class CPUTest {
 
         cpu.run(false, 3);
 
-        assertArrayEquals(DataConverter.convertSignedDecToBool(a, 16),
+        assertArrayEquals(DataConverter.convertSignedDecToBool(a, Microprocessor.WORD_SIZE),
                 cpu.getRegisterFile().getRegisters().get(0).getDataBitStream().getData());
-        assertArrayEquals(DataConverter.convertSignedDecToBool(a + b, 16),
+        assertArrayEquals(DataConverter.convertSignedDecToBool(a + b, Microprocessor.WORD_SIZE),
                 cpu.getRegisterFile().getRegisters().get(1).getDataBitStream().getData());
         assertArrayEquals(new boolean[]{false, false, false, false, true, false, false, false,
                         false, false, false, false, true, false, false, false},
                 cpu.getControlUnit().getMicroprocessor().getIR1().getDataBitStream().getData());
     }
 
-    @Test
-    void testRegisterIntermediateAddition() {
-        //mv 64, ax
-        ram.putData(0, new boolean[]{false, false, false, false, false, false, false, false,
+    @Property(tries = 20)
+    void testRegisterIntermediateAddition(@ForAll @IntRange(min = -32000, max = 32000) int reg,
+                                          @ForAll @IntRange(min = -32000, max = 32000) int inter) {
+        //mv reg, cx
+        ram.putData(0, new boolean[]{false, false, false, true, false, false, false, false,
                 false, false, false, false, false, false, true, false});
-        ram.putData(1, DataConverter.convertSignedDecToBool(64, 16));
+        ram.putData(1, DataConverter.convertSignedDecToBool(reg, Microprocessor.WORD_SIZE));
 
-        //add 74,
+        //add inter, cx
+        ram.putData(2, new boolean[]{false, false, false, true, false, false, false, false,
+                false, false, false, false, true, false, false, true});
+        ram.putData(3, DataConverter.convertSignedDecToBool(inter, Microprocessor.WORD_SIZE));
+
+        cpu.run(false, 2);
+
+        assertArrayEquals(DataConverter.convertSignedDecToBool(reg + inter, Microprocessor.WORD_SIZE),
+                cpu.getRegisterFile().getRegisters().get(2).getDataBitStream().getData());
     }
 
     @Test
@@ -242,12 +250,12 @@ class CPUTest {
         //jno loop
         ram.putData(8, new boolean[]{false, false, false, false, false, false, false, false,
                 false, false, true, false, false, false, true, false});
-        ram.putData(9, DataConverter.convertSignedDecToBool(-8, 16));
+        ram.putData(9, DataConverter.convertSignedDecToBool(-8, Microprocessor.WORD_SIZE));
 
         //jmp $
         ram.putData(10, new boolean[]{false, false, false, false, false, false, false, false,
                 false, false, false, true, true, false, true, false});
-        ram.putData(11, DataConverter.convertSignedDecToBool(-2, 16));
+        ram.putData(11, DataConverter.convertSignedDecToBool(-2, Microprocessor.WORD_SIZE));
 
 
         cpu.run(false, 1);

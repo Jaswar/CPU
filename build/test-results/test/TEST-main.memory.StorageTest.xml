@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="main.memory.StorageTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2021-04-28T20:11:27" hostname="DESKTOP-ND2UF5B" time="0.011">
-  <properties/>
-  <testcase name="testAdvancedReadWrite()" classname="main.memory.StorageTest" time="0.007"/>
-  <testcase name="testSimpleReadWrite()" classname="main.memory.StorageTest" time="0.003"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
