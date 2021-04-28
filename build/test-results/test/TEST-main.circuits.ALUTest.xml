@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="main.circuits.ALUTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2021-04-28T20:11:26" hostname="DESKTOP-ND2UF5B" time="0.017">
+  <properties/>
+  <testcase name="testSumOverflow()" classname="main.circuits.ALUTest" time="0.002"/>
+  <testcase name="testAnd()" classname="main.circuits.ALUTest" time="0.001"/>
+  <testcase name="testNor()" classname="main.circuits.ALUTest" time="0.001"/>
+  <testcase name="testNot()" classname="main.circuits.ALUTest" time="0.001"/>
+  <testcase name="testSub()" classname="main.circuits.ALUTest" time="0.001"/>
+  <testcase name="testSum()" classname="main.circuits.ALUTest" time="0.001"/>
+  <testcase name="testXor()" classname="main.circuits.ALUTest" time="0.0"/>
+  <testcase name="testNand()" classname="main.circuits.ALUTest" time="0.001"/>
+  <testcase name="testOr()" classname="main.circuits.ALUTest" time="0.001"/>
+  <testcase name="testSubOverflow()" classname="main.circuits.ALUTest" time="0.001"/>
+  <testcase name="testZeroFlag()" classname="main.circuits.ALUTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

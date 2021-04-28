@@ -1,0 +1,13 @@
+Ltimestamp = 2021-04-28T22:11:25.976784800, CPUTest:testRegisterAddition = 
+N                              |--------------------jqwik--------------------
+8tries = 10                    | # of calls to property
+9checks = 10                   | # of not rejected calls
+Cgeneration = RANDOMIZED       | parameters are randomly generated
+7after-failure = PREVIOUS_SEED | use the previous seed
+Cwhen-fixed-seed = ALLOW       | fixing the random seed is allowed
+9edge-cases#mode = MIXIN       | edge cases are mixed in
+>edge-cases#total = 18         | # of all combined edge cases
+Fedge-cases#tried = 2          | # of edge cases tried in current run
+Kseed = -6016907687018922706   | random seed to reproduce generated values
+
+

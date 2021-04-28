@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="main.circuits.AddSubtractTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2021-04-28T20:11:26" hostname="DESKTOP-ND2UF5B" time="0.697">
+  <properties/>
+  <testcase name="testVerySimple()" classname="main.circuits.AddSubtractTest" time="0.0"/>
+  <testcase name="randomTest()" classname="main.circuits.AddSubtractTest" time="0.694"/>
+  <testcase name="testSimple1()" classname="main.circuits.AddSubtractTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

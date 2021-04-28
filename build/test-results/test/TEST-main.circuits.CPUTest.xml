@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="main.circuits.CPUTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2021-04-28T20:11:25" hostname="DESKTOP-ND2UF5B" time="1.644">
+  <properties/>
+  <testcase name="testRegisterAddition" classname="main.circuits.CPUTest" time="0.44"/>
+  <testcase name="testMovingFromIndirectMemory()" classname="main.circuits.CPUTest" time="0.021"/>
+  <testcase name="testIndirectValueMemoryWrite()" classname="main.circuits.CPUTest" time="0.015"/>
+  <testcase name="testIndirectMemoryWriting()" classname="main.circuits.CPUTest" time="0.019"/>
+  <testcase name="testMovingBetweenRegisters()" classname="main.circuits.CPUTest" time="0.015"/>
+  <testcase name="testFibonacci()" classname="main.circuits.CPUTest" time="0.2"/>
+  <testcase name="testMovingIntermediateToRegister()" classname="main.circuits.CPUTest" time="0.013"/>
+  <testcase name="testRegisterIntermediateAddition()" classname="main.circuits.CPUTest" time="0.012"/>
+  <testcase name="testUnconditionalJumps()" classname="main.circuits.CPUTest" time="0.03"/>
+  <testcase name="testMovingFromIntermediateValueMemory()" classname="main.circuits.CPUTest" time="0.015"/>
+  <system-out><![CDATA[timestamp = 2021-04-28T22:11:25.976784800, CPUTest:testRegisterAddition = 
+                              |--------------------jqwik--------------------
+tries = 10                    | # of calls to property
+checks = 10                   | # of not rejected calls
+generation = RANDOMIZED       | parameters are randomly generated
+after-failure = PREVIOUS_SEED | use the previous seed
+when-fixed-seed = ALLOW       | fixing the random seed is allowed
+edge-cases#mode = MIXIN       | edge cases are mixed in
+edge-cases#total = 18         | # of all combined edge cases
+edge-cases#tried = 2          | # of edge cases tried in current run
+seed = -6016907687018922706   | random seed to reproduce generated values
+
+
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

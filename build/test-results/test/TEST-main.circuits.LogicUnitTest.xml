@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="main.circuits.LogicUnitTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2021-04-28T20:11:27" hostname="DESKTOP-ND2UF5B" time="0.01">
+  <properties/>
+  <testcase name="testAnd()" classname="main.circuits.LogicUnitTest" time="0.001"/>
+  <testcase name="testNor()" classname="main.circuits.LogicUnitTest" time="0.001"/>
+  <testcase name="testNot()" classname="main.circuits.LogicUnitTest" time="0.001"/>
+  <testcase name="testXor()" classname="main.circuits.LogicUnitTest" time="0.001"/>
+  <testcase name="testNand()" classname="main.circuits.LogicUnitTest" time="0.001"/>
+  <testcase name="testOr()" classname="main.circuits.LogicUnitTest" time="0.001"/>
+  <testcase name="testMultiple1()" classname="main.circuits.LogicUnitTest" time="0.001"/>
+  <testcase name="testMultiple2()" classname="main.circuits.LogicUnitTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

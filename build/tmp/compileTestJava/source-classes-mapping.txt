@@ -1,0 +1,64 @@
+main/memory/StorageTest.java
+ main.memory.StorageTest
+main/circuits/ALUTest.java
+ main.circuits.ALUTest
+main/circuits/IAGTest.java
+ main.circuits.IAGTest
+main/gates/binary/NORTest.java
+ main.gates.binary.NORTest
+ALURFTest.java
+ ALURFTest
+main/circuits/ControlUnitTest.java
+ main.circuits.ControlUnitTest
+main/circuits/LogicUnitTest.java
+ main.circuits.LogicUnitTest
+main/circuits/RegisterTest.java
+ main.circuits.RegisterTest
+main/memory/ROMTest.java
+ main.memory.ROMTest
+main/circuits/memory/DLatchTest.java
+ main.circuits.memory.DLatchTest
+main/gates/multi/MultiNANDTest.java
+ main.gates.multi.MultiNANDTest
+ShiftRegisterTest.java
+ ShiftRegisterTest
+main/control/SplitterTest.java
+ main.control.SplitterTest
+main/circuits/DecoderTest.java
+ main.circuits.DecoderTest
+main/circuits/MultiplexerTest.java
+ main.circuits.MultiplexerTest
+main/gates/binary/XORTest.java
+ main.gates.binary.XORTest
+TFlipFlopCounterTest.java
+ TFlipFlopCounterTest
+main/gates/multi/MultiORTest.java
+ main.gates.multi.MultiORTest
+main/utils/DataConverterTest.java
+ main.utils.DataConverterTest
+main/circuits/memory/DFlipFlopTest.java
+ main.circuits.memory.DFlipFlopTest
+main/memory/RAMTest.java
+ main.memory.RAMTest
+main/circuits/AddSubtractTest.java
+ main.circuits.AddSubtractTest
+main/gates/binary/ANDTest.java
+ main.gates.binary.ANDTest
+ExampleCircuitsTest.java
+ ExampleCircuitsTest
+main/circuits/RegisterFileTest.java
+ main.circuits.RegisterFileTest
+main/circuits/memory/TFlipFlopTest.java
+ main.circuits.memory.TFlipFlopTest
+main/gates/multi/MultiANDTest.java
+ main.gates.multi.MultiANDTest
+main/gates/multi/MultiNORTest.java
+ main.gates.multi.MultiNORTest
+main/circuits/MicroprocessorTest.java
+ main.circuits.MicroprocessorTest
+main/gates/binary/ORTest.java
+ main.gates.binary.ORTest
+main/gates/TriStateTest.java
+ main.gates.TriStateTest
+main/circuits/CPUTest.java
+ main.circuits.CPUTest

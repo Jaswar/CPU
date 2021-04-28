@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="main.memory.RAMTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2021-04-28T20:11:27" hostname="DESKTOP-ND2UF5B" time="0.002">
+  <properties/>
+  <testcase name="testMultipleWrites()" classname="main.memory.RAMTest" time="0.001"/>
+  <testcase name="testSimple()" classname="main.memory.RAMTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

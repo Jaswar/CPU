@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="main.circuits.ControlUnitTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2021-04-28T20:11:26" hostname="DESKTOP-ND2UF5B" time="0.053">
+  <properties/>
+  <testcase name="testRegisterMoving()" classname="main.circuits.ControlUnitTest" time="0.015"/>
+  <testcase name="testThirdInstruction()" classname="main.circuits.ControlUnitTest" time="0.013"/>
+  <testcase name="testMovingIntermediate()" classname="main.circuits.ControlUnitTest" time="0.011"/>
+  <testcase name="testCommonMicroinstructions()" classname="main.circuits.ControlUnitTest" time="0.013"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

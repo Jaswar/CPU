@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="main.control.SplitterTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2021-04-28T20:11:27" hostname="DESKTOP-ND2UF5B" time="0.021">
+  <properties/>
+  <testcase name="testIllegalSplit1()" classname="main.control.SplitterTest" time="0.008"/>
+  <testcase name="testIllegalSplit2()" classname="main.control.SplitterTest" time="0.001"/>
+  <testcase name="testIllegalSplit3()" classname="main.control.SplitterTest" time="0.001"/>
+  <testcase name="testSplitting1()" classname="main.control.SplitterTest" time="0.0"/>
+  <testcase name="testSplitting2()" classname="main.control.SplitterTest" time="0.0"/>
+  <testcase name="testMultiply1()" classname="main.control.SplitterTest" time="0.0"/>
+  <testcase name="testMultiply2()" classname="main.control.SplitterTest" time="0.0"/>
+  <testcase name="testMultiply3()" classname="main.control.SplitterTest" time="0.001"/>
+  <testcase name="testMultiply4()" classname="main.control.SplitterTest" time="0.0"/>
+  <testcase name="testMerging1()" classname="main.control.SplitterTest" time="0.0"/>
+  <testcase name="testMerging2()" classname="main.control.SplitterTest" time="0.0"/>
+  <testcase name="testMismatch1()" classname="main.control.SplitterTest" time="0.001"/>
+  <testcase name="testMismatch4()" classname="main.control.SplitterTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

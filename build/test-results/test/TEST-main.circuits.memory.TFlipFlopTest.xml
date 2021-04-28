@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="main.circuits.memory.TFlipFlopTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2021-04-28T20:11:27" hostname="DESKTOP-ND2UF5B" time="0.006">
+  <properties/>
+  <testcase name="testClear()" classname="main.circuits.memory.TFlipFlopTest" time="0.001"/>
+  <testcase name="testT0()" classname="main.circuits.memory.TFlipFlopTest" time="0.001"/>
+  <testcase name="testDisabled()" classname="main.circuits.memory.TFlipFlopTest" time="0.0"/>
+  <testcase name="testPreset()" classname="main.circuits.memory.TFlipFlopTest" time="0.001"/>
+  <testcase name="testSimple()" classname="main.circuits.memory.TFlipFlopTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
