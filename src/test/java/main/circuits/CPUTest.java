@@ -5,6 +5,7 @@ import main.control.Input;
 import main.memory.RAM;
 import main.utils.DataConverter;
 import main.utils.ProcessRunner;
+import net.jqwik.api.Data;
 import net.jqwik.api.ForAll;
 import net.jqwik.api.Property;
 import net.jqwik.api.constraints.IntRange;
@@ -20,7 +21,7 @@ class CPUTest {
     CPU cpu;
     RAM ram;
 
-    public final int NUM_TRIES = 5;
+    public final int NUM_TRIES = 10;
 
     @BeforeEach
     @BeforeTry
@@ -37,9 +38,40 @@ class CPUTest {
         ram = new RAM(memoryAddress, memoryDataIn, memoryDataOut, memWrite, memRead);
     }
 
+    private void loadForLogicalRegistersOperation(int a, int b) {
+        //mv a, ax
+        ram.putData(0, new boolean[]{false, false, false, false, false, false, false, false,
+                false, false, false, false, false, false, true, false});
+        ram.putData(1, DataConverter.convertSignedDecToBool(a, Microprocessor.WORD_SIZE));
+
+        //mv b, bx
+        ram.putData(2, new boolean[]{false, false, false, false, true, false, false, false,
+                false, false, false, false, false, false, true, false});
+        ram.putData(3, DataConverter.convertSignedDecToBool(b, Microprocessor.WORD_SIZE));
+    }
+
+    private void testJumps(int opCode, int a, int b, boolean shouldPass) {
+        testRegisterAddition(a, b);
+
+        //j
+        ram.putData(6, DataConverter.convertSignedDecToBool(opCode, Microprocessor.WORD_SIZE));
+        ram.putData(7, new boolean[]{false, false, false, false, false, false, false, false,
+                false, false, false, false, true, false, true, false});
+
+        cpu.run(false, 1);
+
+        if (shouldPass) {
+            assertArrayEquals(new boolean[]{false, false, false, false, false, false, false, false,
+                    false, false, false, true, false, false, true, false}, cpu.getIag().getPC().getDataBitStream().getData());
+        } else {
+            assertArrayEquals(new boolean[]{false, false, false, false, false, false, false, false,
+                    false, false, false, false, true, false, false, false}, cpu.getIag().getPC().getDataBitStream().getData());
+        }
+    }
+
     @Test
     void testMovingBetweenRegisters() {
-
+        //mv cx, bx
         ram.putData(2, new boolean[]{false, false, false, false, true, false, true, false,
                 false, false, false, false, false, false, false, true});
 
@@ -60,7 +92,7 @@ class CPUTest {
 
     @Test
     void testMovingIntermediateToRegister() {
-
+        //mv 5, cx
         ram.putData(0, new boolean[]{false, false, false, true, false, false, false, false,
                 false, false, false, false, false, false, true, false});
         ram.putData(1, new boolean[]{false, false, false, false, false, false, false, false,
@@ -206,29 +238,369 @@ class CPUTest {
                 cpu.getRegisterFile().getRegisters().get(2).getDataBitStream().getData());
     }
 
-    @Test
-    void testUnconditionalJumps() {
+    @Property(tries = NUM_TRIES)
+    void testRegisterIncrement(@ForAll @IntRange(min = 0, max = 32) int count,
+                               @ForAll @IntRange(min = -1000, max = 1000) int initialValue) {
+        //mv initialValue, ax
+        ram.putData(0, new boolean[]{false, false, false, false, false, false, false, false,
+                false, false, false, false, false, false, true, false});
+        ram.putData(1, DataConverter.convertSignedDecToBool(initialValue, Microprocessor.WORD_SIZE));
 
-        testRegisterAddition(10, 5);
+        for (int i = 1; i <= count ; i++) {
+            //inc ax
+            ram.putData(2 * i, new boolean[]{false, false, false, false, false, false, false, false,
+                    false, false, false, false, true, false, true, false});
+        }
+        cpu.run(false, count + 1);
 
-        ram.putData(6, new boolean[]{false, false, false, false, false, false, false, false,
-                false, false, false, true, true, false, true, false});
-        ram.putData(7, new boolean[]{false, false, false, false, false, false, false, false,
-                false, false, false, false, false, false, true, true});
+        assertArrayEquals(DataConverter.convertSignedDecToBool(count + initialValue, Microprocessor.WORD_SIZE),
+                cpu.getRegisterFile().getRegisters().get(0).getDataBitStream().getData());
+    }
+
+    @Property(tries = NUM_TRIES)
+    void testRegisterSubtraction(@ForAll @IntRange(min = -32000, max = 32000) int s,
+                                 @ForAll @IntRange(min = -32000, max = 32000) int b) {
+        //mv s, sp
+        ram.putData(0, new boolean[]{false, false, true, true, true, false, false, false,
+                false, false, false, false, false, false, true, false});
+        ram.putData(1, DataConverter.convertSignedDecToBool(s, Microprocessor.WORD_SIZE));
+
+        //mv b, bp
+        ram.putData(2, new boolean[]{false, false, true, true, false, false, false, false,
+                false, false, false, false, false, false, true, false});
+        ram.putData(3, DataConverter.convertSignedDecToBool(b, Microprocessor.WORD_SIZE));
+
+        //sub sp, bp
+        ram.putData(4, new boolean[]{false, false, true, true, false, true, true, true,
+                false, false, false, false, true, false, true, true});
+
+        cpu.run(false, 3);
+
+        assertArrayEquals(DataConverter.convertSignedDecToBool(s - b, Microprocessor.WORD_SIZE),
+                cpu.getRegisterFile().getRegisters().get(6).getDataBitStream().getData());
+    }
+
+    @Property(tries = NUM_TRIES)
+    void testRegisterMinusIntermediate(@ForAll @IntRange(min = -32000, max = 32000) int inter,
+                                       @ForAll @IntRange(min = -32000, max = 32000) int s) {
+        //mv s, si
+        ram.putData(0, new boolean[]{false, false, true, false, true, false, false, false,
+                false, false, false, false, false, false, true, false});
+        ram.putData(1, DataConverter.convertSignedDecToBool(s, Microprocessor.WORD_SIZE));
+
+        //sub sp, inter
+        ram.putData(2, new boolean[]{false, false, true, false, true, false, false, false,
+                false, false, false, false, true, true, false, false});
+        ram.putData(3, DataConverter.convertSignedDecToBool(inter, Microprocessor.WORD_SIZE));
+
+        cpu.run(false, 2);
+
+        assertArrayEquals(DataConverter.convertSignedDecToBool(s - inter, Microprocessor.WORD_SIZE),
+                cpu.getRegisterFile().getRegisters().get(5).getDataBitStream().getData());
+    }
+
+    @Property(tries = NUM_TRIES)
+    void testIntermediateMinusRegister(@ForAll @IntRange(min = -32000, max = 32000) int inter,
+                                       @ForAll @IntRange(min = -32000, max = 32000) int s) {
+        //mv s, di
+        ram.putData(0, new boolean[]{false, false, true, false, false, false, false, false,
+                false, false, false, false, false, false, true, false});
+        ram.putData(1, DataConverter.convertSignedDecToBool(s, Microprocessor.WORD_SIZE));
+
+        //sub inter, di
+        ram.putData(2, new boolean[]{false, false, true, false, false, false, false, false,
+                false, false, false, false, true, true, false, true});
+        ram.putData(3, DataConverter.convertSignedDecToBool(inter, Microprocessor.WORD_SIZE));
+
+        cpu.run(false, 2);
+
+        assertArrayEquals(DataConverter.convertSignedDecToBool(inter - s, Microprocessor.WORD_SIZE),
+                cpu.getRegisterFile().getRegisters().get(4).getDataBitStream().getData());
+    }
+
+    @Property(tries = NUM_TRIES)
+    void testRegisterDecrement(@ForAll @IntRange(min = 0, max = 32) int count,
+                               @ForAll @IntRange(min = -1000, max = 1000) int initialValue) {
+        //mv initialValue, bx
+        ram.putData(0, new boolean[]{false, false, false, false, true, false, false, false,
+                false, false, false, false, false, false, true, false});
+        ram.putData(1, DataConverter.convertSignedDecToBool(initialValue, Microprocessor.WORD_SIZE));
+
+        for (int i = 1; i <= count ; i++) {
+            //dec ax
+            ram.putData(2 * i, new boolean[]{false, false, false, false, true, false, false, false,
+                    false, false, false, false, true, true, true, false});
+        }
+        cpu.run(false, count + 1);
+
+        assertArrayEquals(DataConverter.convertSignedDecToBool(initialValue - count, Microprocessor.WORD_SIZE),
+                cpu.getRegisterFile().getRegisters().get(1).getDataBitStream().getData());
+    }
+
+    @Property(tries = NUM_TRIES)
+    void testNot(@ForAll @IntRange(min = -32000, max = 32000) int value) {
+        //mv value, dx
+        ram.putData(0, new boolean[]{false, false, false, true, true, false, false, false,
+                false, false, false, false, false, false, true, false});
+        ram.putData(1, DataConverter.convertSignedDecToBool(value, Microprocessor.WORD_SIZE));
+
+        //not dx
+        ram.putData(2, new boolean[]{false, false, false, true, true, false, false, false,
+                false, false, false, false, true, true, true, true});
+
+        cpu.run(false, 2);
+
+        assertArrayEquals(DataConverter.convertSignedDecToBool(~value, Microprocessor.WORD_SIZE),
+                cpu.getRegisterFile().getRegisters().get(3).getDataBitStream().getData());
+    }
+
+    @Property(tries = NUM_TRIES)
+    void testOrRegisters(@ForAll @IntRange(min = -32000, max = 32000) int a,
+                         @ForAll @IntRange(min = -32000, max = 32000) int b) {
+        loadForLogicalRegistersOperation(a, b);
+
+        //or ax, bx
+        ram.putData(4, new boolean[]{false, false, false, false, true, false, false, false,
+                false, false, false, true, false, false, false, false});
+
+        cpu.run(false, 3);
+
+        assertArrayEquals(DataConverter.convertSignedDecToBool(a | b, Microprocessor.WORD_SIZE),
+                cpu.getRegisterFile().getRegisters().get(1).getDataBitStream().getData());
+    }
+
+    @Property(tries = NUM_TRIES)
+    void testIntermediateOrRegister(@ForAll @IntRange(min = -32000, max = 32000) int b,
+                         @ForAll @IntRange(min = -32000, max = 32000) int inter) {
+        //mv b, bx
+        ram.putData(0, new boolean[]{false, false, false, false, true, false, false, false,
+                false, false, false, false, false, false, true, false});
+        ram.putData(1, DataConverter.convertSignedDecToBool(b, Microprocessor.WORD_SIZE));
+
+        //or inter, cx
+        ram.putData(2, new boolean[]{false, false, false, false, true, false, false, false,
+                false, false, false, true, false, false, false, true});
+        ram.putData(3, DataConverter.convertSignedDecToBool(inter, Microprocessor.WORD_SIZE));
+
+        cpu.run(false, 2);
+
+        assertArrayEquals(DataConverter.convertSignedDecToBool(b | inter, Microprocessor.WORD_SIZE),
+                cpu.getRegisterFile().getRegisters().get(1).getDataBitStream().getData());
+    }
+
+    @Property(tries = NUM_TRIES)
+    void testAndRegisters(@ForAll @IntRange(min = -32000, max = 32000) int a,
+                         @ForAll @IntRange(min = -32000, max = 32000) int b) {
+        loadForLogicalRegistersOperation(a, b);
+
+        //or ax, bx
+        ram.putData(4, new boolean[]{false, false, false, false, true, false, false, false,
+                false, false, false, true, false, false, true, false});
+
+        cpu.run(false, 3);
+
+        assertArrayEquals(DataConverter.convertSignedDecToBool(a & b, Microprocessor.WORD_SIZE),
+                cpu.getRegisterFile().getRegisters().get(1).getDataBitStream().getData());
+    }
+
+    @Property(tries = NUM_TRIES)
+    void testIntermediateAndRegister(@ForAll @IntRange(min = -32000, max = 32000) int d,
+                                    @ForAll @IntRange(min = -32000, max = 32000) int inter) {
+        //mv d, di
+        ram.putData(0, new boolean[]{false, false, true, false, false, false, false, false,
+                false, false, false, false, false, false, true, false});
+        ram.putData(1, DataConverter.convertSignedDecToBool(d, Microprocessor.WORD_SIZE));
+
+        //and inter, di
+        ram.putData(2, new boolean[]{false, false, true, false, false, false, false, false,
+                false, false, false, true, false, false, true, true});
+        ram.putData(3, DataConverter.convertSignedDecToBool(inter, Microprocessor.WORD_SIZE));
+
+        cpu.run(false, 2);
+
+        assertArrayEquals(DataConverter.convertSignedDecToBool(d & inter, Microprocessor.WORD_SIZE),
+                cpu.getRegisterFile().getRegisters().get(4).getDataBitStream().getData());
+    }
+
+    @Property(tries = NUM_TRIES)
+    void testXorRegisters(@ForAll @IntRange(min = -32000, max = 32000) int a,
+                          @ForAll @IntRange(min = -32000, max = 32000) int b) {
+        loadForLogicalRegistersOperation(a, b);
+
+        //xor ax, bx
+        ram.putData(4, new boolean[]{false, false, false, false, true, false, false, false,
+                false, false, false, true, false, true, false, false});
+
+        cpu.run(false, 3);
+
+        assertArrayEquals(DataConverter.convertSignedDecToBool(a ^ b, Microprocessor.WORD_SIZE),
+                cpu.getRegisterFile().getRegisters().get(1).getDataBitStream().getData());
+    }
+
+    @Property(tries = NUM_TRIES)
+    void testIntermediateXorRegister(@ForAll @IntRange(min = -32000, max = 32000) int d,
+                                     @ForAll @IntRange(min = -32000, max = 32000) int inter) {
+        //mv d, di
+        ram.putData(0, new boolean[]{false, false, true, false, false, false, false, false,
+                false, false, false, false, false, false, true, false});
+        ram.putData(1, DataConverter.convertSignedDecToBool(d, Microprocessor.WORD_SIZE));
+
+        //xor inter, di
+        ram.putData(2, new boolean[]{false, false, true, false, false, false, false, false,
+                false, false, false, true, false, true, false, true});
+        ram.putData(3, DataConverter.convertSignedDecToBool(inter, Microprocessor.WORD_SIZE));
+
+        cpu.run(false, 2);
+
+        assertArrayEquals(DataConverter.convertSignedDecToBool(d ^ inter, Microprocessor.WORD_SIZE),
+                cpu.getRegisterFile().getRegisters().get(4).getDataBitStream().getData());
+    }
+
+    @Property(tries = NUM_TRIES)
+    void testNandRegisters(@ForAll @IntRange(min = -32000, max = 32000) int a,
+                          @ForAll @IntRange(min = -32000, max = 32000) int b) {
+        loadForLogicalRegistersOperation(a, b);
+
+        //nand ax, bx
+        ram.putData(4, new boolean[]{false, false, false, false, true, false, false, false,
+                false, false, false, true, false, true, true, false});
+
+        cpu.run(false, 3);
+
+        assertArrayEquals(DataConverter.convertSignedDecToBool(~(a & b), Microprocessor.WORD_SIZE),
+                cpu.getRegisterFile().getRegisters().get(1).getDataBitStream().getData());
+    }
+
+    @Property(tries = NUM_TRIES)
+    void testIntermediateNandRegister(@ForAll @IntRange(min = -32000, max = 32000) int b,
+                                     @ForAll @IntRange(min = -32000, max = 32000) int inter) {
+        //mv b, bp
+        ram.putData(0, new boolean[]{false, false, true, true, false, false, false, false,
+                false, false, false, false, false, false, true, false});
+        ram.putData(1, DataConverter.convertSignedDecToBool(b, Microprocessor.WORD_SIZE));
+
+        //nand inter, bp
+        ram.putData(2, new boolean[]{false, false, true, true, false, false, false, false,
+                false, false, false, true, false, true, true, true});
+        ram.putData(3, DataConverter.convertSignedDecToBool(inter, Microprocessor.WORD_SIZE));
+
+        cpu.run(false, 2);
+
+        assertArrayEquals(DataConverter.convertSignedDecToBool(~(b & inter), Microprocessor.WORD_SIZE),
+                cpu.getRegisterFile().getRegisters().get(6).getDataBitStream().getData());
+    }
+
+    @Property(tries = NUM_TRIES)
+    void testNorRegisters(@ForAll @IntRange(min = -32000, max = 32000) int a,
+                           @ForAll @IntRange(min = -32000, max = 32000) int b) {
+        loadForLogicalRegistersOperation(a, b);
+
+        //nor ax, bx
+        ram.putData(4, new boolean[]{false, false, false, false, true, false, false, false,
+                false, false, false, true, true, false, false, false});
+
+        cpu.run(false, 3);
+
+        assertArrayEquals(DataConverter.convertSignedDecToBool(~(a | b), Microprocessor.WORD_SIZE),
+                cpu.getRegisterFile().getRegisters().get(1).getDataBitStream().getData());
+    }
+
+    @Property(tries = NUM_TRIES)
+    void testIntermediateNorRegister(@ForAll @IntRange(min = -32000, max = 32000) int b,
+                                      @ForAll @IntRange(min = -32000, max = 32000) int inter) {
+        //mv b, sp
+        ram.putData(0, new boolean[]{false, false, true, true, true, false, false, false,
+                false, false, false, false, false, false, true, false});
+        ram.putData(1, DataConverter.convertSignedDecToBool(b, Microprocessor.WORD_SIZE));
+
+        //nor inter, sp
+        ram.putData(2, new boolean[]{false, false, true, true, true, false, false, false,
+                false, false, false, true, true, false, false, true});
+        ram.putData(3, DataConverter.convertSignedDecToBool(inter, Microprocessor.WORD_SIZE));
+
+        cpu.run(false, 2);
+
+        assertArrayEquals(DataConverter.convertSignedDecToBool(~(b | inter), Microprocessor.WORD_SIZE),
+                cpu.getRegisterFile().getRegisters().get(7).getDataBitStream().getData());
+    }
+
+
+
+    @Property(tries = NUM_TRIES)
+    void testUnconditionalJumps(@ForAll @IntRange(min = -16000, max = 16000) int a,
+                                @ForAll @IntRange(min = -16000, max = 16000) int b) {
+        testJumps(26, a, b, true);
+    }
+
+    @Property(tries = NUM_TRIES)
+    void testJumpIfNegative(@ForAll @IntRange(min = -16000, max = 16000) int a,
+                            @ForAll @IntRange(min = -16000, max = 16000) int b) {
+        testJumps(27, a, b, a + b < 0);
+    }
+
+    @Property(tries = NUM_TRIES)
+    void testJumpIfNonNegative(@ForAll @IntRange(min = -16000, max = 16000) int a,
+                            @ForAll @IntRange(min = -16000, max = 16000) int b) {
+        testJumps(28, a, b, a + b >= 0);
+    }
+
+    @Property(tries = NUM_TRIES)
+    void testJumpIfZero(@ForAll @IntRange(min = -16000, max = 16000) int a,
+                            @ForAll @IntRange(min = -16000, max = 16000) int b) {
+        testJumps(29, a, b, a + b == 0);
+    }
+
+    @Property(tries = NUM_TRIES)
+    void testJumpIfNonZero(@ForAll @IntRange(min = -16000, max = 16000) int a,
+                            @ForAll @IntRange(min = -16000, max = 16000) int b) {
+        testJumps(30, a, b, a + b != 0);
+    }
+
+    @Property(tries = NUM_TRIES)
+    void testJumpIfPositive(@ForAll @IntRange(min = -16000, max = 16000) int a,
+                               @ForAll @IntRange(min = -16000, max = 16000) int b) {
+        testJumps(31, a, b, a + b > 0);
+    }
+
+    @Property(tries = NUM_TRIES)
+    void testJumpIfNonPositive(@ForAll @IntRange(min = -16000, max = 16000) int a,
+                            @ForAll @IntRange(min = -16000, max = 16000) int b) {
+        testJumps(32, a, b, a + b <= 0);
+    }
+
+    @Property(tries = NUM_TRIES)
+    void testJumpIfOverflow(@ForAll @IntRange(min = -32000, max = 32000) int a,
+                               @ForAll @IntRange(min = -32000, max = 32000) int b) {
+        boolean shouldPass = Math.abs(a + b) > 32767;
+        if (a + b == -32768) {
+            shouldPass = false;
+        }
+        testJumps(33, a, b, shouldPass);
+    }
+
+    @Property(tries = NUM_TRIES)
+    void testJumpIfNoOverflow(@ForAll @IntRange(min = -32000, max = 32000) int a,
+                            @ForAll @IntRange(min = -32000, max = 32000) int b) {
+        boolean shouldPass = Math.abs(a + b) <= 32767;
+        if (a + b == -32768) {
+            shouldPass = true;
+        }
+        testJumps(34, a, b, shouldPass);
+    }
+
+    @Property(tries = NUM_TRIES)
+    void testClearFlags(@ForAll @IntRange(min = -32000, max = 32000) int a,
+                        @ForAll @IntRange(min = -32000, max = 32000) int b) {
+        testRegisterAddition(a, b);
+
+        ram.putData(6, DataConverter.convertSignedDecToBool(35, Microprocessor.WORD_SIZE));
 
         cpu.run(false, 1);
 
-        assertArrayEquals(new boolean[]{false, false, false, false, false, false, false, false,
-                false, false, false, false, true, false, true, true}, cpu.getIag().getPC().getDataBitStream().getData());
-        assertArrayEquals(new boolean[]{false, false, false, false, false, false, false, false,
-                        false, false, false, false, true, true, true, true},
-                cpu.getRegisterFile().getRegisters().get(1).getDataBitStream().getData());
-        assertArrayEquals(new boolean[]{false, false, false, false, false, false, false, false,
-                        false, false, false, false, true, false, true, false},
-                cpu.getRegisterFile().getRegisters().get(0).getDataBitStream().getData());
-
+        assertEquals("0000",
+                DataConverter.convertBoolToBin(cpu.getControlUnit().getMicroprocessor().getStatus().getData()));
     }
-    
+
     @Test
     void testFibonacci() {
         //mov 1, ax
