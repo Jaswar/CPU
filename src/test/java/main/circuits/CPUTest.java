@@ -5,12 +5,15 @@ import main.control.Input;
 import main.memory.RAM;
 import main.utils.DataConverter;
 import main.utils.ProcessRunner;
+import main.warnings.InconsistentBitStreamSourcesWarning;
 import net.jqwik.api.Data;
 import net.jqwik.api.ForAll;
 import net.jqwik.api.Property;
 import net.jqwik.api.constraints.IntRange;
+import net.jqwik.api.lifecycle.AfterTry;
 import net.jqwik.api.lifecycle.BeforeProperty;
 import net.jqwik.api.lifecycle.BeforeTry;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -26,6 +29,8 @@ class CPUTest {
     @BeforeEach
     @BeforeTry
     void setup() {
+        InconsistentBitStreamSourcesWarning.setSuppress(true);
+
         BitStream clk = new BitStream(1);
         BitStream memoryDataOut = new BitStream(Microprocessor.WORD_SIZE);
         BitStream memoryDataIn = new BitStream(Microprocessor.WORD_SIZE);
@@ -36,6 +41,12 @@ class CPUTest {
         cpu = new CPU(memRead, memWrite, memoryDataOut, memoryDataIn, memoryAddress);
 
         ram = new RAM(memoryAddress, memoryDataIn, memoryDataOut, memWrite, memRead);
+    }
+
+    @AfterEach
+    @AfterTry
+    void teardown() {
+        InconsistentBitStreamSourcesWarning.setSuppress(false);
     }
 
     private void loadForLogicalRegistersOperation(int a, int b) {
@@ -53,7 +64,6 @@ class CPUTest {
     private void testJumps(int opCode, int a, int b, boolean shouldPass) {
         testRegisterAddition(a, b);
 
-        //j
         ram.putData(6, DataConverter.convertSignedDecToBool(opCode, Microprocessor.WORD_SIZE));
         ram.putData(7, new boolean[]{false, false, false, false, false, false, false, false,
                 false, false, false, false, true, false, true, false});

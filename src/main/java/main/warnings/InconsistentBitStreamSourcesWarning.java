@@ -6,11 +6,25 @@ import main.Node;
  */
 public class InconsistentBitStreamSourcesWarning {
 
+    private static boolean suppress = false;
+
     public static void show(Node oldSource, Node newSource) {
-        //System.err.println("Warning! Possible inconsistency between:\n" + oldSource + " and\n" + newSource);
+        if (!suppress) {
+            System.err.println("Warning! Possible inconsistency between:\n" + oldSource + " and\n" + newSource);
+        }
     }
 
     public static void show(String message) {
-        System.err.println(message);
+        if (!suppress) {
+            System.err.println(message);
+        }
+    }
+
+    /**Allow for setting of the suppression of the warning.
+     *
+     * @param s - the new value to set the suppression to
+     */
+    public static void setSuppress(boolean s) {
+        suppress = s;
     }
 }

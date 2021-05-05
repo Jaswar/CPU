@@ -169,12 +169,12 @@ public class CPU implements Circuit {
             currentClockCycle++;
 
             if (this.controlUnit.getMicroinstruction().getData()[0]) {
+                currentInstruction++;
                 if (showStatus) {
                     System.out.println("Executed clock cycles: " + currentClockCycle);
                     System.out.println("Executed instructions: " + currentInstruction);
                     System.out.println(this.requestStatus());
                 }
-                currentInstruction++;
             }
         }
     }

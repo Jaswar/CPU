@@ -9,10 +9,18 @@ import java.util.Scanner;
 
 public class MappingROMLoader {
 
+    /**Run the main method of this class to create a storage file with the mapping information.
+     */
     public static void main(String[] args) {
         readMicroinstructionCSVFile("./documentation/microinstructions.csv", "./storage/main/microMapping.stg");
     }
 
+    /**Method to load the mapping information for the microprocessor from the file specified.
+     *
+     * @param documentFilepath - filepath where the .csv file containing the mapping information is. This should be
+     *                         the file generated from microinstructions.xlsx
+     * @param storageFilepath - filepath where the resulting storage should be saved
+     */
     private static void readMicroinstructionCSVFile(String documentFilepath, String storageFilepath) {
         try (Scanner fileScanner = new Scanner(new File(documentFilepath))) {
 

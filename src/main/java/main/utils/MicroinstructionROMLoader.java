@@ -9,10 +9,19 @@ import java.util.Scanner;
 
 public class MicroinstructionROMLoader {
 
+
+    /**Run the main method of this class to create a storage file with the microinstructions.
+     */
     public static void main(String[] args) {
         readMicroinstructionCSVFile("./documentation/microinstructions.csv", "./storage/main/microinstructions.stg");
     }
 
+    /**Method to load the microinstructions for the microprocessor from the file specified.
+     *
+     * @param documentFilepath - filepath where the .csv file containing the microinstructions is. This should be
+     *                         the file generated from microinstructions.xlsx
+     * @param storageFilepath - filepath where the resulting storage should be saved
+     */
     private static void readMicroinstructionCSVFile(String documentFilepath, String storageFilepath) {
         try (Scanner fileScanner = new Scanner(new File(documentFilepath))) {
 

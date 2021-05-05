@@ -60,6 +60,10 @@ public class IAG implements Circuit {
         return status;
     }
 
+    /**Method to get the program counter of the Instruction Address Generator.
+     *
+     * @return - the program counter (PC)
+     */
     public Register getPC() {
         return this.programCounter;
     }
